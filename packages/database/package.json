@@ -1,0 +1,44 @@
+{
+  "name": "@eventure/database",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/src/client.js",
+  "types": "./dist/src/client.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/client.d.ts",
+      "import": "./dist/src/client.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "prisma db seed",
+    "db:studio": "prisma studio",
+    "lint": "eslint src prisma/seed.ts --max-warnings=0",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "test:coverage": "vitest run --coverage --passWithNoTests"
+  },
+  "dependencies": {
+    "@prisma/client": "6.19.3",
+    "bcryptjs": "3.0.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@types/node": "24.10.1",
+    "@vitest/coverage-v8": "4.1.10",
+    "dotenv": "17.2.3",
+    "eslint": "9.39.5",
+    "prisma": "6.19.3",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.46.1",
+    "vitest": "4.1.10"
+  }
+}
