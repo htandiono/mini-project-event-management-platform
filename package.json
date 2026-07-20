@@ -1,0 +1,34 @@
+{
+  "name": "eventure-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A two-person event management platform mini project.",
+  "packageManager": "pnpm@11.9.0",
+  "engines": {
+    "node": ">=22.13.0",
+    "pnpm": ">=11.9.0"
+  },
+  "scripts": {
+    "dev": "pnpm build:packages && dotenv -e .env -- pnpm --parallel --stream --filter @eventure/web --filter @eventure/api dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "build:packages": "pnpm --filter @eventure/shared build && pnpm --filter @eventure/database build",
+    "typecheck": "pnpm build:packages && pnpm -r typecheck",
+    "test": "pnpm build:packages && pnpm -r test",
+    "test:coverage": "pnpm build:packages && pnpm -r test:coverage",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "db:generate": "dotenv -e .env -- pnpm --filter @eventure/database db:generate",
+    "db:format": "dotenv -e .env -- pnpm --filter @eventure/database exec prisma format",
+    "db:validate": "dotenv -e .env -- pnpm --filter @eventure/database exec prisma validate",
+    "db:migrate": "dotenv -e .env -- pnpm --filter @eventure/database db:migrate",
+    "db:seed": "dotenv -e .env -- pnpm --filter @eventure/database db:seed",
+    "db:studio": "dotenv -e .env -- pnpm --filter @eventure/database db:studio",
+    "verify": "pnpm format:check && pnpm db:validate && pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+  },
+  "devDependencies": {
+    "dotenv-cli": "10.0.0",
+    "prettier": "3.6.2",
+    "typescript": "5.9.3"
+  }
+}
