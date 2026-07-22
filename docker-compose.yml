@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: eventure-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-eventure}
+      POSTGRES_USER: ${POSTGRES_USER:-eventure}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-eventure_dev_only}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - eventure_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  eventure_postgres_data:
