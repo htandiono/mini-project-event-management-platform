@@ -59,6 +59,17 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** API lint, typecheck, and ticket allocation tests.
 
+### Step 6 - Event voucher CRUD
+
+**Commit:** `feat(api): manage limited event vouchers`
+
+- Added organizer-scoped list, create, update, and soft-delete voucher endpoints.
+- Required exactly one percentage or fixed-IDR discount and a valid active date range.
+- Normalized voucher codes, enforced global uniqueness, and blocked usage limits below existing redemptions.
+- Prevented meaningless voucher creation for free events.
+
+**Verification:** shared/API typecheck, API lint, and voucher rule tests.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.

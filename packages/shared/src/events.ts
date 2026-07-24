@@ -106,3 +106,10 @@ export interface VoucherInput {
   startsAt: string;
   endsAt: string;
 }
+
+export interface OrganizerVoucherSummary extends PublicVoucherSummary {
+  id: string;
+  usageLimit: number;
+  usedCount: number;
+  startsAt: string;
+}

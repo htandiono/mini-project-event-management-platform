@@ -63,4 +63,41 @@ export const ticketTypeInputSchema = z
     }
   });
 
+export const voucherInputSchema = z
+  .object({
+    code: z
+      .string()
+      .trim()
+      .min(3)
+      .max(30)
+      .regex(/^[A-Za-z0-9-]+$/, "Use only letters, numbers, and hyphens")
+      .transform((code) => code.toUpperCase()),
+    name: z.string().trim().min(3).max(100),
+    discountPercent: z.number().int().min(1).max(100).nullable().optional(),
+    discountAmount: z.number().int().positive().max(1_000_000_000).nullable().optional(),
+    usageLimit: z.number().int().positive().max(100_000),
+    startsAt: z.iso.datetime(),
+    endsAt: z.iso.datetime(),
+  })
+  .superRefine((voucher, context) => {
+    const discountCount =
+      Number(voucher.discountPercent != null) + Number(voucher.discountAmount != null);
+
+    if (discountCount !== 1) {
+      context.addIssue({
+        code: "custom",
+        path: ["discountPercent"],
+        message: "Choose either a percentage or fixed discount",
+      });
+    }
+
+    if (new Date(voucher.endsAt) <= new Date(voucher.startsAt)) {
+      context.addIssue({
+        code: "custom",
+        path: ["endsAt"],
+        message: "Voucher end time must be after its start time",
+      });
+    }
+  });
+
 export type ParsedEventListQuery = z.infer<typeof eventListQuerySchema>;
