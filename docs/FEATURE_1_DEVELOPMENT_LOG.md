@@ -36,6 +36,18 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** API lint, typecheck, and public event service tests.
 
+### Step 4 - Organizer event CRUD
+
+**Commit:** `feat(api): add organizer event lifecycle`
+
+- Added organizer-scoped list, create, update, and soft-delete endpoints.
+- Added backend validation for event content, capacity, and chronological date ranges.
+- Preserved booked-seat counts when capacity changes and blocked destructive capacity reductions.
+- Blocked deletion while payment transactions are active, then soft-deleted the event and its ticket/voucher children atomically.
+- Kept authentication ownership separate by consuming the `response.locals.user` contract that Feature 2 will populate.
+
+**Verification:** shared/API typecheck, API lint, and organizer capacity tests.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.

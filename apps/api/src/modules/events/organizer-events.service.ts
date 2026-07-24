@@ -1,0 +1,192 @@
+import { TransactionStatus, type Prisma, type PrismaClient } from "@eventure/database";
+import type { EventInput, OrganizerEventSummary } from "@eventure/shared";
+
+import { AppError } from "../../lib/app-error.js";
+
+const organizerEventSelect = {
+  id: true,
+  slug: true,
+  name: true,
+  city: true,
+  startsAt: true,
+  endsAt: true,
+  capacity: true,
+  availableSeats: true,
+  isFree: true,
+  status: true,
+  category: { select: { name: true } },
+  _count: { select: { ticketTypes: { where: { deletedAt: null } } } },
+} satisfies Prisma.EventSelect;
+
+type OrganizerEventRecord = Prisma.EventGetPayload<{ select: typeof organizerEventSelect }>;
+
+function mapOrganizerEvent(event: OrganizerEventRecord): OrganizerEventSummary {
+  return {
+    id: event.id,
+    slug: event.slug,
+    name: event.name,
+    categoryName: event.category.name,
+    city: event.city,
+    startsAt: event.startsAt.toISOString(),
+    endsAt: event.endsAt.toISOString(),
+    capacity: event.capacity,
+    availableSeats: event.availableSeats,
+    isFree: event.isFree,
+    status: event.status,
+    ticketTypeCount: event._count.ticketTypes,
+  };
+}
+
+function slugify(value: string): string {
+  return value
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "")
+    .slice(0, 80);
+}
+
+async function createUniqueSlug(database: PrismaClient, name: string): Promise<string> {
+  const base = slugify(name) || "event";
+  let candidate = base;
+  let suffix = 2;
+
+  while (await database.event.findUnique({ where: { slug: candidate }, select: { id: true } })) {
+    candidate = `${base}-${suffix}`;
+    suffix += 1;
+  }
+
+  return candidate;
+}
+
+async function assertActiveCategory(database: PrismaClient, categoryId: string): Promise<void> {
+  const category = await database.category.findFirst({
+    where: { id: categoryId, deletedAt: null },
+    select: { id: true },
+  });
+
+  if (!category) {
+    throw new AppError("Category not found", 404);
+  }
+}
+
+export async function listOrganizerEvents(
+  database: PrismaClient,
+  organizerId: string,
+): Promise<OrganizerEventSummary[]> {
+  const events = await database.event.findMany({
+    where: { organizerId, deletedAt: null },
+    orderBy: { startsAt: "desc" },
+    select: organizerEventSelect,
+  });
+
+  return events.map(mapOrganizerEvent);
+}
+
+export async function createOrganizerEvent(
+  database: PrismaClient,
+  organizerId: string,
+  input: EventInput,
+  now = new Date(),
+): Promise<OrganizerEventSummary> {
+  await assertActiveCategory(database, input.categoryId);
+  const slug = await createUniqueSlug(database, input.name);
+  const event = await database.event.create({
+    data: {
+      ...input,
+      slug,
+      organizerId,
+      startsAt: new Date(input.startsAt),
+      endsAt: new Date(input.endsAt),
+      availableSeats: input.capacity,
+      publishedAt: input.status === "PUBLISHED" ? now : null,
+    },
+    select: organizerEventSelect,
+  });
+
+  return mapOrganizerEvent(event);
+}
+
+export async function updateOrganizerEvent(
+  database: PrismaClient,
+  organizerId: string,
+  eventId: string,
+  input: EventInput,
+  now = new Date(),
+): Promise<OrganizerEventSummary> {
+  const existing = await database.event.findFirst({
+    where: { id: eventId, organizerId, deletedAt: null },
+    select: { capacity: true, availableSeats: true, publishedAt: true },
+  });
+
+  if (!existing) {
+    throw new AppError("Event not found", 404);
+  }
+
+  const bookedSeats = existing.capacity - existing.availableSeats;
+
+  if (input.capacity < bookedSeats) {
+    throw new AppError("Capacity cannot be lower than the number of booked seats", 409);
+  }
+
+  await assertActiveCategory(database, input.categoryId);
+  const event = await database.event.update({
+    where: { id: eventId },
+    data: {
+      ...input,
+      startsAt: new Date(input.startsAt),
+      endsAt: new Date(input.endsAt),
+      availableSeats: input.capacity - bookedSeats,
+      publishedAt: input.status === "PUBLISHED" ? (existing.publishedAt ?? now) : null,
+    },
+    select: organizerEventSelect,
+  });
+
+  return mapOrganizerEvent(event);
+}
+
+export async function deleteOrganizerEvent(
+  database: PrismaClient,
+  organizerId: string,
+  eventId: string,
+  now = new Date(),
+): Promise<void> {
+  const event = await database.event.findFirst({
+    where: { id: eventId, organizerId, deletedAt: null },
+    select: {
+      id: true,
+      _count: {
+        select: {
+          transactions: {
+            where: {
+              status: {
+                in: [
+                  TransactionStatus.WAITING_FOR_PAYMENT,
+                  TransactionStatus.WAITING_FOR_CONFIRMATION,
+                ],
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!event) {
+    throw new AppError("Event not found", 404);
+  }
+
+  if (event._count.transactions > 0) {
+    throw new AppError("An event with active transactions cannot be deleted", 409);
+  }
+
+  await database.$transaction([
+    database.ticketType.updateMany({
+      where: { eventId, deletedAt: null },
+      data: { deletedAt: now },
+    }),
+    database.voucher.updateMany({ where: { eventId, deletedAt: null }, data: { deletedAt: now } }),
+    database.event.update({ where: { id: eventId }, data: { deletedAt: now } }),
+  ]);
+}

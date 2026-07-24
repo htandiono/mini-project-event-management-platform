@@ -73,6 +73,21 @@ export interface EventInput {
   status: "DRAFT" | "PUBLISHED";
 }
 
+export interface OrganizerEventSummary {
+  id: string;
+  slug: string;
+  name: string;
+  categoryName: string;
+  city: string;
+  startsAt: string;
+  endsAt: string;
+  capacity: number;
+  availableSeats: number;
+  isFree: boolean;
+  status: "DRAFT" | "PUBLISHED" | "CANCELED" | "COMPLETED";
+  ticketTypeCount: number;
+}
+
 export interface TicketTypeInput {
   name: string;
   description?: string | null;
