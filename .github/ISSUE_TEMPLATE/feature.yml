@@ -1,0 +1,38 @@
+name: Feature task
+description: Plan an independently testable product change.
+title: "feat: "
+labels: [enhancement]
+body:
+  - type: dropdown
+    id: ownership
+    attributes:
+      label: Ownership
+      options:
+        - Feature 1 - events and transactions
+        - Feature 2 - accounts and organizer dashboard
+        - Shared foundation
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: User outcome
+      description: What can the user do after this is complete?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: |
+        - [ ] Happy path
+        - [ ] Validation and error path
+        - [ ] Empty/loading states
+        - [ ] Tests
+    validations:
+      required: true
+  - type: textarea
+    id: contracts
+    attributes:
+      label: Shared contracts affected
+      description: List Prisma models, API response types, routes, or design tokens that change.
