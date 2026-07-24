@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export const TRANSACTION_STATUSES = [
   "WAITING_FOR_PAYMENT",
   "WAITING_FOR_CONFIRMATION",
@@ -20,3 +22,21 @@ export const TRANSACTION_STATUS_LABELS: Record<TransactionStatus, string> = {
 
 export const PAYMENT_PROOF_WINDOW_HOURS = 2;
 export const ORGANIZER_REVIEW_WINDOW_DAYS = 3;
+
+export const rejectTransactionSchema = z.object({
+  reason: z.string().max(500).optional(),
+});
+
+export type RejectTransactionDTO = z.infer<typeof rejectTransactionSchema>;
+
+export interface AttendeeListItem {
+  id: string;
+  invoiceNumber: string;
+  customerName: string;
+  customerEmail: string;
+  ticketTypeName: string;
+  quantity: number;
+  totalPaid: number;
+  isAttended: boolean;
+  createdAt: string;
+}
