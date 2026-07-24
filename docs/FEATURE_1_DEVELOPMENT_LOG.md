@@ -14,6 +14,17 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** shared package build and typecheck.
 
+### Step 2 - Public event listing API
+
+**Commit:** `feat(api): add public event discovery query`
+
+- Added validated search, category, city, sorting, and pagination query parameters.
+- Restricted discovery results to active, published, upcoming events.
+- Calculated the public starting price from active ticket types and kept price sorting on the backend.
+- Added category metadata for filter controls and focused tests for query limits and price ordering.
+
+**Verification:** API lint, typecheck, and event service tests.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.
