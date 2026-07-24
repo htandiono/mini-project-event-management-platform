@@ -48,6 +48,17 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** shared/API typecheck, API lint, and organizer capacity tests.
 
+### Step 5 - Event ticket type CRUD
+
+**Commit:** `feat(api): manage event ticket types`
+
+- Added organizer-scoped list, create, update, and soft-delete ticket endpoints.
+- Enforced unique active ticket names, event-level allocation limits, and zero pricing for free events.
+- Preserved sold quantities when capacity changes and blocked edits below sold quantity.
+- Prevented deletion of ticket types that already have sales.
+
+**Verification:** API lint, typecheck, and ticket allocation tests.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.

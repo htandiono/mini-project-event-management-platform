@@ -40,4 +40,27 @@ export const eventInputSchema = z
     }
   });
 
+export const ticketTypeInputSchema = z
+  .object({
+    name: z.string().trim().min(2).max(80),
+    description: z.string().trim().max(500).nullable().optional(),
+    price: z.number().int().min(0).max(1_000_000_000),
+    capacity: z.number().int().positive().max(100_000),
+    salesStartAt: z.iso.datetime().nullable().optional(),
+    salesEndAt: z.iso.datetime().nullable().optional(),
+  })
+  .superRefine((ticket, context) => {
+    if (
+      ticket.salesStartAt &&
+      ticket.salesEndAt &&
+      new Date(ticket.salesEndAt) <= new Date(ticket.salesStartAt)
+    ) {
+      context.addIssue({
+        code: "custom",
+        path: ["salesEndAt"],
+        message: "Ticket sales end time must be after its start time",
+      });
+    }
+  });
+
 export type ParsedEventListQuery = z.infer<typeof eventListQuerySchema>;
