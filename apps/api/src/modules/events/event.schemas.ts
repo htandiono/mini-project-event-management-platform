@@ -10,4 +10,6 @@ export const eventListQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(24).default(9),
 });
 
+export const eventSlugSchema = z.string().trim().min(1).max(160);
+
 export type ParsedEventListQuery = z.infer<typeof eventListQuerySchema>;

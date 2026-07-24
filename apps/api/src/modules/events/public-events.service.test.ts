@@ -2,7 +2,7 @@ import type { PrismaClient } from "@eventure/database";
 import { describe, expect, it, vi } from "vitest";
 
 import { eventListQuerySchema } from "./event.schemas.js";
-import { listPublishedEvents } from "./public-events.service.js";
+import { getPublishedEventBySlug, listPublishedEvents } from "./public-events.service.js";
 
 const baseRecord = {
   id: "event-1",
@@ -59,5 +59,50 @@ describe("listPublishedEvents", () => {
 
     expect(result.data.map((event) => event.name)).toEqual(["Free Day", "Community Day"]);
     expect(result.totalPages).toBe(1);
+  });
+});
+
+describe("getPublishedEventBySlug", () => {
+  it("maps ticket and voucher dates to the public contract", async () => {
+    const database = {
+      event: {
+        findFirst: vi.fn().mockResolvedValue({
+          ...baseRecord,
+          description: "A useful community gathering.",
+          address: "Jalan Merdeka 1",
+          province: "West Java",
+          endsAt: new Date("2026-10-01T06:00:00.000Z"),
+          capacity: 50,
+          availableSeats: 40,
+          ticketTypes: [
+            {
+              id: "ticket-1",
+              name: "General",
+              description: null,
+              price: 150_000,
+              capacity: 50,
+              availableSeats: 40,
+              salesStartAt: null,
+              salesEndAt: new Date("2026-09-30T00:00:00.000Z"),
+            },
+          ],
+          vouchers: [
+            {
+              code: "EARLY10",
+              name: "Early bird",
+              discountPercent: 10,
+              discountAmount: null,
+              endsAt: new Date("2026-09-01T00:00:00.000Z"),
+            },
+          ],
+        }),
+      },
+      voucher: { fields: { usageLimit: "usageLimit-field-reference" } },
+    } as unknown as PrismaClient;
+
+    const result = await getPublishedEventBySlug(database, "community-day");
+
+    expect(result?.ticketTypes[0]?.salesEndAt).toBe("2026-09-30T00:00:00.000Z");
+    expect(result?.vouchers[0]?.code).toBe("EARLY10");
   });
 });

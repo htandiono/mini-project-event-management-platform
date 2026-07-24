@@ -25,6 +25,17 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** API lint, typecheck, and event service tests.
 
+### Step 3 - Public event details
+
+**Commit:** `feat(api): expose public event details`
+
+- Added a slug-based published event endpoint with a consistent not-found response.
+- Returned active ticket types, remaining capacity, venue details, and current event vouchers.
+- Excluded soft-deleted or unavailable vouchers at the database query boundary.
+- Added a focused mapping test for ticket and voucher date serialization.
+
+**Verification:** API lint, typecheck, and public event service tests.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.

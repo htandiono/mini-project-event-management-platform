@@ -3,8 +3,9 @@ import type { ApiSuccess, CategorySummary, EventSummary, PaginatedData } from "@
 import { Router } from "express";
 
 import { asyncHandler } from "../../lib/async-handler.js";
-import { eventListQuerySchema } from "./event.schemas.js";
-import { listPublishedEvents } from "./public-events.service.js";
+import { AppError } from "../../lib/app-error.js";
+import { eventListQuerySchema, eventSlugSchema } from "./event.schemas.js";
+import { getPublishedEventBySlug, listPublishedEvents } from "./public-events.service.js";
 
 export const publicEventsRouter = Router();
 
@@ -35,6 +36,26 @@ publicEventsRouter.get(
       success: true,
       message: "Categories retrieved",
       data: categories,
+    };
+
+    response.json(body);
+  }),
+);
+
+publicEventsRouter.get(
+  "/:slug",
+  asyncHandler(async (request, response) => {
+    const slug = eventSlugSchema.parse(request.params.slug);
+    const event = await getPublishedEventBySlug(prisma, slug);
+
+    if (!event) {
+      throw new AppError("Event not found", 404);
+    }
+
+    const body: ApiSuccess<typeof event> = {
+      success: true,
+      message: "Event retrieved",
+      data: event,
     };
 
     response.json(body);

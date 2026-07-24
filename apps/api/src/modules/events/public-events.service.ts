@@ -1,4 +1,4 @@
-import type { EventSummary, PaginatedData } from "@eventure/shared";
+import type { EventDetail, EventSummary, PaginatedData } from "@eventure/shared";
 import { EventStatus, type Prisma, type PrismaClient } from "@eventure/database";
 
 import type { ParsedEventListQuery } from "./event.schemas.js";
@@ -22,6 +22,41 @@ const eventListSelect = {
 
 type EventListRecord = Prisma.EventGetPayload<{ select: typeof eventListSelect }>;
 
+const eventDetailSelect = {
+  ...eventListSelect,
+  description: true,
+  address: true,
+  province: true,
+  endsAt: true,
+  capacity: true,
+  availableSeats: true,
+  ticketTypes: {
+    where: { deletedAt: null },
+    orderBy: { price: "asc" },
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      price: true,
+      capacity: true,
+      availableSeats: true,
+      salesStartAt: true,
+      salesEndAt: true,
+    },
+  },
+  vouchers: {
+    select: {
+      code: true,
+      name: true,
+      discountPercent: true,
+      discountAmount: true,
+      endsAt: true,
+    },
+  },
+} satisfies Prisma.EventSelect;
+
+type EventDetailRecord = Prisma.EventGetPayload<{ select: typeof eventDetailSelect }>;
+
 function mapEventSummary(event: EventListRecord): EventSummary {
   const prices = event.ticketTypes.map((ticket) => ticket.price);
 
@@ -36,6 +71,27 @@ function mapEventSummary(event: EventListRecord): EventSummary {
     priceFrom: event.isFree ? 0 : Math.min(...prices),
     imageUrl: event.thumbnailUrl,
     organizerName: event.organizer.name,
+  };
+}
+
+function mapEventDetail(event: EventDetailRecord): EventDetail {
+  return {
+    ...mapEventSummary(event),
+    description: event.description,
+    address: event.address,
+    province: event.province,
+    endsAt: event.endsAt.toISOString(),
+    capacity: event.capacity,
+    availableSeats: event.availableSeats,
+    ticketTypes: event.ticketTypes.map((ticket) => ({
+      ...ticket,
+      salesStartAt: ticket.salesStartAt?.toISOString() ?? null,
+      salesEndAt: ticket.salesEndAt?.toISOString() ?? null,
+    })),
+    vouchers: event.vouchers.map((voucher) => ({
+      ...voucher,
+      endsAt: voucher.endsAt.toISOString(),
+    })),
   };
 }
 
@@ -92,4 +148,32 @@ export async function listPublishedEvents(
     totalPages: Math.ceil(total / query.limit),
     limit: query.limit,
   };
+}
+
+export async function getPublishedEventBySlug(
+  database: PrismaClient,
+  slug: string,
+  now = new Date(),
+): Promise<EventDetail | null> {
+  const event = await database.event.findFirst({
+    where: {
+      slug,
+      deletedAt: null,
+      status: EventStatus.PUBLISHED,
+    },
+    select: {
+      ...eventDetailSelect,
+      vouchers: {
+        ...eventDetailSelect.vouchers,
+        where: {
+          deletedAt: null,
+          startsAt: { lte: now },
+          endsAt: { gt: now },
+          usedCount: { lt: database.voucher.fields.usageLimit },
+        },
+      },
+    },
+  });
+
+  return event ? mapEventDetail(event) : null;
 }
