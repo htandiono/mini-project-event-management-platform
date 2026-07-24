@@ -70,6 +70,18 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** shared/API typecheck, API lint, and voucher rule tests.
 
+### Step 7 - Transactional checkout
+
+**Commit:** `feat(api): create transactional ticket checkout`
+
+- Added customer checkout validation with combined duplicate ticket quantities.
+- Applied discounts in a documented order: event voucher, user coupon, then points.
+- Reserved event and ticket capacity, redeemed benefits, and created invoice items inside one serializable SQL transaction.
+- Used conditional updates to prevent overselling and over-redemption during concurrent checkouts.
+- Completed zero-total registrations immediately; paid registrations receive the two-hour payment deadline.
+
+**Verification:** API lint, typecheck, and checkout validation/calculation tests.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.
