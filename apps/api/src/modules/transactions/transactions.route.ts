@@ -5,6 +5,7 @@ import { Router } from "express";
 import { asyncHandler } from "../../lib/async-handler.js";
 import { requireRequestUser } from "../../lib/request-user.js";
 import { createCheckout } from "./checkout.service.js";
+import { getCheckoutOptions } from "./checkout-options.service.js";
 import {
   cancelCustomerTransaction,
   getCustomerTransaction,
@@ -39,6 +40,21 @@ transactionsRouter.get(
       success: true,
       message: "Transactions retrieved",
       data: transactions,
+    };
+
+    response.json(body);
+  }),
+);
+
+transactionsRouter.get(
+  "/options",
+  asyncHandler(async (_request, response) => {
+    const customer = requireRequestUser(response.locals, "CUSTOMER");
+    const options = await getCheckoutOptions(prisma, customer.id);
+    const body: ApiSuccess<typeof options> = {
+      success: true,
+      message: "Checkout options retrieved",
+      data: options,
     };
 
     response.json(body);

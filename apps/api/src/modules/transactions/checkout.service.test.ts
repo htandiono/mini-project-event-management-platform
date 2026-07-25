@@ -1,6 +1,7 @@
+import { PointEntryType } from "@eventure/database";
 import { describe, expect, it } from "vitest";
 
-import { calculateCheckoutTotals } from "./checkout.service.js";
+import { calculateCheckoutTotals, calculatePointBalance } from "./checkout.service.js";
 import { checkoutInputSchema } from "./transaction.schemas.js";
 
 describe("checkout input", () => {
@@ -32,5 +33,17 @@ describe("calculateCheckoutTotals", () => {
       voucherDiscount: 50_000,
       total: 0,
     });
+  });
+});
+
+describe("calculatePointBalance", () => {
+  it("accounts for debit and restored point entries", () => {
+    expect(
+      calculatePointBalance([
+        { type: PointEntryType.CREDIT, amount: 10_000 },
+        { type: PointEntryType.DEBIT, amount: 3_000 },
+        { type: PointEntryType.RESTORE, amount: 1_000 },
+      ]),
+    ).toBe(8_000);
   });
 });

@@ -28,6 +28,16 @@ export interface CheckoutTotals {
   total: number;
 }
 
+export function calculatePointBalance(
+  entries: Array<{ type: PointEntryType; amount: number }>,
+): number {
+  return entries.reduce(
+    (balance, entry) =>
+      balance + (entry.type === PointEntryType.DEBIT ? -entry.amount : entry.amount),
+    0,
+  );
+}
+
 function discountValue(base: number, discount?: Discount): number {
   if (!discount) {
     return 0;
@@ -194,11 +204,7 @@ export async function createCheckout(
               select: { type: true, amount: true },
             })
           : [];
-      const pointBalance = pointEntries.reduce(
-        (balance, entry) =>
-          balance + (entry.type === PointEntryType.DEBIT ? -entry.amount : entry.amount),
-        0,
-      );
+      const pointBalance = calculatePointBalance(pointEntries);
 
       if (pointsToUse > pointBalance) {
         throw new AppError("Insufficient point balance", 400);

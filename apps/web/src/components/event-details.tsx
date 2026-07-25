@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { formatIdr } from "@/lib/currency";
 
+import { CheckoutForm } from "./checkout-form";
 import styles from "./event-details.module.css";
 
 interface EventDetailsProps {
@@ -81,6 +82,8 @@ export function EventDetails({ event, reviewData }: EventDetailsProps) {
               </ul>
             </>
           ) : null}
+
+          <CheckoutForm eventId={event.id} eventName={event.name} tickets={event.ticketTypes} />
         </section>
 
         <section className={styles.panel}>

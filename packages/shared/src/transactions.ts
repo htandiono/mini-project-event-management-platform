@@ -34,6 +34,18 @@ export interface CheckoutInput {
   pointsToUse?: number;
 }
 
+export interface CheckoutCouponOption {
+  id: string;
+  name: string;
+  discountPercent: number;
+  expiresAt: string;
+}
+
+export interface CheckoutOptions {
+  pointBalance: number;
+  coupons: CheckoutCouponOption[];
+}
+
 export interface TransactionItemSummary {
   ticketTypeId: string;
   ticketTypeName: string;

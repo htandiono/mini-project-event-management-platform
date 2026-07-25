@@ -2,11 +2,14 @@ import type {
   ApiFailure,
   ApiSuccess,
   CategorySummary,
+  CheckoutInput,
+  CheckoutOptions,
   EventDetail,
   EventListQuery,
   EventReviews,
   EventSummary,
   PaginatedData,
+  TransactionSummary,
 } from "@eventure/shared";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1";
@@ -72,4 +75,12 @@ export function getEvent(slug: string, signal?: AbortSignal): Promise<EventDetai
 
 export function getEventReviews(slug: string, signal?: AbortSignal): Promise<EventReviews> {
   return apiRequest(`/events/${encodeURIComponent(slug)}/reviews`, { signal });
+}
+
+export function getCheckoutOptions(): Promise<CheckoutOptions> {
+  return apiRequest("/transactions/options");
+}
+
+export function createCheckout(input: CheckoutInput): Promise<TransactionSummary> {
+  return apiRequest("/transactions", { method: "POST", body: JSON.stringify(input) });
 }

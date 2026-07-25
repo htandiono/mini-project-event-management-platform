@@ -159,6 +159,74 @@
   font-weight: 800;
 }
 
+.checkoutStart {
+  margin-top: 1.25rem;
+  width: 100%;
+}
+
+.checkoutForm {
+  border-top: 1px solid var(--color-line);
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+}
+
+.checkoutForm h3 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.55rem;
+  margin: 0;
+}
+
+.quantityRow {
+  align-items: center;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr auto;
+}
+
+.quantityRow select,
+.checkoutField input,
+.checkoutField select {
+  background: var(--color-canvas);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  min-height: 2.6rem;
+  padding: 0.5rem 0.65rem;
+}
+
+.checkoutField {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.checkoutField span {
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.checkoutSummary {
+  align-items: center;
+  background: var(--color-canvas);
+  border-radius: var(--radius-sm);
+  display: flex;
+  justify-content: space-between;
+  padding: 0.85rem;
+}
+
+.checkoutError {
+  color: var(--color-primary-dark);
+  margin: 0;
+}
+
+.loginPrompt {
+  background: var(--color-canvas);
+  border-radius: var(--radius-sm);
+  margin-top: 1rem;
+  padding: 1rem;
+}
+
 @media (max-width: 850px) {
   .hero,
   .content {

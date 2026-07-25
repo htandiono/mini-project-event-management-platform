@@ -147,6 +147,17 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** web lint, typecheck, event detail component test, and production build.
 
+### Step 14 - Guided ticket checkout
+
+**Commit:** `feat(checkout): add guided ticket purchase`
+
+- Added a customer checkout-options endpoint for live point balance and usable referral coupons.
+- Added ticket quantity, event voucher, coupon, and point controls to the event detail page.
+- Required an explicit confirmation before creating the transaction and redirected to its status page.
+- Presented a clear login handoff when Feature 2 authentication has not established a customer session.
+
+**Verification:** shared/API/web typecheck, lint, checkout form test, and production builds.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.
