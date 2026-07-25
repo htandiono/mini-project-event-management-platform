@@ -13,7 +13,7 @@ export const transactionSummarySelect = {
   total: true,
   paymentDeadline: true,
   createdAt: true,
-  event: { select: { name: true } },
+  event: { select: { name: true, slug: true, endsAt: true } },
   items: {
     select: {
       ticketTypeId: true,
@@ -35,6 +35,8 @@ export function mapTransaction(transaction: TransactionSummaryRecord): Transacti
     invoiceNumber: transaction.invoiceNumber,
     eventId: transaction.eventId,
     eventName: transaction.event.name,
+    eventSlug: transaction.event.slug,
+    eventEndsAt: transaction.event.endsAt.toISOString(),
     status: transaction.status,
     subtotal: transaction.subtotal,
     pointsUsed: transaction.pointsUsed,

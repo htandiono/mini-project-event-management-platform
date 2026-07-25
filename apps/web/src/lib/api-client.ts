@@ -35,7 +35,14 @@ export async function apiRequest<T>(path: string, init: RequestInit = {}): Promi
       ...init.headers,
     },
   });
-  const body = (await response.json()) as ApiSuccess<T> | ApiFailure;
+  const responseText = await response.text();
+
+  if (!responseText) {
+    if (response.ok) return undefined as T;
+    throw new ApiClientError("Request failed", response.status);
+  }
+
+  const body = JSON.parse(responseText) as ApiSuccess<T> | ApiFailure;
 
   if (!response.ok || !body.success) {
     const failure = body as ApiFailure;
@@ -83,4 +90,16 @@ export function getCheckoutOptions(): Promise<CheckoutOptions> {
 
 export function createCheckout(input: CheckoutInput): Promise<TransactionSummary> {
   return apiRequest("/transactions", { method: "POST", body: JSON.stringify(input) });
+}
+
+export function getTransactions(signal?: AbortSignal): Promise<TransactionSummary[]> {
+  return apiRequest("/transactions", { signal });
+}
+
+export function getTransaction(id: string, signal?: AbortSignal): Promise<TransactionSummary> {
+  return apiRequest(`/transactions/${encodeURIComponent(id)}`, { signal });
+}
+
+export function cancelTransaction(id: string): Promise<void> {
+  return apiRequest(`/transactions/${encodeURIComponent(id)}/cancel`, { method: "POST" });
 }

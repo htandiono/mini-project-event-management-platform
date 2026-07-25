@@ -158,6 +158,17 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** shared/API/web typecheck, lint, checkout form test, and production builds.
 
+### Step 15 - Customer transaction tracking
+
+**Commit:** `feat(web): track customer ticket transactions`
+
+- Added customer transaction history and invoice detail pages using the six shared status labels.
+- Displayed ticket line items, every applied benefit, and the final IDR total.
+- Added a live payment-deadline countdown for unpaid orders.
+- Added confirmation before customer cancellation and refreshed the server-restored transaction state.
+
+**Verification:** shared/API/web typecheck, lint, countdown/API client tests, and production builds.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.

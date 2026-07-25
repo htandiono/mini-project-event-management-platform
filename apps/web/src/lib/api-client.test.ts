@@ -38,4 +38,10 @@ describe("apiRequest", () => {
       expect.objectContaining({ message: "Not found", status: 404 }),
     );
   });
+
+  it("supports successful no-content responses", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(null, { status: 204 }));
+
+    await expect(apiRequest<void>("/test", { method: "DELETE" })).resolves.toBeUndefined();
+  });
 });

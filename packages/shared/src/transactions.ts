@@ -59,6 +59,8 @@ export interface TransactionSummary {
   invoiceNumber: string;
   eventId: string;
   eventName: string;
+  eventSlug: string;
+  eventEndsAt: string;
   status: TransactionStatus;
   subtotal: number;
   pointsUsed: number;
