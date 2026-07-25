@@ -125,6 +125,17 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** web lint, typecheck, and API client tests.
 
+### Step 12 - Event discovery interface
+
+**Commit:** `feat(web): build searchable event discovery`
+
+- Added a responsive discovery page backed by server-side search, category/city filters, sorting, and pagination.
+- Debounced search input by 350 milliseconds and canceled stale network requests.
+- Covered loading, error, empty, and populated result states with accessible announcements.
+- Replaced landing-page fixtures with the next three published events from the API.
+
+**Verification:** web lint, typecheck, debounce tests, and production build.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.
