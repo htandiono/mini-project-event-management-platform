@@ -104,6 +104,16 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** shared/API typecheck, API lint, and review eligibility tests.
 
+### Step 10 - Event publication guard
+
+**Commit:** `fix(api): require tickets before event publication`
+
+- Required organizers to create events as drafts and configure ticket inventory before publishing.
+- Rejected draft-to-published transitions without an active ticket type.
+- Excluded malformed paid events without ticket types from public discovery and protected price serialization.
+
+**Verification:** API lint, typecheck, and organizer publication tests.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.

@@ -68,7 +68,7 @@ function mapEventSummary(event: EventListRecord): EventSummary {
     city: event.city,
     venue: event.venue,
     startsAt: event.startsAt.toISOString(),
-    priceFrom: event.isFree ? 0 : Math.min(...prices),
+    priceFrom: event.isFree || prices.length === 0 ? 0 : Math.min(...prices),
     imageUrl: event.thumbnailUrl,
     organizerName: event.organizer.name,
   };
@@ -104,6 +104,7 @@ export async function listPublishedEvents(
     deletedAt: null,
     status: EventStatus.PUBLISHED,
     startsAt: { gte: now },
+    AND: [{ OR: [{ isFree: true }, { ticketTypes: { some: { deletedAt: null } } }] }],
     ...(query.category
       ? { category: { is: { slug: query.category, deletedAt: null } } }
       : undefined),

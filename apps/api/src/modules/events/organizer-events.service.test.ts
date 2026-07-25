@@ -43,6 +43,7 @@ describe("updateOrganizerEvent", () => {
           capacity: 100,
           availableSeats: 80,
           publishedAt: new Date("2026-01-01T00:00:00.000Z"),
+          _count: { ticketTypes: 1 },
         }),
         update,
       },
@@ -62,12 +63,30 @@ describe("updateOrganizerEvent", () => {
           capacity: 100,
           availableSeats: 80,
           publishedAt: null,
+          _count: { ticketTypes: 1 },
         }),
       },
     } as unknown as PrismaClient;
 
     await expect(
       updateOrganizerEvent(database, "organizer-1", "event-1", { ...input, capacity: 19 }),
+    ).rejects.toMatchObject({ statusCode: 409 });
+  });
+
+  it("rejects publication until a ticket type exists", async () => {
+    const database = {
+      event: {
+        findFirst: vi.fn().mockResolvedValue({
+          capacity: 100,
+          availableSeats: 100,
+          publishedAt: null,
+          _count: { ticketTypes: 0 },
+        }),
+      },
+    } as unknown as PrismaClient;
+
+    await expect(
+      updateOrganizerEvent(database, "organizer-1", "event-1", input),
     ).rejects.toMatchObject({ statusCode: 409 });
   });
 });

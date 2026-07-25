@@ -88,8 +88,11 @@ export async function createOrganizerEvent(
   database: PrismaClient,
   organizerId: string,
   input: EventInput,
-  now = new Date(),
 ): Promise<OrganizerEventSummary> {
+  if (input.status === "PUBLISHED") {
+    throw new AppError("Create the event as a draft and add a ticket type before publishing", 409);
+  }
+
   await assertActiveCategory(database, input.categoryId);
   const slug = await createUniqueSlug(database, input.name);
   const event = await database.event.create({
@@ -100,7 +103,7 @@ export async function createOrganizerEvent(
       startsAt: new Date(input.startsAt),
       endsAt: new Date(input.endsAt),
       availableSeats: input.capacity,
-      publishedAt: input.status === "PUBLISHED" ? now : null,
+      publishedAt: null,
     },
     select: organizerEventSelect,
   });
@@ -117,7 +120,12 @@ export async function updateOrganizerEvent(
 ): Promise<OrganizerEventSummary> {
   const existing = await database.event.findFirst({
     where: { id: eventId, organizerId, deletedAt: null },
-    select: { capacity: true, availableSeats: true, publishedAt: true },
+    select: {
+      capacity: true,
+      availableSeats: true,
+      publishedAt: true,
+      _count: { select: { ticketTypes: { where: { deletedAt: null } } } },
+    },
   });
 
   if (!existing) {
@@ -128,6 +136,10 @@ export async function updateOrganizerEvent(
 
   if (input.capacity < bookedSeats) {
     throw new AppError("Capacity cannot be lower than the number of booked seats", 409);
+  }
+
+  if (input.status === "PUBLISHED" && existing._count.ticketTypes === 0) {
+    throw new AppError("Add at least one ticket type before publishing", 409);
   }
 
   await assertActiveCategory(database, input.categoryId);
