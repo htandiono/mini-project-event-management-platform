@@ -136,6 +136,17 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** web lint, typecheck, debounce tests, and production build.
 
+### Step 13 - Event detail interface
+
+**Commit:** `feat(web): present event details and reviews`
+
+- Added a responsive event page with Jakarta-local schedule, venue, organizer, capacity, and ticket information.
+- Displayed currently valid event voucher codes and their IDR or percentage benefit.
+- Added the public attendee review summary and review list with an accessible rating label.
+- Covered API failure and not-found paths without exposing backend details.
+
+**Verification:** web lint, typecheck, event detail component test, and production build.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.

@@ -1,0 +1,167 @@
+.page {
+  padding-block: 2rem 6rem;
+}
+
+.back {
+  color: var(--color-muted);
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.hero {
+  background: var(--color-night);
+  border-radius: var(--radius-lg);
+  color: var(--color-surface);
+  display: grid;
+  gap: clamp(2rem, 6vw, 5rem);
+  grid-template-columns: minmax(0, 1.35fr) minmax(16rem, 0.65fr);
+  overflow: hidden;
+  padding: clamp(2rem, 5vw, 4.5rem);
+  position: relative;
+}
+
+.hero::after {
+  background: var(--color-gold);
+  border-radius: 50%;
+  content: "";
+  height: 11rem;
+  opacity: 0.9;
+  position: absolute;
+  right: -4rem;
+  top: -4rem;
+  width: 11rem;
+}
+
+.hero h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.8rem, 6vw, 5.4rem);
+  letter-spacing: -0.05em;
+  line-height: 0.98;
+  margin: 0;
+  max-width: 14ch;
+}
+
+.lead {
+  color: #cbd2d8;
+  font-size: 1.05rem;
+  margin: 1.5rem 0 0;
+  max-width: 42rem;
+  white-space: pre-line;
+}
+
+.facts {
+  align-self: end;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-md);
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.fact span {
+  color: #b5bec6;
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.fact strong {
+  display: block;
+  margin-top: 0.2rem;
+}
+
+.content {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: minmax(0, 1.4fr) minmax(18rem, 0.6fr);
+  margin-top: 2rem;
+}
+
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.panel h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2rem;
+  margin: 0 0 1.25rem;
+}
+
+.tickets,
+.reviews {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.ticket,
+.review {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+}
+
+.ticketHeader,
+.reviewHeader {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.ticket h3,
+.review h3,
+.ticket p,
+.review p {
+  margin: 0;
+}
+
+.ticket p,
+.review p,
+.muted {
+  color: var(--color-muted);
+}
+
+.ticket p,
+.review p {
+  margin-top: 0.45rem;
+}
+
+.voucherList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.voucherList li {
+  background: color-mix(in srgb, var(--color-gold) 18%, white);
+  border: 1px solid color-mix(in srgb, var(--color-gold) 55%, white);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 750;
+  list-style: none;
+  padding: 0.45rem 0.7rem;
+}
+
+.rating {
+  color: #a56613;
+  font-weight: 800;
+}
+
+@media (max-width: 850px) {
+  .hero,
+  .content {
+    grid-template-columns: 1fr;
+  }
+}
