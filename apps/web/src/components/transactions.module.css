@@ -137,6 +137,45 @@
   margin-top: 1.25rem;
 }
 
+.reviewPanel {
+  margin-top: 1.25rem;
+}
+
+.reviewForm {
+  display: grid;
+  gap: 1rem;
+}
+
+.reviewForm label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.reviewForm label span {
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.reviewForm select,
+.reviewForm textarea {
+  background: var(--color-canvas);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem;
+}
+
+.reviewForm textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.success {
+  color: var(--color-teal);
+  font-weight: 700;
+  margin: 0;
+}
+
 @media (max-width: 760px) {
   .card,
   .detailGrid {

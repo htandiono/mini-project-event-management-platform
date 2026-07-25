@@ -169,6 +169,17 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** shared/API/web typecheck, lint, countdown/API client tests, and production builds.
 
+### Step 16 - Customer review editor
+
+**Commit:** `feat(web): manage completed event reviews`
+
+- Added review creation after a completed event has ended, with a one-to-five rating and validated comment.
+- Added edit and delete actions for an existing transaction review.
+- Required confirmation before publishing, updating, or deleting review data.
+- Reflected the saved review immediately in transaction state while the public event feed remains server sourced.
+
+**Verification:** shared/API/web typecheck, lint, review editor test, and production builds.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.

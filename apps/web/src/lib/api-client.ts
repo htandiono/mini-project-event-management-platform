@@ -9,6 +9,8 @@ import type {
   EventReviews,
   EventSummary,
   PaginatedData,
+  ReviewInput,
+  ReviewSummary,
   TransactionSummary,
 } from "@eventure/shared";
 
@@ -102,4 +104,24 @@ export function getTransaction(id: string, signal?: AbortSignal): Promise<Transa
 
 export function cancelTransaction(id: string): Promise<void> {
   return apiRequest(`/transactions/${encodeURIComponent(id)}/cancel`, { method: "POST" });
+}
+
+export function createReview(transactionId: string, input: ReviewInput): Promise<ReviewSummary> {
+  return apiRequest(`/transactions/${encodeURIComponent(transactionId)}/review`, {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+export function updateReview(transactionId: string, input: ReviewInput): Promise<ReviewSummary> {
+  return apiRequest(`/transactions/${encodeURIComponent(transactionId)}/review`, {
+    method: "PUT",
+    body: JSON.stringify(input),
+  });
+}
+
+export function deleteReview(transactionId: string): Promise<void> {
+  return apiRequest(`/transactions/${encodeURIComponent(transactionId)}/review`, {
+    method: "DELETE",
+  });
 }

@@ -70,6 +70,7 @@ export interface TransactionSummary {
   paymentDeadline: string;
   createdAt: string;
   items: TransactionItemSummary[];
+  review: ReviewSummary | null;
 }
 
 export interface ReviewInput {

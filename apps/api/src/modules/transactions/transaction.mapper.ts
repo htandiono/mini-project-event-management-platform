@@ -23,6 +23,17 @@ export const transactionSummarySelect = {
       ticketType: { select: { name: true } },
     },
   },
+  review: {
+    select: {
+      id: true,
+      rating: true,
+      comment: true,
+      createdAt: true,
+      updatedAt: true,
+      deletedAt: true,
+      customer: { select: { name: true, avatarUrl: true } },
+    },
+  },
 } satisfies Prisma.TransactionSelect;
 
 type TransactionSummaryRecord = Prisma.TransactionGetPayload<{
@@ -52,5 +63,17 @@ export function mapTransaction(transaction: TransactionSummaryRecord): Transacti
       unitPrice: item.unitPrice,
       subtotal: item.subtotal,
     })),
+    review:
+      transaction.review && !transaction.review.deletedAt
+        ? {
+            id: transaction.review.id,
+            rating: transaction.review.rating,
+            comment: transaction.review.comment,
+            customerName: transaction.review.customer.name,
+            customerAvatarUrl: transaction.review.customer.avatarUrl,
+            createdAt: transaction.review.createdAt.toISOString(),
+            updatedAt: transaction.review.updatedAt.toISOString(),
+          }
+        : null,
   };
 }

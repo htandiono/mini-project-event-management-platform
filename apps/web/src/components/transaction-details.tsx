@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { ApiClientError, cancelTransaction, getTransaction } from "@/lib/api-client";
 import { formatIdr } from "@/lib/currency";
 
+import { ReviewEditor } from "./review-editor";
 import styles from "./transactions.module.css";
 
 interface TransactionDetailsProps {
@@ -184,6 +185,17 @@ export function TransactionDetails({ transactionId }: TransactionDetailsProps) {
           </div>
         </aside>
       </div>
+
+      {transaction.status === "DONE" && new Date(transaction.eventEndsAt) <= new Date() ? (
+        <ReviewEditor
+          key={transaction.review?.id ?? "new-review"}
+          transactionId={transaction.id}
+          review={transaction.review}
+          onChange={(review) =>
+            setTransaction((current) => (current ? { ...current, review } : current))
+          }
+        />
+      ) : null}
     </article>
   );
 }
