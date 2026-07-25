@@ -93,6 +93,17 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** API lint, typecheck, and atomic restoration tests.
 
+### Step 9 - Attendee reviews
+
+**Commit:** `feat(api): add post-event attendee reviews`
+
+- Added create, edit, and soft-delete review endpoints tied to a completed customer transaction.
+- Required the event to have ended before review creation and constrained ratings to one through five.
+- Allowed a deleted transaction review to be restored without violating its unique transaction relationship.
+- Added a public event review feed with database-calculated average rating and count.
+
+**Verification:** shared/API typecheck, API lint, and review eligibility tests.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.

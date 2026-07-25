@@ -1,9 +1,16 @@
 import { prisma } from "@eventure/database";
-import type { ApiSuccess, CategorySummary, EventSummary, PaginatedData } from "@eventure/shared";
+import type {
+  ApiSuccess,
+  CategorySummary,
+  EventReviews,
+  EventSummary,
+  PaginatedData,
+} from "@eventure/shared";
 import { Router } from "express";
 
 import { asyncHandler } from "../../lib/async-handler.js";
 import { AppError } from "../../lib/app-error.js";
+import { listEventReviews } from "../transactions/reviews.service.js";
 import { eventListQuerySchema, eventSlugSchema } from "./event.schemas.js";
 import { getPublishedEventBySlug, listPublishedEvents } from "./public-events.service.js";
 
@@ -56,6 +63,21 @@ publicEventsRouter.get(
       success: true,
       message: "Event retrieved",
       data: event,
+    };
+
+    response.json(body);
+  }),
+);
+
+publicEventsRouter.get(
+  "/:slug/reviews",
+  asyncHandler(async (request, response) => {
+    const slug = eventSlugSchema.parse(request.params.slug);
+    const reviews = await listEventReviews(prisma, slug);
+    const body: ApiSuccess<EventReviews> = {
+      success: true,
+      message: "Event reviews retrieved",
+      data: reviews,
     };
 
     response.json(body);

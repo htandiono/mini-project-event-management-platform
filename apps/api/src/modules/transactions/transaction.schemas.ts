@@ -20,3 +20,8 @@ export const checkoutInputSchema = z.object({
 });
 
 export const transactionIdSchema = z.string().trim().min(1).max(40);
+
+export const reviewInputSchema = z.object({
+  rating: z.number().int().min(1).max(5),
+  comment: z.string().trim().min(5).max(1_000),
+});

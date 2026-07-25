@@ -62,3 +62,17 @@ export interface ReviewInput {
   rating: number;
   comment: string;
 }
+
+export interface ReviewSummary extends ReviewInput {
+  id: string;
+  customerName: string;
+  customerAvatarUrl: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface EventReviews {
+  averageRating: number;
+  reviewCount: number;
+  reviews: ReviewSummary[];
+}
