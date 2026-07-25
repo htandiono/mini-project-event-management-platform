@@ -18,3 +18,5 @@ export const checkoutInputSchema = z.object({
   userCouponId: z.string().trim().min(1).max(40).optional(),
   pointsToUse: z.number().int().min(0).default(0),
 });
+
+export const transactionIdSchema = z.string().trim().min(1).max(40);

@@ -13,6 +13,7 @@ import {
 import { randomUUID } from "node:crypto";
 
 import { AppError } from "../../lib/app-error.js";
+import { mapTransaction, transactionSummarySelect } from "./transaction.mapper.js";
 
 interface Discount {
   percent?: number | null;
@@ -73,50 +74,6 @@ function normalizeItems(items: CheckoutInput["items"]): Map<string, number> {
 function invoiceNumber(now: Date): string {
   const date = now.toISOString().slice(0, 10).replaceAll("-", "");
   return `EVT-${date}-${randomUUID().slice(0, 8).toUpperCase()}`;
-}
-
-function mapTransaction(transaction: {
-  id: string;
-  invoiceNumber: string;
-  eventId: string;
-  status: TransactionStatus;
-  subtotal: number;
-  pointsUsed: number;
-  voucherDiscount: number;
-  couponDiscount: number;
-  total: number;
-  paymentDeadline: Date;
-  createdAt: Date;
-  event: { name: string };
-  items: Array<{
-    ticketTypeId: string;
-    quantity: number;
-    unitPrice: number;
-    subtotal: number;
-    ticketType: { name: string };
-  }>;
-}): TransactionSummary {
-  return {
-    id: transaction.id,
-    invoiceNumber: transaction.invoiceNumber,
-    eventId: transaction.eventId,
-    eventName: transaction.event.name,
-    status: transaction.status,
-    subtotal: transaction.subtotal,
-    pointsUsed: transaction.pointsUsed,
-    voucherDiscount: transaction.voucherDiscount,
-    couponDiscount: transaction.couponDiscount,
-    total: transaction.total,
-    paymentDeadline: transaction.paymentDeadline.toISOString(),
-    createdAt: transaction.createdAt.toISOString(),
-    items: transaction.items.map((item) => ({
-      ticketTypeId: item.ticketTypeId,
-      ticketTypeName: item.ticketType.name,
-      quantity: item.quantity,
-      unitPrice: item.unitPrice,
-      subtotal: item.subtotal,
-    })),
-  };
 }
 
 export async function createCheckout(
@@ -209,7 +166,7 @@ export async function createCheckout(
             where: {
               id: input.userCouponId,
               userId: customerId,
-              status: UserCouponStatus.ACTIVE,
+              status: { in: [UserCouponStatus.ACTIVE, UserCouponStatus.RESTORED] },
               expiresAt: { gt: now },
               coupon: { deletedAt: null },
             },
@@ -288,7 +245,11 @@ export async function createCheckout(
 
       if (userCoupon) {
         const redemption = await transaction.userCoupon.updateMany({
-          where: { id: userCoupon.id, status: UserCouponStatus.ACTIVE, expiresAt: { gt: now } },
+          where: {
+            id: userCoupon.id,
+            status: { in: [UserCouponStatus.ACTIVE, UserCouponStatus.RESTORED] },
+            expiresAt: { gt: now },
+          },
           data: { status: UserCouponStatus.REDEEMED, redeemedAt: now },
         });
 
@@ -322,29 +283,7 @@ export async function createCheckout(
             }),
           },
         },
-        select: {
-          id: true,
-          invoiceNumber: true,
-          eventId: true,
-          status: true,
-          subtotal: true,
-          pointsUsed: true,
-          voucherDiscount: true,
-          couponDiscount: true,
-          total: true,
-          paymentDeadline: true,
-          createdAt: true,
-          event: { select: { name: true } },
-          items: {
-            select: {
-              ticketTypeId: true,
-              quantity: true,
-              unitPrice: true,
-              subtotal: true,
-              ticketType: { select: { name: true } },
-            },
-          },
-        },
+        select: transactionSummarySelect,
       });
 
       if (totals.pointsUsed > 0) {

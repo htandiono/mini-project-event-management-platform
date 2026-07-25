@@ -82,6 +82,17 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** API lint, typecheck, and checkout validation/calculation tests.
 
+### Step 8 - Transaction status and rollback
+
+**Commit:** `feat(api): restore benefits on transaction expiry`
+
+- Added customer transaction history, detail, and unpaid cancellation endpoints.
+- Expired unpaid transactions after two hours and canceled unreviewed proofs after the organizer deadline.
+- Restored event capacity, ticket inventory, voucher usage, coupon status, and points in one SQL transaction.
+- Guarded rollback with a conditional status transition so concurrent workers cannot restore twice.
+
+**Verification:** API lint, typecheck, and atomic restoration tests.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.
