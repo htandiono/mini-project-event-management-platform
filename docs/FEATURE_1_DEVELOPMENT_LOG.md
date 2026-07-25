@@ -114,6 +114,17 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** API lint, typecheck, and organizer publication tests.
 
+### Step 11 - Typed web API client
+
+**Commit:** `feat(web): add public event API client`
+
+- Added one typed fetch boundary for the shared API success and failure envelopes.
+- Forwarded browser credentials for the authentication workstream without coupling Feature 1 to JWT implementation details.
+- Added public event list, category, detail, and review helpers with encoded query parameters and abort support.
+- Added tests for query serialization and success/error response handling.
+
+**Verification:** web lint, typecheck, and API client tests.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.
