@@ -1,0 +1,133 @@
+.page {
+  padding-block: clamp(2.5rem, 6vw, 5rem) 6rem;
+}
+
+.back {
+  color: var(--color-muted);
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+}
+
+.heading {
+  align-items: end;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.heading h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.5rem, 5vw, 4.2rem);
+  letter-spacing: -0.045em;
+  line-height: 1;
+  margin: 0;
+}
+
+.layout {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.8fr);
+}
+
+.panel,
+.message {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.panel h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  margin: 0 0 1rem;
+}
+
+.list {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.item {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+}
+
+.itemHeader,
+.actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+
+.item h3,
+.item p {
+  margin: 0;
+}
+
+.item p,
+.muted {
+  color: var(--color-muted);
+}
+
+.item p {
+  margin-top: 0.35rem;
+}
+
+.actions {
+  border-top: 1px solid var(--color-line);
+  justify-content: flex-start;
+  margin-top: 0.8rem;
+  padding-top: 0.8rem;
+}
+
+.form {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.field span {
+  color: var(--color-muted);
+  font-size: 0.76rem;
+  font-weight: 750;
+}
+
+.field input,
+.field textarea,
+.field select {
+  background: var(--color-canvas);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  min-height: 2.65rem;
+  padding: 0.6rem 0.7rem;
+}
+
+.field textarea {
+  min-height: 5rem;
+  resize: vertical;
+}
+
+.error {
+  color: var(--color-primary-dark);
+}
+
+@media (max-width: 800px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

@@ -191,6 +191,17 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** shared/API/web typecheck, lint, organizer event component test, and production builds.
 
+### Step 18 - Organizer ticket inventory
+
+**Commit:** `feat(web): manage organizer ticket inventory`
+
+- Added a dedicated event resource page for ticket type creation, editing, and deletion.
+- Mirrored backend limits for free-event pricing, per-ticket capacity, sales windows, and sold-seat preservation.
+- Displayed both ticket-level and event-level remaining inventory before publication.
+- Required confirmation before every ticket mutation.
+
+**Verification:** web lint, typecheck, ticket resource component test, and production build.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.

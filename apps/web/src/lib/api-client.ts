@@ -15,6 +15,8 @@ import type {
   ReviewInput,
   ReviewSummary,
   TransactionSummary,
+  TicketTypeInput,
+  TicketTypeSummary,
 } from "@eventure/shared";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1";
@@ -153,4 +155,36 @@ export function updateOrganizerEvent(
 
 export function deleteOrganizerEvent(id: string): Promise<void> {
   return apiRequest(`/organizer/events/${encodeURIComponent(id)}`, { method: "DELETE" });
+}
+
+export function getEventTickets(eventId: string): Promise<TicketTypeSummary[]> {
+  return apiRequest(`/organizer/events/${encodeURIComponent(eventId)}/tickets`);
+}
+
+export function createEventTicket(
+  eventId: string,
+  input: TicketTypeInput,
+): Promise<TicketTypeSummary> {
+  return apiRequest(`/organizer/events/${encodeURIComponent(eventId)}/tickets`, {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+export function updateEventTicket(
+  eventId: string,
+  ticketId: string,
+  input: TicketTypeInput,
+): Promise<TicketTypeSummary> {
+  return apiRequest(
+    `/organizer/events/${encodeURIComponent(eventId)}/tickets/${encodeURIComponent(ticketId)}`,
+    { method: "PUT", body: JSON.stringify(input) },
+  );
+}
+
+export function deleteEventTicket(eventId: string, ticketId: string): Promise<void> {
+  return apiRequest(
+    `/organizer/events/${encodeURIComponent(eventId)}/tickets/${encodeURIComponent(ticketId)}`,
+    { method: "DELETE" },
+  );
 }
