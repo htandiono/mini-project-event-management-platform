@@ -26,7 +26,7 @@ This matrix translates the supplied brief into implementation ownership and evid
 | Unit tests for each flow                                          | Both          | Feature 1 API services, hooks, clients, and components     | Feature 1 ready   |
 | `.env.example`, CORS, secrets excluded                            | Shared        | Env parser, CORS allowlist, `.gitignore`                   | Foundation ready  |
 | Frontend and backend deployed                                     | Both          | URLs in README                                             | Not started       |
-| 20+ meaningful conventional commits                               | Both          | 63 total; 25 Feature 1 commits after evidence update       | Satisfied         |
+| 20+ meaningful conventional commits                               | Both          | 64 total; 26 Feature 1 commits after CI portability fix    | Satisfied         |
 | `main`/`develop` branching and no direct main pushes              | Both          | Remote branches and protected `main` with one approval     | Configured        |
 | README with features, stack, ERD, setup, URLs, demo users         | Shared        | Repository README and Feature 1 implementation status      | Feature 1 updated |
 

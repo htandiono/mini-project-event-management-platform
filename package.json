@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "pnpm build:packages && dotenv -e .env -- pnpm --parallel --stream --filter @eventure/web --filter @eventure/api dev",
     "build": "pnpm -r build",
-    "lint": "pnpm -r lint",
+    "lint": "pnpm build:packages && pnpm -r lint",
     "build:packages": "pnpm --filter @eventure/shared build && pnpm --filter @eventure/database build",
     "typecheck": "pnpm build:packages && pnpm -r typecheck",
     "test": "pnpm build:packages && pnpm -r test",

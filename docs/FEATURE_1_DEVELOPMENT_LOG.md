@@ -272,10 +272,20 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** Markdown formatting, link/path review, clean worktree, and full `pnpm verify`.
 
+### Step 26 - Clean-runner lint preparation
+
+**Commit:** `fix(ci): build workspace packages before lint`
+
+- Made the root lint command build the shared and database packages before type-aware ESLint runs.
+- Removed the hidden dependency on ignored local `dist` declarations that caused fresh GitHub runners to report unsafe error-typed imports.
+- Kept the fix in the reusable `lint` script so standalone lint and the complete verification workflow behave consistently.
+
+**Verification:** reproduced the failure without package build artifacts, reran lint from the same clean-artifact state, and completed full `pnpm verify`.
+
 ## Delivered sequence summary
 
 1. Shared contracts and public event discovery/detail APIs.
 2. Organizer event, ticket type, and voucher lifecycle APIs.
 3. Serializable checkout, deadline processing, complete rollback, and attendee reviews.
 4. Searchable discovery, event detail, checkout, transaction, review, and organizer interfaces.
-5. Demonstration seed data, integrity fixes, partner integration seams, integration-test hardening, and final evidence.
+5. Demonstration seed data, integrity fixes, partner integration seams, integration-test hardening, CI portability, and final evidence.
