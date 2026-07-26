@@ -213,6 +213,16 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** web lint, typecheck, ticket/voucher resource component test, and production build.
 
+### Step 20 - Feature 1 demonstration data
+
+**Commit:** `feat(database): seed Feature 1 event catalog`
+
+- Expanded the repeatable seed with technology, music, and food events across Jakarta, Bandung, and Surabaya.
+- Included multiple paid ticket tiers, a free registration tier, percentage vouchers, and fixed-IDR vouchers.
+- Used stable slugs and voucher codes with upserts so repeated seeding does not duplicate records.
+
+**Verification:** Prisma schema validation, database package lint, and seed typecheck.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.
