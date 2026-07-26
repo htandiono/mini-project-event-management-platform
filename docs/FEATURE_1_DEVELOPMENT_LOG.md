@@ -233,6 +233,16 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** Prisma format/validation, generated client, and workspace typecheck.
 
+### Step 22 - Event edit inventory guards
+
+**Commit:** `fix(api): preserve ticket rules on event edits`
+
+- Prevented event capacity reductions below the sum of active ticket allocations.
+- Prevented switching an event to free while any active ticket tier still has a price.
+- Kept the earlier booked-seat and publication-readiness guards intact.
+
+**Verification:** API lint, typecheck, and organizer inventory regression tests.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.

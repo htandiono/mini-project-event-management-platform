@@ -48,6 +48,7 @@ describe("updateOrganizerEvent", () => {
         update,
       },
       category: { findFirst: vi.fn().mockResolvedValue({ id: input.categoryId }) },
+      ticketType: { aggregate: vi.fn().mockResolvedValue({ _sum: { capacity: 70 } }) },
     } as unknown as PrismaClient;
 
     const result = await updateOrganizerEvent(database, "organizer-1", "event-1", input);
@@ -87,6 +88,28 @@ describe("updateOrganizerEvent", () => {
 
     await expect(
       updateOrganizerEvent(database, "organizer-1", "event-1", input),
+    ).rejects.toMatchObject({ statusCode: 409 });
+  });
+
+  it("rejects event capacity below configured ticket allocations", async () => {
+    const database = {
+      event: {
+        findFirst: vi.fn().mockResolvedValue({
+          capacity: 100,
+          availableSeats: 100,
+          publishedAt: null,
+          _count: { ticketTypes: 1 },
+        }),
+      },
+      ticketType: { aggregate: vi.fn().mockResolvedValue({ _sum: { capacity: 90 } }) },
+    } as unknown as PrismaClient;
+
+    await expect(
+      updateOrganizerEvent(database, "organizer-1", "event-1", {
+        ...input,
+        capacity: 80,
+        status: "DRAFT",
+      }),
     ).rejects.toMatchObject({ statusCode: 409 });
   });
 });

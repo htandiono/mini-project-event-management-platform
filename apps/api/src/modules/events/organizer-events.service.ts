@@ -185,6 +185,28 @@ export async function updateOrganizerEvent(
     throw new AppError("Add at least one ticket type before publishing", 409);
   }
 
+  if (input.capacity !== existing.capacity) {
+    const allocation = await database.ticketType.aggregate({
+      where: { eventId, deletedAt: null },
+      _sum: { capacity: true },
+    });
+
+    if ((allocation._sum.capacity ?? 0) > input.capacity) {
+      throw new AppError("Reduce ticket allocations before lowering event capacity", 409);
+    }
+  }
+
+  if (input.isFree) {
+    const paidTicket = await database.ticketType.findFirst({
+      where: { eventId, deletedAt: null, price: { gt: 0 } },
+      select: { id: true },
+    });
+
+    if (paidTicket) {
+      throw new AppError("Set all ticket prices to zero before making the event free", 409);
+    }
+  }
+
   await assertActiveCategory(database, input.categoryId);
   const event = await database.event.update({
     where: { id: eventId },
