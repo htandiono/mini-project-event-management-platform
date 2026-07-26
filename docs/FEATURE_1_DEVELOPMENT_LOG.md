@@ -253,14 +253,29 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** API lint, typecheck, and transaction restoration tests.
 
-## Planned sequence
+### Step 24 - Event details test router
 
-1. Public event query validation, filtering, sorting, and pagination.
-2. Public event details and category metadata.
-3. Organizer event CRUD with soft deletion.
-4. Ticket type and event voucher management.
-5. Transactional checkout with capacity and discount enforcement.
-6. Transaction expiry/cancellation restoration and customer transaction status.
-7. Post-event review creation and editing.
-8. Event discovery, detail, checkout, transaction, and organizer web flows.
-9. Full Feature 1 verification and requirements evidence update.
+**Commit:** `test(web): provide router in event details test`
+
+- Updated the event-details integration test to supply the Next.js router used by its checkout form.
+- Kept the production navigation behavior intact while exercising the complete event detail composition.
+
+**Verification:** focused event-details component test and full web test suite through `pnpm verify`.
+
+### Step 25 - Final implementation evidence
+
+**Commit:** `docs: finalize Feature 1 implementation evidence`
+
+- Updated the repository status, clone instructions, API surface, and Feature 1 development-log link.
+- Replaced planned Feature 1 requirements with concrete source and test evidence.
+- Recorded the GitHub workflow state and the final atomic commit counts.
+
+**Verification:** Markdown formatting, link/path review, clean worktree, and full `pnpm verify`.
+
+## Delivered sequence summary
+
+1. Shared contracts and public event discovery/detail APIs.
+2. Organizer event, ticket type, and voucher lifecycle APIs.
+3. Serializable checkout, deadline processing, complete rollback, and attendee reviews.
+4. Searchable discovery, event detail, checkout, transaction, review, and organizer interfaces.
+5. Demonstration seed data, integrity fixes, partner integration seams, integration-test hardening, and final evidence.
