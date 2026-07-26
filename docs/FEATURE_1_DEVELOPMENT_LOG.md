@@ -223,6 +223,16 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** Prisma schema validation, database package lint, and seed typecheck.
 
+### Step 21 - Restored coupon reuse
+
+**Commit:** `fix(database): allow restored coupon reuse`
+
+- Changed the user-coupon transaction relation from one-to-one to one-to-many.
+- Preserved each historical transaction's coupon reference while allowing a restored coupon to discount a later checkout.
+- Added an index for transaction lookups by user coupon and updated the README ERD.
+
+**Verification:** Prisma format/validation, generated client, and workspace typecheck.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.

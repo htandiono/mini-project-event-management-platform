@@ -133,7 +133,7 @@ erDiagram
   TRANSACTION ||--|{ TRANSACTION_ITEM : contains
   TICKET_TYPE ||--o{ TRANSACTION_ITEM : selected_as
   VOUCHER o|--o{ TRANSACTION : discounts
-  USER_COUPON o|--o| TRANSACTION : discounts
+  USER_COUPON o|--o{ TRANSACTION : discounts
   TRANSACTION ||--o| PAYMENT_PROOF : has
   TRANSACTION ||--o{ POINT_LEDGER : records
   TRANSACTION ||--o| REVIEW : enables
