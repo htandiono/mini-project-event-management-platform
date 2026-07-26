@@ -11,12 +11,14 @@ import type {
   EventSummary,
   OrganizerEventDetail,
   OrganizerEventSummary,
+  OrganizerVoucherSummary,
   PaginatedData,
   ReviewInput,
   ReviewSummary,
   TransactionSummary,
   TicketTypeInput,
   TicketTypeSummary,
+  VoucherInput,
 } from "@eventure/shared";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1";
@@ -185,6 +187,38 @@ export function updateEventTicket(
 export function deleteEventTicket(eventId: string, ticketId: string): Promise<void> {
   return apiRequest(
     `/organizer/events/${encodeURIComponent(eventId)}/tickets/${encodeURIComponent(ticketId)}`,
+    { method: "DELETE" },
+  );
+}
+
+export function getEventVouchers(eventId: string): Promise<OrganizerVoucherSummary[]> {
+  return apiRequest(`/organizer/events/${encodeURIComponent(eventId)}/vouchers`);
+}
+
+export function createEventVoucher(
+  eventId: string,
+  input: VoucherInput,
+): Promise<OrganizerVoucherSummary> {
+  return apiRequest(`/organizer/events/${encodeURIComponent(eventId)}/vouchers`, {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+export function updateEventVoucher(
+  eventId: string,
+  voucherId: string,
+  input: VoucherInput,
+): Promise<OrganizerVoucherSummary> {
+  return apiRequest(
+    `/organizer/events/${encodeURIComponent(eventId)}/vouchers/${encodeURIComponent(voucherId)}`,
+    { method: "PUT", body: JSON.stringify(input) },
+  );
+}
+
+export function deleteEventVoucher(eventId: string, voucherId: string): Promise<void> {
+  return apiRequest(
+    `/organizer/events/${encodeURIComponent(eventId)}/vouchers/${encodeURIComponent(voucherId)}`,
     { method: "DELETE" },
   );
 }

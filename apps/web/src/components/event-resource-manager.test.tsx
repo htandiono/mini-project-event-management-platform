@@ -1,13 +1,18 @@
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { getEventTickets, getOrganizerEvent } from "@/lib/api-client";
+import { getEventTickets, getEventVouchers, getOrganizerEvent } from "@/lib/api-client";
 
 import { EventResourceManager } from "./event-resource-manager";
 
 vi.mock("@/lib/api-client", async (importOriginal) => {
   const original = await importOriginal<typeof import("@/lib/api-client")>();
-  return { ...original, getEventTickets: vi.fn(), getOrganizerEvent: vi.fn() };
+  return {
+    ...original,
+    getEventTickets: vi.fn(),
+    getEventVouchers: vi.fn(),
+    getOrganizerEvent: vi.fn(),
+  };
 });
 
 beforeEach(() => {
@@ -44,6 +49,19 @@ beforeEach(() => {
       salesEndAt: null,
     },
   ]);
+  vi.mocked(getEventVouchers).mockResolvedValue([
+    {
+      id: "voucher-1",
+      code: "EARLY10",
+      name: "Early bird",
+      discountPercent: 10,
+      discountAmount: null,
+      usageLimit: 20,
+      usedCount: 3,
+      startsAt: "2026-08-01T00:00:00.000Z",
+      endsAt: "2026-09-01T00:00:00.000Z",
+    },
+  ]);
 });
 
 describe("EventResourceManager", () => {
@@ -51,5 +69,6 @@ describe("EventResourceManager", () => {
     render(<EventResourceManager eventId="event-1" />);
     expect(await screen.findByRole("heading", { name: "General Admission" })).toBeInTheDocument();
     expect(screen.getByText("50 of 50 available")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "EARLY10" })).toBeInTheDocument();
   });
 });

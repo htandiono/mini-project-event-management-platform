@@ -32,6 +32,10 @@
   grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.8fr);
 }
 
+.voucherSection {
+  margin-top: 1.25rem;
+}
+
 .panel,
 .message {
   background: var(--color-surface);

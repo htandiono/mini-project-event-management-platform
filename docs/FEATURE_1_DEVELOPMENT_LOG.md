@@ -202,6 +202,17 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** web lint, typecheck, ticket resource component test, and production build.
 
+### Step 19 - Organizer event vouchers
+
+**Commit:** `feat(web): manage organizer event vouchers`
+
+- Added limited-time event voucher creation, editing, and soft deletion to the resource page.
+- Supported either percentage or fixed-IDR discounts, normalized codes, usage limits, and active dates.
+- Displayed live redemption counts and blocked voucher controls for free events.
+- Required confirmation before every voucher mutation.
+
+**Verification:** web lint, typecheck, ticket/voucher resource component test, and production build.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.
