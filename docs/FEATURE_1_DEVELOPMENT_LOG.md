@@ -243,6 +243,16 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** API lint, typecheck, and organizer inventory regression tests.
 
+### Step 23 - Shared rejection rollback seam
+
+**Commit:** `refactor(api): expose transaction rollback seam`
+
+- Exposed the tested transaction restoration operation for Feature 2 payment-proof rejection.
+- Allowed `REJECTED` as a terminal rollback status while retaining the conditional one-time transition.
+- Documented the exact `response.locals.user`, organizer deadline, rollback, and email integration contracts for the partner.
+
+**Verification:** API lint, typecheck, and transaction restoration tests.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.

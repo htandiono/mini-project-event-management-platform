@@ -27,7 +27,7 @@ type RestorableTransaction = Prisma.TransactionGetPayload<{ select: typeof resto
 async function restoreReservation(
   client: Prisma.TransactionClient,
   transaction: RestorableTransaction,
-  nextStatus: "EXPIRED" | "CANCELED",
+  nextStatus: "EXPIRED" | "CANCELED" | "REJECTED",
   reason: string,
   now: Date,
 ): Promise<boolean> {
@@ -86,11 +86,11 @@ async function restoreReservation(
   return true;
 }
 
-async function expireTransaction(
+export async function restoreTransactionById(
   database: PrismaClient,
   transactionId: string,
   expectedStatus: "WAITING_FOR_PAYMENT" | "WAITING_FOR_CONFIRMATION",
-  nextStatus: "EXPIRED" | "CANCELED",
+  nextStatus: "EXPIRED" | "CANCELED" | "REJECTED",
   reason: string,
   now: Date,
 ): Promise<boolean> {
@@ -131,7 +131,7 @@ export async function expireOverdueTransactions(
     const expectedStatus = paymentExpired
       ? TransactionStatus.WAITING_FOR_PAYMENT
       : TransactionStatus.WAITING_FOR_CONFIRMATION;
-    const restored = await expireTransaction(
+    const restored = await restoreTransactionById(
       database,
       transaction.id,
       expectedStatus,
