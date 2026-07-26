@@ -1,7 +1,10 @@
 import type { EventDetail, EventReviews } from "@eventure/shared";
 import { render, screen } from "@testing-library/react";
+import { vi } from "vitest";
 
 import { EventDetails } from "./event-details";
+
+vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
 
 const event: EventDetail = {
   id: "event-1",
