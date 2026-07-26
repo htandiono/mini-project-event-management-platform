@@ -6,8 +6,11 @@ import type {
   CheckoutOptions,
   EventDetail,
   EventListQuery,
+  EventInput,
   EventReviews,
   EventSummary,
+  OrganizerEventDetail,
+  OrganizerEventSummary,
   PaginatedData,
   ReviewInput,
   ReviewSummary,
@@ -124,4 +127,30 @@ export function deleteReview(transactionId: string): Promise<void> {
   return apiRequest(`/transactions/${encodeURIComponent(transactionId)}/review`, {
     method: "DELETE",
   });
+}
+
+export function getOrganizerEvents(signal?: AbortSignal): Promise<OrganizerEventSummary[]> {
+  return apiRequest("/organizer/events", { signal });
+}
+
+export function getOrganizerEvent(id: string): Promise<OrganizerEventDetail> {
+  return apiRequest(`/organizer/events/${encodeURIComponent(id)}`);
+}
+
+export function createOrganizerEvent(input: EventInput): Promise<OrganizerEventSummary> {
+  return apiRequest("/organizer/events", { method: "POST", body: JSON.stringify(input) });
+}
+
+export function updateOrganizerEvent(
+  id: string,
+  input: EventInput,
+): Promise<OrganizerEventSummary> {
+  return apiRequest(`/organizer/events/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    body: JSON.stringify(input),
+  });
+}
+
+export function deleteOrganizerEvent(id: string): Promise<void> {
+  return apiRequest(`/organizer/events/${encodeURIComponent(id)}`, { method: "DELETE" });
 }

@@ -88,6 +88,15 @@ export interface OrganizerEventSummary {
   ticketTypeCount: number;
 }
 
+export interface OrganizerEventDetail extends OrganizerEventSummary {
+  categoryId: string;
+  description: string;
+  venue: string;
+  address: string;
+  province: string;
+  thumbnailUrl: string | null;
+}
+
 export interface TicketTypeInput {
   name: string;
   description?: string | null;

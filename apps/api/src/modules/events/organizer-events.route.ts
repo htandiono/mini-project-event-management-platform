@@ -1,5 +1,5 @@
 import { prisma } from "@eventure/database";
-import type { ApiSuccess, OrganizerEventSummary } from "@eventure/shared";
+import type { ApiSuccess, OrganizerEventDetail, OrganizerEventSummary } from "@eventure/shared";
 import { Router } from "express";
 
 import { asyncHandler } from "../../lib/async-handler.js";
@@ -8,6 +8,7 @@ import { entityIdSchema, eventInputSchema } from "./event.schemas.js";
 import {
   createOrganizerEvent,
   deleteOrganizerEvent,
+  getOrganizerEvent,
   listOrganizerEvents,
   updateOrganizerEvent,
 } from "./organizer-events.service.js";
@@ -42,6 +43,22 @@ organizerEventsRouter.post(
     };
 
     response.status(201).json(body);
+  }),
+);
+
+organizerEventsRouter.get(
+  "/:eventId",
+  asyncHandler(async (request, response) => {
+    const organizer = requireRequestUser(response.locals, "ORGANIZER");
+    const eventId = entityIdSchema.parse(request.params.eventId);
+    const event = await getOrganizerEvent(prisma, organizer.id, eventId);
+    const body: ApiSuccess<OrganizerEventDetail> = {
+      success: true,
+      message: "Organizer event retrieved",
+      data: event,
+    };
+
+    response.json(body);
   }),
 );
 

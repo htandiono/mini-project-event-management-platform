@@ -180,6 +180,17 @@ This document records Feature 1 as a sequence of small, reviewable commits. Each
 
 **Verification:** shared/API/web typecheck, lint, review editor test, and production builds.
 
+### Step 17 - Organizer event manager
+
+**Commit:** `feat(web): manage organizer event lifecycle`
+
+- Added the organizer event inventory and a validated create/edit form for core event details.
+- Kept new events in draft status so tickets must be configured before publication.
+- Added confirmed soft deletion and surfaced active-transaction conflicts from the API.
+- Added a protected organizer detail endpoint to prefill edits without exposing another organizer's data.
+
+**Verification:** shared/API/web typecheck, lint, organizer event component test, and production builds.
+
 ## Planned sequence
 
 1. Public event query validation, filtering, sorting, and pagination.

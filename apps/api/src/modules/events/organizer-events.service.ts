@@ -1,5 +1,5 @@
 import { TransactionStatus, type Prisma, type PrismaClient } from "@eventure/database";
-import type { EventInput, OrganizerEventSummary } from "@eventure/shared";
+import type { EventInput, OrganizerEventDetail, OrganizerEventSummary } from "@eventure/shared";
 
 import { AppError } from "../../lib/app-error.js";
 
@@ -20,6 +20,20 @@ const organizerEventSelect = {
 
 type OrganizerEventRecord = Prisma.EventGetPayload<{ select: typeof organizerEventSelect }>;
 
+const organizerEventDetailSelect = {
+  ...organizerEventSelect,
+  categoryId: true,
+  description: true,
+  venue: true,
+  address: true,
+  province: true,
+  thumbnailUrl: true,
+} satisfies Prisma.EventSelect;
+
+type OrganizerEventDetailRecord = Prisma.EventGetPayload<{
+  select: typeof organizerEventDetailSelect;
+}>;
+
 function mapOrganizerEvent(event: OrganizerEventRecord): OrganizerEventSummary {
   return {
     id: event.id,
@@ -34,6 +48,18 @@ function mapOrganizerEvent(event: OrganizerEventRecord): OrganizerEventSummary {
     isFree: event.isFree,
     status: event.status,
     ticketTypeCount: event._count.ticketTypes,
+  };
+}
+
+function mapOrganizerEventDetail(event: OrganizerEventDetailRecord): OrganizerEventDetail {
+  return {
+    ...mapOrganizerEvent(event),
+    categoryId: event.categoryId,
+    description: event.description,
+    venue: event.venue,
+    address: event.address,
+    province: event.province,
+    thumbnailUrl: event.thumbnailUrl,
   };
 }
 
@@ -82,6 +108,23 @@ export async function listOrganizerEvents(
   });
 
   return events.map(mapOrganizerEvent);
+}
+
+export async function getOrganizerEvent(
+  database: PrismaClient,
+  organizerId: string,
+  eventId: string,
+): Promise<OrganizerEventDetail> {
+  const event = await database.event.findFirst({
+    where: { id: eventId, organizerId, deletedAt: null },
+    select: organizerEventDetailSelect,
+  });
+
+  if (!event) {
+    throw new AppError("Event not found", 404);
+  }
+
+  return mapOrganizerEventDetail(event);
 }
 
 export async function createOrganizerEvent(
