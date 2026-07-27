@@ -4,7 +4,12 @@ import { TRANSACTION_STATUS_LABELS, type TransactionSummary } from "@eventure/sh
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { ApiClientError, cancelTransaction, getTransaction } from "@/lib/api-client";
+import {
+  ApiClientError,
+  cancelTransaction,
+  getTransaction,
+  uploadTransactionPaymentProof,
+} from "@/lib/api-client";
 import { formatIdr } from "@/lib/currency";
 
 import { ReviewEditor } from "./review-editor";
@@ -20,6 +25,13 @@ export function formatCountdown(milliseconds: number): string {
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
   return `${hours}h ${minutes}m remaining`;
+}
+
+export function validatePaymentProofFile(file: File): string | null {
+  const supportedTypes = ["image/jpeg", "image/png", "image/webp"];
+  if (!supportedTypes.includes(file.type)) return "Choose a JPEG, PNG, or WebP image.";
+  if (file.size > 5 * 1024 * 1024) return "Payment proof must be 5 MB or smaller.";
+  return null;
 }
 
 function PaymentCountdown({ deadline }: { deadline: string }) {
@@ -45,6 +57,7 @@ export function TransactionDetails({ transactionId }: TransactionDetailsProps) {
   const [transaction, setTransaction] = useState<TransactionSummary | null>(null);
   const [loading, setLoading] = useState(true);
   const [working, setWorking] = useState(false);
+  const [paymentProof, setPaymentProof] = useState<File | null>(null);
   const [error, setError] = useState("");
   const [needsLogin, setNeedsLogin] = useState(false);
 
@@ -74,6 +87,33 @@ export function TransactionDetails({ transactionId }: TransactionDetailsProps) {
       setTransaction(await getTransaction(transactionId));
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Unable to cancel transaction");
+    } finally {
+      setWorking(false);
+    }
+  }
+
+  async function uploadProof(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!paymentProof) {
+      setError("Choose a payment proof image first.");
+      return;
+    }
+
+    const validationError = validatePaymentProofFile(paymentProof);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    setWorking(true);
+    setError("");
+
+    try {
+      await uploadTransactionPaymentProof(transactionId, paymentProof);
+      setTransaction(await getTransaction(transactionId));
+      setPaymentProof(null);
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "Unable to upload payment proof");
     } finally {
       setWorking(false);
     }
@@ -160,9 +200,31 @@ export function TransactionDetails({ transactionId }: TransactionDetailsProps) {
           ) : null}
           <p className={styles.muted}>
             {transaction.status === "WAITING_FOR_PAYMENT"
-              ? "Upload your proof from the payment section supplied by the account feature."
+              ? "Upload a clear bank-transfer receipt before the two-hour deadline."
               : "This status updates automatically as your registration is reviewed."}
           </p>
+          {transaction.status === "WAITING_FOR_PAYMENT" ? (
+            <form className={styles.uploadForm} onSubmit={uploadProof}>
+              <label>
+                <span>Payment proof (JPEG, PNG, or WebP; max 5 MB)</span>
+                <input
+                  accept="image/jpeg,image/png,image/webp"
+                  disabled={working}
+                  name="paymentProof"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0] ?? null;
+                    setPaymentProof(file);
+                    if (file) setError(validatePaymentProofFile(file) ?? "");
+                  }}
+                  required
+                  type="file"
+                />
+              </label>
+              <button className="button button--primary" disabled={working} type="submit">
+                {working ? "Uploading..." : "Upload payment proof"}
+              </button>
+            </form>
+          ) : null}
           {error ? (
             <p className={styles.error} role="alert">
               {error}
@@ -174,7 +236,7 @@ export function TransactionDetails({ transactionId }: TransactionDetailsProps) {
             </Link>
             {transaction.status === "WAITING_FOR_PAYMENT" ? (
               <button
-                className="button button--primary"
+                className="button button--ghost"
                 type="button"
                 disabled={working}
                 onClick={cancel}

@@ -12,6 +12,7 @@ import type {
   OrganizerEventDetail,
   OrganizerEventSummary,
   OrganizerVoucherSummary,
+  PaymentProofSubmission,
   PaginatedData,
   ReviewInput,
   ReviewSummary,
@@ -35,12 +36,13 @@ export class ApiClientError extends Error {
 }
 
 export async function apiRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const isFormData = typeof FormData !== "undefined" && init.body instanceof FormData;
   const response = await fetch(`${apiUrl}${path}`, {
     ...init,
     cache: "no-store",
     credentials: "include",
     headers: {
-      ...(init.body ? { "Content-Type": "application/json" } : undefined),
+      ...(init.body && !isFormData ? { "Content-Type": "application/json" } : undefined),
       ...init.headers,
     },
   });
@@ -111,6 +113,19 @@ export function getTransaction(id: string, signal?: AbortSignal): Promise<Transa
 
 export function cancelTransaction(id: string): Promise<void> {
   return apiRequest(`/transactions/${encodeURIComponent(id)}/cancel`, { method: "POST" });
+}
+
+export function uploadTransactionPaymentProof(
+  id: string,
+  file: File,
+): Promise<PaymentProofSubmission> {
+  const body = new FormData();
+  body.append("paymentProof", file);
+
+  return apiRequest(`/transactions/${encodeURIComponent(id)}/payment-proof`, {
+    method: "POST",
+    body,
+  });
 }
 
 export function createReview(transactionId: string, input: ReviewInput): Promise<ReviewSummary> {
