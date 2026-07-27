@@ -7,8 +7,10 @@ The Prisma schema in `packages/database/prisma/schema.prisma` is the single sour
 1. Copy `.env.example` to `.env` at the repository root.
 2. Start PostgreSQL with `docker compose up -d`.
 3. Run `pnpm db:generate`.
-4. Run `pnpm db:migrate -- --name <short-description>` after a schema change.
+4. Run `pnpm db:migrate:deploy` to apply the committed schema.
 5. Run `pnpm db:seed` for deterministic demo users and baseline event data.
+
+During schema development, use `pnpm db:migrate -- --name <short-description>` to create a new migration, then commit both the migration and schema change.
 
 The root scripts load `.env` and forward it to Prisma and both applications. Never create or commit an environment file inside a workspace package.
 
