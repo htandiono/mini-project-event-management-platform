@@ -92,7 +92,10 @@ export default function AccountLayout({ children }: { children: React.ReactNode 
             >
               {user.name}
             </h2>
-            <span className="badge badge--info" style={{ marginTop: "0.2rem", fontSize: "0.68rem" }}>
+            <span
+              className="badge badge--info"
+              style={{ marginTop: "0.2rem", fontSize: "0.68rem" }}
+            >
               {user.role}
             </span>
           </div>

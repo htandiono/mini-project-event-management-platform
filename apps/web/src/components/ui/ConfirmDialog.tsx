@@ -28,12 +28,7 @@ export function ConfirmDialog({
 }: ConfirmDialogProps) {
   const footer = (
     <>
-      <button
-        type="button"
-        className="button button--ghost"
-        onClick={onClose}
-        disabled={isLoading}
-      >
+      <button type="button" className="button button--ghost" onClick={onClose} disabled={isLoading}>
         {cancelText}
       </button>
       <button

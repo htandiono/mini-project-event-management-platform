@@ -41,12 +41,10 @@ describe("POST /api/v1/auth/login", () => {
   });
 
   it("logs in successfully with valid credentials", async () => {
-    const res = await request(app)
-      .post("/api/v1/auth/login")
-      .send({
-        email: activeEmail,
-        password: "Password123!",
-      });
+    const res = await request(app).post("/api/v1/auth/login").send({
+      email: activeEmail,
+      password: "Password123!",
+    });
 
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
@@ -55,12 +53,10 @@ describe("POST /api/v1/auth/login", () => {
   });
 
   it("fails login with incorrect password", async () => {
-    const res = await request(app)
-      .post("/api/v1/auth/login")
-      .send({
-        email: activeEmail,
-        password: "WrongPassword!",
-      });
+    const res = await request(app).post("/api/v1/auth/login").send({
+      email: activeEmail,
+      password: "WrongPassword!",
+    });
 
     expect(res.status).toBe(401);
     expect(res.body.success).toBe(false);
@@ -79,12 +75,10 @@ describe("POST /api/v1/auth/login", () => {
   });
 
   it("fails login when account is suspended", async () => {
-    const res = await request(app)
-      .post("/api/v1/auth/login")
-      .send({
-        email: suspendedEmail,
-        password: "Password123!",
-      });
+    const res = await request(app).post("/api/v1/auth/login").send({
+      email: suspendedEmail,
+      password: "Password123!",
+    });
 
     expect(res.status).toBe(403);
     expect(res.body.success).toBe(false);

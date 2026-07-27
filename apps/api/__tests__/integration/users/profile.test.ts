@@ -37,9 +37,7 @@ describe("GET & PATCH /api/v1/users/me", () => {
   });
 
   it("retrieves the profile with point balance", async () => {
-    const res = await request(app)
-      .get("/api/v1/users/me")
-      .set("Cookie", cookie);
+    const res = await request(app).get("/api/v1/users/me").set("Cookie", cookie);
 
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);

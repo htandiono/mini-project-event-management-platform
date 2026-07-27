@@ -133,12 +133,7 @@ export default function ProfilePage() {
             }}
           >
             {avatarPreview ? (
-              <Image
-                src={avatarPreview}
-                alt="Avatar preview"
-                fill
-                style={{ objectFit: "cover" }}
-              />
+              <Image src={avatarPreview} alt="Avatar preview" fill style={{ objectFit: "cover" }} />
             ) : user?.avatarUrl ? (
               <Image
                 src={user.avatarUrl}

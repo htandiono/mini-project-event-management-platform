@@ -40,15 +40,13 @@ describe("POST /api/v1/auth/register", () => {
   });
 
   it("registers a new user successfully without referral code", async () => {
-    const res = await request(app)
-      .post("/api/v1/auth/register")
-      .send({
-        email: testEmail1,
-        password: "Password123!",
-        confirmPassword: "Password123!",
-        name: "John Doe",
-        role: "CUSTOMER",
-      });
+    const res = await request(app).post("/api/v1/auth/register").send({
+      email: testEmail1,
+      password: "Password123!",
+      confirmPassword: "Password123!",
+      name: "John Doe",
+      role: "CUSTOMER",
+    });
 
     expect(res.status).toBe(201);
     expect(res.body.success).toBe(true);
@@ -60,16 +58,14 @@ describe("POST /api/v1/auth/register", () => {
   });
 
   it("registers a new user with a valid referral code and awards points and coupon", async () => {
-    const res = await request(app)
-      .post("/api/v1/auth/register")
-      .send({
-        email: testEmail2,
-        password: "Password123!",
-        confirmPassword: "Password123!",
-        name: "Jane Smith",
-        role: "CUSTOMER",
-        referralCode: referrerCode,
-      });
+    const res = await request(app).post("/api/v1/auth/register").send({
+      email: testEmail2,
+      password: "Password123!",
+      confirmPassword: "Password123!",
+      name: "Jane Smith",
+      role: "CUSTOMER",
+      referralCode: referrerCode,
+    });
 
     expect(res.status).toBe(201);
     expect(res.body.success).toBe(true);
@@ -88,15 +84,13 @@ describe("POST /api/v1/auth/register", () => {
   });
 
   it("fails registration with duplicate email", async () => {
-    const res = await request(app)
-      .post("/api/v1/auth/register")
-      .send({
-        email: testEmail1,
-        password: "Password123!",
-        confirmPassword: "Password123!",
-        name: "John Doe",
-        role: "CUSTOMER",
-      });
+    const res = await request(app).post("/api/v1/auth/register").send({
+      email: testEmail1,
+      password: "Password123!",
+      confirmPassword: "Password123!",
+      name: "John Doe",
+      role: "CUSTOMER",
+    });
 
     expect(res.status).toBe(409);
     expect(res.body.success).toBe(false);

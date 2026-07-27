@@ -45,7 +45,11 @@ export async function sendWelcomeEmail(to: string, name: string): Promise<void> 
   await sendEmail(to, "Welcome to Eventure!", html);
 }
 
-export async function sendPasswordResetEmail(to: string, name: string, resetLink: string): Promise<void> {
+export async function sendPasswordResetEmail(
+  to: string,
+  name: string,
+  resetLink: string,
+): Promise<void> {
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
       <h2 style="color: #c94f43;">Password Reset Request</h2>

@@ -124,7 +124,10 @@ export async function getStatistics(
   };
 }
 
-export async function getAttendees(organizerId: string, eventId: string): Promise<AttendeeListItem[]> {
+export async function getAttendees(
+  organizerId: string,
+  eventId: string,
+): Promise<AttendeeListItem[]> {
   const event = await prisma.event.findFirst({
     where: { id: eventId, organizerId, deletedAt: null },
   });

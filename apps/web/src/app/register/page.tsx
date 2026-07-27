@@ -112,7 +112,8 @@ export default function RegisterPage() {
                   gap: "0.5rem",
                   padding: "0.75rem",
                   border: "1px solid",
-                  borderColor: selectedRole === "CUSTOMER" ? "var(--color-teal)" : "var(--color-line)",
+                  borderColor:
+                    selectedRole === "CUSTOMER" ? "var(--color-teal)" : "var(--color-line)",
                   borderRadius: "var(--radius-sm)",
                   background: selectedRole === "CUSTOMER" ? "rgba(23, 109, 101, 0.08)" : "white",
                   cursor: "pointer",
@@ -130,7 +131,8 @@ export default function RegisterPage() {
                   gap: "0.5rem",
                   padding: "0.75rem",
                   border: "1px solid",
-                  borderColor: selectedRole === "ORGANIZER" ? "var(--color-teal)" : "var(--color-line)",
+                  borderColor:
+                    selectedRole === "ORGANIZER" ? "var(--color-teal)" : "var(--color-line)",
                   borderRadius: "var(--radius-sm)",
                   background: selectedRole === "ORGANIZER" ? "rgba(23, 109, 101, 0.08)" : "white",
                   cursor: "pointer",
@@ -151,7 +153,9 @@ export default function RegisterPage() {
             <input
               id="name"
               className="form-input"
-              placeholder={selectedRole === "ORGANIZER" ? "Purwadhika / Ismaya Live" : "Budi Santoso"}
+              placeholder={
+                selectedRole === "ORGANIZER" ? "Purwadhika / Ismaya Live" : "Budi Santoso"
+              }
               {...register("name", { required: "Name is required" })}
             />
             {errors.name && <span className="form-error">{errors.name.message}</span>}

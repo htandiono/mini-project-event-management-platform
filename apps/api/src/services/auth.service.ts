@@ -38,23 +38,21 @@ export function formatUserResponse(
     referralCode: user.referralCode,
     referredById: user.referredById,
     avatarUrl: user.avatarUrl,
-    createdAt: user.createdAt instanceof Date ? user.createdAt.toISOString() : String(user.createdAt),
-    updatedAt: user.updatedAt instanceof Date ? user.updatedAt.toISOString() : String(user.updatedAt),
+    createdAt:
+      user.createdAt instanceof Date ? user.createdAt.toISOString() : String(user.createdAt),
+    updatedAt:
+      user.updatedAt instanceof Date ? user.updatedAt.toISOString() : String(user.updatedAt),
   };
 }
 
 export function setAuthCookies(res: Response, user: { id: string; role: string }) {
   const env = getEnv();
-  const accessToken = jwt.sign(
-    { sub: user.id, role: user.role },
-    env.JWT_ACCESS_SECRET,
-    { expiresIn: env.JWT_ACCESS_EXPIRES_IN as unknown as jwt.SignOptions["expiresIn"] },
-  );
-  const refreshToken = jwt.sign(
-    { sub: user.id, role: user.role },
-    env.JWT_REFRESH_SECRET,
-    { expiresIn: env.JWT_REFRESH_EXPIRES_IN as unknown as jwt.SignOptions["expiresIn"] },
-  );
+  const accessToken = jwt.sign({ sub: user.id, role: user.role }, env.JWT_ACCESS_SECRET, {
+    expiresIn: env.JWT_ACCESS_EXPIRES_IN as unknown as jwt.SignOptions["expiresIn"],
+  });
+  const refreshToken = jwt.sign({ sub: user.id, role: user.role }, env.JWT_REFRESH_SECRET, {
+    expiresIn: env.JWT_REFRESH_EXPIRES_IN as unknown as jwt.SignOptions["expiresIn"],
+  });
 
   const isProduction = env.NODE_ENV === "production";
 

@@ -67,14 +67,15 @@ export function SiteHeader() {
 
               <Link
                 className="button button--light"
-                style={{ display: "flex", gap: "0.5rem", padding: "0.5rem 1rem", fontSize: "0.88rem" }}
+                style={{
+                  display: "flex",
+                  gap: "0.5rem",
+                  padding: "0.5rem 1rem",
+                  fontSize: "0.88rem",
+                }}
                 href={user.role === "ORGANIZER" ? "/organizer/dashboard" : "/account"}
               >
-                {user.role === "ORGANIZER" ? (
-                  <LayoutDashboard size={16} />
-                ) : (
-                  <UserIcon size={16} />
-                )}
+                {user.role === "ORGANIZER" ? <LayoutDashboard size={16} /> : <UserIcon size={16} />}
                 <span>{user.name || "Dashboard"}</span>
               </Link>
 

@@ -60,9 +60,7 @@ export default function OrganizerDashboardPage() {
 
       <div className="stats-grid">
         <div className="stat-card" style={{ borderLeft: "4px solid var(--color-gold)" }}>
-          <div
-            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-          >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span className="stat-card__label">Active Events</span>
             <CalendarDays size={20} style={{ color: "var(--color-gold)" }} />
           </div>
@@ -82,9 +80,7 @@ export default function OrganizerDashboardPage() {
         </div>
 
         <div className="stat-card" style={{ borderLeft: "4px solid var(--color-teal)" }}>
-          <div
-            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-          >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span className="stat-card__label">Pending Verifications</span>
             <ClipboardCheck size={20} style={{ color: "var(--color-teal)" }} />
           </div>
@@ -99,9 +95,7 @@ export default function OrganizerDashboardPage() {
         </div>
 
         <div className="stat-card" style={{ borderLeft: "4px solid var(--color-primary)" }}>
-          <div
-            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-          >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span className="stat-card__label">Total Tickets Sold</span>
             <BarChart3 size={20} style={{ color: "var(--color-primary)" }} />
           </div>
@@ -110,9 +104,7 @@ export default function OrganizerDashboardPage() {
         </div>
 
         <div className="stat-card" style={{ borderLeft: "4px solid var(--color-ink)" }}>
-          <div
-            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-          >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span className="stat-card__label">Gross Revenue (IDR)</span>
             <span style={{ fontWeight: "700", color: "var(--color-gold)" }}>Rp</span>
           </div>

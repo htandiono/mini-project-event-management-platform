@@ -55,9 +55,7 @@ describe("GET /api/v1/dashboard/statistics", () => {
   });
 
   it("retrieves zeroed statistics for an organizer with no events", async () => {
-    const res = await request(app)
-      .get("/api/v1/dashboard/statistics")
-      .set("Cookie", orgCookie);
+    const res = await request(app).get("/api/v1/dashboard/statistics").set("Cookie", orgCookie);
 
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
@@ -67,9 +65,7 @@ describe("GET /api/v1/dashboard/statistics", () => {
   });
 
   it("denies access to a CUSTOMER role", async () => {
-    const res = await request(app)
-      .get("/api/v1/dashboard/statistics")
-      .set("Cookie", custCookie);
+    const res = await request(app).get("/api/v1/dashboard/statistics").set("Cookie", custCookie);
 
     expect(res.status).toBe(403);
     expect(res.body.success).toBe(false);

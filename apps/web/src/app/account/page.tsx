@@ -73,9 +73,7 @@ export default function AccountOverviewPage() {
 
       <div className="stats-grid">
         <div className="stat-card">
-          <div
-            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-          >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span className="stat-card__label">Points Balance</span>
             <Sparkles size={20} style={{ color: "var(--color-gold)" }} />
           </div>
@@ -94,9 +92,7 @@ export default function AccountOverviewPage() {
         </div>
 
         <div className="stat-card">
-          <div
-            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-          >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span className="stat-card__label">Active Coupons</span>
             <Gift size={20} style={{ color: "var(--color-teal)" }} />
           </div>
@@ -115,9 +111,7 @@ export default function AccountOverviewPage() {
         </div>
 
         <div className="stat-card">
-          <div
-            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-          >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span className="stat-card__label">Referral Program</span>
             <Share2 size={20} style={{ color: "var(--color-primary)" }} />
           </div>
@@ -136,9 +130,7 @@ export default function AccountOverviewPage() {
         </div>
 
         <div className="stat-card">
-          <div
-            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-          >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span className="stat-card__label">My Orders</span>
             <ShoppingBag size={20} style={{ color: "var(--color-muted)" }} />
           </div>

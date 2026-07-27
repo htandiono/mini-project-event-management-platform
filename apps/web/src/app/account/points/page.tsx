@@ -147,9 +147,7 @@ export default function PointsHistoryPage() {
                   return (
                     <tr key={item.id}>
                       <td>
-                        <span
-                          className={`badge ${isCredit ? "badge--success" : "badge--warning"}`}
-                        >
+                        <span className={`badge ${isCredit ? "badge--success" : "badge--warning"}`}>
                           {item.type}
                         </span>
                       </td>

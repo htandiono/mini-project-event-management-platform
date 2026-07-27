@@ -105,7 +105,9 @@ export default function LoginPage() {
           </div>
 
           <div className="form-group">
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+            <div
+              style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}
+            >
               <label className="form-label" htmlFor="password">
                 Password
               </label>

@@ -14,7 +14,10 @@ export const uploadAvatar = multer({
     if (allowedMimeTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new AppError("Only JPEG, PNG, and WebP images are allowed", 400) as unknown as null, false);
+      cb(
+        new AppError("Only JPEG, PNG, and WebP images are allowed", 400) as unknown as null,
+        false,
+      );
     }
   },
 }).single("avatar");

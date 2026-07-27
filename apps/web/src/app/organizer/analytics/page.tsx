@@ -43,7 +43,11 @@ export default function OrganizerAnalyticsPage() {
     return undefined;
   }, [timeRange, startDate, endDate]);
 
-  const { data: stats, isLoading, refetch } = useQuery({
+  const {
+    data: stats,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["organizer-analytics", queryParams],
     queryFn: () => dashboardApi.getStatistics(queryParams),
   });
@@ -61,20 +65,35 @@ export default function OrganizerAnalyticsPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "1rem",
+        }}
+      >
         <div>
           <h1 style={{ fontFamily: "Georgia, serif", fontSize: "1.8rem", margin: "0 0 0.5rem 0" }}>
             Analytics & Financial Reports
           </h1>
           <p style={{ color: "var(--color-muted)", margin: 0 }}>
-            Inspect ticket sales trends, category distribution, and revenue visualizations by year, month, and day.
+            Inspect ticket sales trends, category distribution, and revenue visualizations by year,
+            month, and day.
           </p>
         </div>
         <button
           type="button"
           onClick={() => refetch()}
           className="button"
-          style={{ background: "var(--color-surface)", border: "1px solid var(--color-line)", display: "flex", alignItems: "center", gap: "0.4rem" }}
+          style={{
+            background: "var(--color-surface)",
+            border: "1px solid var(--color-line)",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.4rem",
+          }}
         >
           <RefreshCw size={14} /> Refresh Data
         </button>
@@ -95,7 +114,9 @@ export default function OrganizerAnalyticsPage() {
       >
         <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
           <Filter size={16} style={{ color: "var(--color-muted)" }} />
-          <span style={{ fontSize: "0.85rem", fontWeight: "600", marginRight: "0.5rem" }}>Filter Timeframe:</span>
+          <span style={{ fontSize: "0.85rem", fontWeight: "600", marginRight: "0.5rem" }}>
+            Filter Timeframe:
+          </span>
           {[
             { label: "All Time", value: "ALL" },
             { label: "This Year", value: "YEAR" },
@@ -146,9 +167,15 @@ export default function OrganizerAnalyticsPage() {
         )}
       </div>
 
-      <div className="stats-grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+      <div
+        className="stats-grid"
+        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}
+      >
         <div className="stat-card" style={{ borderTop: "3px solid var(--color-gold)" }}>
-          <span className="stat-card__label" style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+          <span
+            className="stat-card__label"
+            style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}
+          >
             <DollarSign size={16} style={{ color: "var(--color-gold)" }} /> Total Revenue
           </span>
           <span className="stat-card__value" style={{ fontSize: "1.5rem" }}>
@@ -156,13 +183,19 @@ export default function OrganizerAnalyticsPage() {
           </span>
         </div>
         <div className="stat-card" style={{ borderTop: "3px solid var(--color-teal)" }}>
-          <span className="stat-card__label" style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+          <span
+            className="stat-card__label"
+            style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}
+          >
             <Ticket size={16} style={{ color: "var(--color-teal)" }} /> Total Tickets Sold
           </span>
           <span className="stat-card__value">{summary.totalAttendees}</span>
         </div>
         <div className="stat-card" style={{ borderTop: "3px solid var(--color-primary)" }}>
-          <span className="stat-card__label" style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+          <span
+            className="stat-card__label"
+            style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}
+          >
             <Layers size={16} style={{ color: "var(--color-primary)" }} /> Total Published Events
           </span>
           <span className="stat-card__value">{summary.totalEvents}</span>
@@ -174,7 +207,13 @@ export default function OrganizerAnalyticsPage() {
           Loading visualization charts...
         </div>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(450px, 1fr))", gap: "2rem" }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(450px, 1fr))",
+            gap: "2rem",
+          }}
+        >
           <div
             style={{
               background: "var(--color-surface)",
@@ -189,7 +228,16 @@ export default function OrganizerAnalyticsPage() {
             </h3>
             <div style={{ width: "100%", height: 300 }}>
               {revenueData.length === 0 ? (
-                <div style={{ display: "flex", height: "100%", alignItems: "center", justifyContent: "center", color: "var(--color-muted)", fontStyle: "italic" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    height: "100%",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "var(--color-muted)",
+                    fontStyle: "italic",
+                  }}
+                >
                   No revenue recorded for this period.
                 </div>
               ) : (
@@ -200,10 +248,19 @@ export default function OrganizerAnalyticsPage() {
                     <YAxis stroke="var(--color-muted)" fontSize={12} />
                     <Tooltip
                       formatter={(value: unknown) => [formatIdr(Number(value || 0)), "Revenue"]}
-                      contentStyle={{ background: "var(--color-surface)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-line)" }}
+                      contentStyle={{
+                        background: "var(--color-surface)",
+                        borderRadius: "var(--radius-sm)",
+                        border: "1px solid var(--color-line)",
+                      }}
                     />
                     <Legend />
-                    <Bar dataKey="revenue" name="Revenue (IDR)" fill="var(--color-gold)" radius={[4, 4, 0, 0]} />
+                    <Bar
+                      dataKey="revenue"
+                      name="Revenue (IDR)"
+                      fill="var(--color-gold)"
+                      radius={[4, 4, 0, 0]}
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               )}
@@ -224,7 +281,16 @@ export default function OrganizerAnalyticsPage() {
             </h3>
             <div style={{ width: "100%", height: 300 }}>
               {ticketData.length === 0 ? (
-                <div style={{ display: "flex", height: "100%", alignItems: "center", justifyContent: "center", color: "var(--color-muted)", fontStyle: "italic" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    height: "100%",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "var(--color-muted)",
+                    fontStyle: "italic",
+                  }}
+                >
                   No ticket sales recorded for this period.
                 </div>
               ) : (
@@ -234,10 +300,19 @@ export default function OrganizerAnalyticsPage() {
                     <XAxis dataKey="month" stroke="var(--color-muted)" fontSize={12} />
                     <YAxis stroke="var(--color-muted)" fontSize={12} />
                     <Tooltip
-                      contentStyle={{ background: "var(--color-surface)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-line)" }}
+                      contentStyle={{
+                        background: "var(--color-surface)",
+                        borderRadius: "var(--radius-sm)",
+                        border: "1px solid var(--color-line)",
+                      }}
                     />
                     <Legend />
-                    <Bar dataKey="count" name="Tickets Sold" fill="var(--color-teal)" radius={[4, 4, 0, 0]} />
+                    <Bar
+                      dataKey="count"
+                      name="Tickets Sold"
+                      fill="var(--color-teal)"
+                      radius={[4, 4, 0, 0]}
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               )}
@@ -259,7 +334,16 @@ export default function OrganizerAnalyticsPage() {
             </h3>
             <div style={{ width: "100%", height: 260 }}>
               {categoryData.length === 0 ? (
-                <div style={{ display: "flex", height: "100%", alignItems: "center", justifyContent: "center", color: "var(--color-muted)", fontStyle: "italic" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    height: "100%",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "var(--color-muted)",
+                    fontStyle: "italic",
+                  }}
+                >
                   No events categorized yet.
                 </div>
               ) : (
@@ -267,12 +351,27 @@ export default function OrganizerAnalyticsPage() {
                   <BarChart data={categoryData} layout="vertical">
                     <CartesianGrid strokeDasharray="3 3" stroke="var(--color-line)" />
                     <XAxis type="number" stroke="var(--color-muted)" fontSize={12} />
-                    <YAxis dataKey="category" type="category" stroke="var(--color-muted)" fontSize={12} width={120} />
+                    <YAxis
+                      dataKey="category"
+                      type="category"
+                      stroke="var(--color-muted)"
+                      fontSize={12}
+                      width={120}
+                    />
                     <Tooltip
-                      contentStyle={{ background: "var(--color-surface)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-line)" }}
+                      contentStyle={{
+                        background: "var(--color-surface)",
+                        borderRadius: "var(--radius-sm)",
+                        border: "1px solid var(--color-line)",
+                      }}
                     />
                     <Legend />
-                    <Bar dataKey="count" name="Event Count" fill="var(--color-primary)" radius={[0, 4, 4, 0]} />
+                    <Bar
+                      dataKey="count"
+                      name="Event Count"
+                      fill="var(--color-primary)"
+                      radius={[0, 4, 4, 0]}
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               )}

@@ -11,8 +11,7 @@ export const authApi = {
   register: (data: RegisterDTO) =>
     fetchApi<UserResponse>("/auth/register", { method: "POST", data }),
 
-  login: (data: LoginDTO) =>
-    fetchApi<UserResponse>("/auth/login", { method: "POST", data }),
+  login: (data: LoginDTO) => fetchApi<UserResponse>("/auth/login", { method: "POST", data }),
 
   logout: () => fetchApi<null>("/auth/logout", { method: "POST" }),
 
