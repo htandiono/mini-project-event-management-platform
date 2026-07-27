@@ -42,10 +42,16 @@ export async function getStatistics(
   if (query.startDate || query.endDate) {
     dateFilter.createdAt = {};
     if (query.startDate) {
-      dateFilter.createdAt = { ...dateFilter.createdAt, gte: new Date(query.startDate) };
+      dateFilter.createdAt = {
+        ...dateFilter.createdAt,
+        gte: new Date(`${query.startDate}T00:00:00.000+07:00`),
+      };
     }
     if (query.endDate) {
-      dateFilter.createdAt = { ...dateFilter.createdAt, lte: new Date(query.endDate) };
+      dateFilter.createdAt = {
+        ...dateFilter.createdAt,
+        lte: new Date(`${query.endDate}T23:59:59.999+07:00`),
+      };
     }
   }
 
@@ -139,7 +145,7 @@ export async function getAttendees(
   const transactions = await prisma.transaction.findMany({
     where: {
       eventId,
-      status: { in: ["DONE", "WAITING_FOR_CONFIRMATION"] },
+      status: "DONE",
     },
     include: {
       customer: { select: { name: true, email: true } },

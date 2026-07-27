@@ -27,7 +27,23 @@ export interface DashboardStatsResponse {
   eventsByCategory: CategoryDistributionSeries[];
 }
 
-export interface DashboardQuery {
-  startDate?: string;
-  endDate?: string;
-}
+const dashboardDateSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD format")
+  .refine((value) => {
+    const parsed = new Date(`${value}T00:00:00.000Z`);
+    return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
+  }, "Enter a valid calendar date");
+
+export const dashboardQuerySchema = z
+  .object({
+    startDate: dashboardDateSchema.optional(),
+    endDate: dashboardDateSchema.optional(),
+  })
+  .refine(
+    ({ startDate, endDate }) => !startDate || !endDate || startDate <= endDate,
+    "Start date must be on or before end date",
+  );
+
+export type DashboardQuery = z.infer<typeof dashboardQuerySchema>;
+import { z } from "zod";
