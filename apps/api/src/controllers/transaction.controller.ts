@@ -1,4 +1,4 @@
-import type { OrganizerTransactionQuery } from "@eventure/shared";
+import { organizerTransactionQuerySchema } from "@eventure/shared";
 import type { Request, Response } from "express";
 import { AppError } from "../lib/app-error.js";
 import { asyncHandler } from "../lib/async-handler.js";
@@ -8,10 +8,8 @@ export const listTransactions = asyncHandler(async (req: Request, res: Response)
   if (!req.user) {
     throw new AppError("Authentication required", 401);
   }
-  const transactions = await transactionService.listTransactions(
-    req.user.id,
-    req.query as OrganizerTransactionQuery,
-  );
+  const query = organizerTransactionQuerySchema.parse(req.query);
+  const transactions = await transactionService.listTransactions(req.user.id, query);
   res.status(200).json({
     success: true,
     message: "Transactions retrieved successfully",

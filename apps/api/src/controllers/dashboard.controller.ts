@@ -1,4 +1,4 @@
-import type { DashboardQuery } from "@eventure/shared";
+import { dashboardQuerySchema } from "@eventure/shared";
 import type { Request, Response } from "express";
 import { AppError } from "../lib/app-error.js";
 import { asyncHandler } from "../lib/async-handler.js";
@@ -8,7 +8,8 @@ export const getStatistics = asyncHandler(async (req: Request, res: Response) =>
   if (!req.user) {
     throw new AppError("Authentication required", 401);
   }
-  const stats = await dashboardService.getStatistics(req.user.id, req.query as DashboardQuery);
+  const query = dashboardQuerySchema.parse(req.query);
+  const stats = await dashboardService.getStatistics(req.user.id, query);
   res.status(200).json({
     success: true,
     message: "Dashboard statistics retrieved successfully",
