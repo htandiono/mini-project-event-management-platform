@@ -16,6 +16,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: eventure
+          POSTGRES_USER: eventure
+          POSTGRES_PASSWORD: eventure_dev_only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U eventure -d eventure"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -39,6 +54,9 @@ jobs:
 
       - name: Generate Prisma client
         run: pnpm db:generate
+
+      - name: Apply database migrations
+        run: pnpm db:migrate:deploy
 
       - name: Verify formatting, types, tests, and builds
         run: pnpm verify

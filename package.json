@@ -22,6 +22,7 @@
     "db:format": "dotenv -e .env -- pnpm --filter @eventure/database exec prisma format",
     "db:validate": "dotenv -e .env -- pnpm --filter @eventure/database exec prisma validate",
     "db:migrate": "dotenv -e .env -- pnpm --filter @eventure/database db:migrate",
+    "db:migrate:deploy": "dotenv -e .env -- pnpm --filter @eventure/database exec prisma migrate deploy",
     "db:seed": "dotenv -e .env -- pnpm --filter @eventure/database db:seed",
     "db:studio": "dotenv -e .env -- pnpm --filter @eventure/database db:studio",
     "verify": "pnpm format:check && pnpm db:validate && pnpm lint && pnpm typecheck && pnpm test && pnpm build"
