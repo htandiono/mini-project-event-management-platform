@@ -23,6 +23,7 @@ export interface UploadResult {
 export async function uploadToCloudinary(
   buffer: Buffer,
   folder = "eventure/avatars",
+  cropAvatar = true,
 ): Promise<UploadResult> {
   ensureConfigured();
 
@@ -31,7 +32,9 @@ export async function uploadToCloudinary(
       {
         folder,
         resource_type: "image",
-        transformation: [{ width: 400, height: 400, crop: "fill", gravity: "face" }],
+        transformation: cropAvatar
+          ? [{ width: 400, height: 400, crop: "fill", gravity: "face" }]
+          : undefined,
       },
       (error, result) => {
         if (error || !result) {

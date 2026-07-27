@@ -1,11 +1,14 @@
 import { prisma } from "@eventure/database";
-import type { ApiSuccess, TransactionSummary } from "@eventure/shared";
+import type { ApiSuccess, PaymentProofSubmission, TransactionSummary } from "@eventure/shared";
 import { Router } from "express";
 
+import { AppError } from "../../lib/app-error.js";
 import { asyncHandler } from "../../lib/async-handler.js";
 import { requireRequestUser } from "../../lib/request-user.js";
+import { uploadPaymentProof } from "../../middleware/upload.js";
 import { createCheckout } from "./checkout.service.js";
 import { getCheckoutOptions } from "./checkout-options.service.js";
+import { submitPaymentProof } from "./payment-proof.service.js";
 import {
   cancelCustomerTransaction,
   getCustomerTransaction,
@@ -71,6 +74,28 @@ transactionsRouter.get(
       success: true,
       message: "Transaction retrieved",
       data: transaction,
+    };
+
+    response.json(body);
+  }),
+);
+
+transactionsRouter.post(
+  "/:transactionId/payment-proof",
+  uploadPaymentProof,
+  asyncHandler(async (request, response) => {
+    const customer = requireRequestUser(response.locals, "CUSTOMER");
+    const transactionId = transactionIdSchema.parse(request.params.transactionId);
+
+    if (!request.file) {
+      throw new AppError("Payment proof image is required", 400);
+    }
+
+    const submission = await submitPaymentProof(prisma, customer.id, transactionId, request.file);
+    const body: ApiSuccess<PaymentProofSubmission> = {
+      success: true,
+      message: "Payment proof uploaded",
+      data: submission,
     };
 
     response.json(body);

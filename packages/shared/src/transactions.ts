@@ -75,6 +75,13 @@ export interface TransactionSummary {
   review: ReviewSummary | null;
 }
 
+export interface PaymentProofSubmission {
+  transactionId: string;
+  status: "WAITING_FOR_CONFIRMATION";
+  paymentUploadedAt: string;
+  organizerDeadline: string;
+}
+
 export interface ReviewInput {
   rating: number;
   comment: string;
