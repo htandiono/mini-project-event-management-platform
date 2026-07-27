@@ -1,4 +1,4 @@
-import { rejectTransactionSchema } from "@eventure/shared";
+import { organizerTransactionQuerySchema, rejectTransactionSchema } from "@eventure/shared";
 import { Router } from "express";
 import * as transactionController from "../controllers/transaction.controller.js";
 import { authenticate } from "../middleware/authenticate.js";
@@ -9,7 +9,11 @@ export const transactionRouter = Router();
 
 transactionRouter.use(authenticate, authorize("ORGANIZER"));
 
-transactionRouter.get("/", transactionController.listTransactions);
+transactionRouter.get(
+  "/",
+  validate({ query: organizerTransactionQuerySchema }),
+  transactionController.listTransactions,
+);
 transactionRouter.patch("/:id/accept", transactionController.acceptProof);
 transactionRouter.patch(
   "/:id/reject",

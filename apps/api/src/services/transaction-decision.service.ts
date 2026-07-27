@@ -1,5 +1,5 @@
 import { prisma, type Prisma } from "@eventure/database";
-import type { TransactionStatus } from "@eventure/shared";
+import type { OrganizerTransactionQuery } from "@eventure/shared";
 import { AppError } from "../lib/app-error.js";
 import { restoreTransactionById } from "../modules/transactions/transaction-lifecycle.service.js";
 import { sendTransactionAcceptedEmail, sendTransactionRejectedEmail } from "./email.service.js";
@@ -55,10 +55,7 @@ function formatTx<T extends TransactionRecord>(t: T | null) {
   };
 }
 
-export async function listTransactions(
-  organizerId: string,
-  query: { status?: string; eventId?: string },
-) {
+export async function listTransactions(organizerId: string, query: OrganizerTransactionQuery) {
   await checkAndRollbackExpiredTransactions(organizerId);
 
   const where: Prisma.TransactionWhereInput = {
@@ -66,7 +63,7 @@ export async function listTransactions(
   };
 
   if (query.status && query.status !== "ALL") {
-    where.status = query.status as TransactionStatus;
+    where.status = query.status;
   }
   if (query.eventId) {
     where.eventId = query.eventId;
@@ -109,12 +106,20 @@ export async function acceptProof(organizerId: string, transactionId: string) {
     throw new AppError("Only orders waiting for confirmation can be accepted", 400);
   }
 
-  const updated = await prisma.transaction.update({
-    where: { id: transactionId },
+  const transition = await prisma.transaction.updateMany({
+    where: { id: transactionId, status: "WAITING_FOR_CONFIRMATION" },
     data: {
       status: "DONE",
       completedAt: new Date(),
     },
+  });
+
+  if (transition.count !== 1) {
+    throw new AppError("Transaction status changed; refresh and try again", 409);
+  }
+
+  const updated = await prisma.transaction.findUnique({
+    where: { id: transactionId },
     include: {
       customer: { select: { name: true, email: true } },
       event: { select: { name: true } },
@@ -124,6 +129,10 @@ export async function acceptProof(organizerId: string, transactionId: string) {
       },
     },
   });
+
+  if (!updated) {
+    throw new AppError("Transaction not found", 404);
+  }
 
   if (t.customer?.email) {
     void sendTransactionAcceptedEmail(

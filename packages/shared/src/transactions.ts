@@ -107,6 +107,13 @@ export const rejectTransactionSchema = z.object({
 
 export type RejectTransactionDTO = z.infer<typeof rejectTransactionSchema>;
 
+export const organizerTransactionQuerySchema = z.object({
+  status: z.enum(["ALL", ...TRANSACTION_STATUSES]).optional(),
+  eventId: z.string().trim().min(1).max(40).optional(),
+});
+
+export type OrganizerTransactionQuery = z.infer<typeof organizerTransactionQuerySchema>;
+
 export interface AttendeeListItem {
   id: string;
   invoiceNumber: string;
