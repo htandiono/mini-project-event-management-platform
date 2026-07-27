@@ -60,12 +60,14 @@ async function main() {
   );
 
   const technology = categories.find((category) => category.slug === "technology");
+  const music = categories.find((category) => category.slug === "music");
+  const food = categories.find((category) => category.slug === "food-and-drink");
 
-  if (!technology) {
-    throw new Error("Technology category seed failed");
+  if (!technology || !music || !food) {
+    throw new Error("Event category seed failed");
   }
 
-  await prisma.event.upsert({
+  const productMeetup = await prisma.event.upsert({
     where: { slug: "jakarta-product-meetup-2026" },
     update: {},
     create: {
@@ -103,6 +105,109 @@ async function main() {
           },
         ],
       },
+    },
+  });
+
+  const sunsetSessions = await prisma.event.upsert({
+    where: { slug: "sunset-sessions-bandung" },
+    update: {},
+    create: {
+      organizerId: organizer.id,
+      categoryId: music.id,
+      name: "Sunset Sessions Bandung",
+      slug: "sunset-sessions-bandung",
+      description:
+        "An open-air evening of independent music, local food stalls, and relaxed city views.",
+      venue: "Teras Cikapundung",
+      address: "Jl. Siliwangi, Cipaganti",
+      city: "Bandung",
+      province: "West Java",
+      startsAt: new Date("2026-11-07T09:30:00.000Z"),
+      endsAt: new Date("2026-11-07T14:00:00.000Z"),
+      capacity: 300,
+      availableSeats: 300,
+      isFree: false,
+      status: EventStatus.PUBLISHED,
+      publishedAt: new Date(),
+      ticketTypes: {
+        create: [
+          {
+            name: "Festival Pass",
+            price: 125_000,
+            capacity: 250,
+            availableSeats: 250,
+          },
+          {
+            name: "Front Stage",
+            description: "A limited section close to the main stage.",
+            price: 225_000,
+            capacity: 50,
+            availableSeats: 50,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.event.upsert({
+    where: { slug: "surabaya-taste-trail" },
+    update: {},
+    create: {
+      organizerId: organizer.id,
+      categoryId: food.id,
+      name: "Surabaya Taste Trail",
+      slug: "surabaya-taste-trail",
+      description:
+        "Meet local cooks and sample a curated trail of Surabaya favorites in one afternoon.",
+      venue: "Tunjungan Plaza Courtyard",
+      address: "Jl. Jenderal Basuki Rachmat No. 8-12",
+      city: "Surabaya",
+      province: "East Java",
+      startsAt: new Date("2026-12-05T04:00:00.000Z"),
+      endsAt: new Date("2026-12-05T09:00:00.000Z"),
+      capacity: 200,
+      availableSeats: 200,
+      isFree: true,
+      status: EventStatus.PUBLISHED,
+      publishedAt: new Date(),
+      ticketTypes: {
+        create: [
+          {
+            name: "Free Registration",
+            price: 0,
+            capacity: 200,
+            availableSeats: 200,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.voucher.upsert({
+    where: { code: "PRODUCT10" },
+    update: {},
+    create: {
+      eventId: productMeetup.id,
+      code: "PRODUCT10",
+      name: "Product community offer",
+      discountPercent: 10,
+      usageLimit: 40,
+      startsAt: new Date("2026-07-01T00:00:00.000Z"),
+      endsAt: new Date("2026-10-10T23:59:59.000Z"),
+    },
+  });
+
+  await prisma.voucher.upsert({
+    where: { code: "SUNSET25" },
+    update: {},
+    create: {
+      eventId: sunsetSessions.id,
+      code: "SUNSET25",
+      name: "Sunset early booking",
+      discountAmount: 25_000,
+      usageLimit: 60,
+      startsAt: new Date("2026-07-01T00:00:00.000Z"),
+      endsAt: new Date("2026-10-31T23:59:59.000Z"),
     },
   });
 

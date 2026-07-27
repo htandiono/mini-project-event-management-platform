@@ -1,48 +1,14 @@
-import type { EventSummary } from "@eventure/shared";
 import Link from "next/link";
 
 import { EventCard } from "@/components/event-card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { getEvents } from "@/lib/api-client";
 
-const previewEvents: EventSummary[] = [
-  {
-    id: "preview-1",
-    slug: "jakarta-product-meetup-2026",
-    name: "Jakarta Product Meetup 2026",
-    categoryName: "Technology",
-    city: "Jakarta",
-    venue: "Kuningan City Hall",
-    startsAt: "2026-10-17T11:00:00.000Z",
-    priceFrom: 75_000,
-    imageUrl: null,
-    organizerName: "Ayu Pratama",
-  },
-  {
-    id: "preview-2",
-    slug: "sunset-sessions-bandung",
-    name: "Sunset Sessions Bandung",
-    categoryName: "Music",
-    city: "Bandung",
-    venue: "Teras Cikapundung",
-    startsAt: "2026-11-07T09:30:00.000Z",
-    priceFrom: 125_000,
-    imageUrl: null,
-    organizerName: "Nada Collective",
-  },
-  {
-    id: "preview-3",
-    slug: "surabaya-taste-trail",
-    name: "Surabaya Taste Trail",
-    categoryName: "Food & Drink",
-    city: "Surabaya",
-    venue: "Tunjungan Plaza Courtyard",
-    startsAt: "2026-12-05T04:00:00.000Z",
-    priceFrom: 0,
-    imageUrl: null,
-    organizerName: "Rasa Surabaya",
-  },
-];
+export default async function HomePage() {
+  const upcoming = await getEvents({ sort: "startsAt", order: "asc", page: 1, limit: 3 })
+    .then((result) => result.data)
+    .catch(() => []);
 
-export default function HomePage() {
   return (
     <>
       <section className="hero">
@@ -54,10 +20,10 @@ export default function HomePage() {
               Discover concerts, workshops, meetups, and local experiences curated across Indonesia.
             </p>
 
-            <form className="search-panel" action="#discover">
+            <form className="search-panel" action="/events">
               <label>
                 <span>What are you looking for?</span>
-                <input name="search" type="search" placeholder="Try “design meetup”" />
+                <input name="search" type="search" placeholder="Try design meetup" />
               </label>
               <label>
                 <span>City</span>
@@ -97,15 +63,22 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div className="event-grid">
-          {previewEvents.map((event, index) => (
-            <EventCard
-              key={event.id}
-              event={event}
-              accent={(["coral", "teal", "gold"] as const)[index] ?? "coral"}
-            />
-          ))}
-        </div>
+        {upcoming.length > 0 ? (
+          <div className="event-grid">
+            {upcoming.map((event, index) => (
+              <EventCard
+                key={event.id}
+                event={event}
+                accent={(["coral", "teal", "gold"] as const)[index] ?? "coral"}
+              />
+            ))}
+          </div>
+        ) : (
+          <EmptyState
+            title="Events are being prepared"
+            description="Browse again shortly or start planning your own event."
+          />
+        )}
       </section>
 
       <section className="organizer-callout">
@@ -118,7 +91,7 @@ export default function HomePage() {
             Create an event, offer flexible tickets and vouchers, then follow every registration
             from one focused dashboard.
           </p>
-          <Link className="button button--light" href="/register?role=organizer">
+          <Link className="button button--light" href="/organizer/events">
             Start organizing
           </Link>
         </div>

@@ -4,7 +4,7 @@ Eventure is a responsive event management platform for discovering, publishing, 
 
 ## Current status
 
-The shared foundation is ready: monorepo tooling, frontend theme, Express API shell, Prisma data model, seed data, tests, CI, local PostgreSQL, and contributor contracts. Product feature endpoints and screens are intentionally left to the two feature branches.
+The shared foundation and Feature 1 are implemented on `feature/feature-1-events-transactions`. Event discovery, organizer event/ticket/voucher management, transactional checkout, deadline rollback, customer transaction tracking, and attendee reviews are covered by API and web tests. Feature 2 authentication, referrals/profile, payment-proof upload and decisions, dashboard reporting, and notification email remain on the partner branch.
 
 ## Main features
 
@@ -30,6 +30,15 @@ The shared foundation is ready: monorepo tooling, frontend theme, Express API sh
 
 Planned feature integrations required by the brief are Recharts, Multer with Cloudinary, and Nodemailer. They should be added only in the feature that uses them.
 
+## Feature 1 API surface
+
+- Public: `GET /api/v1/events`, `/events/categories`, `/events/:slug`, and `/events/:slug/reviews`
+- Organizer: event CRUD under `/api/v1/organizer/events`, with nested `/tickets` and `/vouchers`
+- Customer: checkout/history under `/api/v1/transactions`, cancellation under `/:id/cancel`, and reviews under `/:id/review`
+- Account-dependent routes consume the shared authenticated user from `response.locals.user`; Feature 2 owns the JWT middleware that populates it.
+
+The complete commit-by-commit record is in [Feature 1 Development Log](docs/FEATURE_1_DEVELOPMENT_LOG.md).
+
 ## Repository layout
 
 ```text
@@ -54,8 +63,8 @@ docs/                   Architecture and collaboration guides
 1. Clone the repository and switch to your assigned branch.
 
    ```bash
-   git clone <repository-url>
-   cd "Mini Project Event Management Platform"
+   git clone https://github.com/htandiono/mini-project-event-management-platform.git
+   cd mini-project-event-management-platform
    git switch feature/feature-2-accounts-dashboard
    ```
 
@@ -133,7 +142,7 @@ erDiagram
   TRANSACTION ||--|{ TRANSACTION_ITEM : contains
   TICKET_TYPE ||--o{ TRANSACTION_ITEM : selected_as
   VOUCHER o|--o{ TRANSACTION : discounts
-  USER_COUPON o|--o| TRANSACTION : discounts
+  USER_COUPON o|--o{ TRANSACTION : discounts
   TRANSACTION ||--o| PAYMENT_PROOF : has
   TRANSACTION ||--o{ POINT_LEDGER : records
   TRANSACTION ||--o| REVIEW : enables

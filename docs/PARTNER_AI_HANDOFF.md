@@ -90,6 +90,13 @@ change, and place it in a separate commit/PR for both contributors to review.
 8. Async Nodemailer adapter and HTML templates
 9. Full Feature 2 flow tests, responsive review, and documentation update
 
+## Feature 1 integration seams
+
+- Authenticated API middleware must assign the shared `AuthUser` value to `response.locals.user` before calling `next()`. Feature 1 organizer, checkout, transaction, and review routes consume that exact location and enforce their own role requirement.
+- Use `restoreTransactionById` from `apps/api/src/modules/transactions/transaction-lifecycle.service.ts` when rejecting a `WAITING_FOR_CONFIRMATION` transaction. Pass `REJECTED` as the next status; the helper conditionally transitions once and restores event seats, ticket seats, voucher usage, the user coupon, and points in one database transaction.
+- Set `organizerDeadline` when payment proof upload changes a transaction to `WAITING_FOR_CONFIRMATION`. Feature 1 lazy expiry processing will cancel and restore it after that deadline.
+- Send acceptance/rejection email only after the database operation resolves. A failed email must not repeat or reverse the transaction decision.
+
 ## Handoff checklist
 
 - Branch is based on the current `develop`
