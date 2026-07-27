@@ -292,7 +292,7 @@ CREATE INDEX "Voucher_eventId_startsAt_endsAt_deletedAt_idx" ON "Voucher"("event
 CREATE UNIQUE INDEX "Transaction_invoiceNumber_key" ON "Transaction"("invoiceNumber");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Transaction_userCouponId_key" ON "Transaction"("userCouponId");
+CREATE INDEX "Transaction_userCouponId_idx" ON "Transaction"("userCouponId");
 
 -- CreateIndex
 CREATE INDEX "Transaction_customerId_status_idx" ON "Transaction"("customerId", "status");

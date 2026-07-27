@@ -1,4 +1,4 @@
-import { EventStatus, PrismaClient, UserRole, TransactionStatus } from "@prisma/client";
+import { EventStatus, PrismaClient, TransactionStatus, UserRole } from "@prisma/client";
 import { hash } from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -12,20 +12,20 @@ function required(name: string): string {
 }
 
 async function main() {
-  console.log("🌱 Starting rich database seed (30+ products, transactions, and logs)...");
+  console.log("Starting Indonesian event demo data seed...");
 
   const customerPassword = await hash(required("DEMO_CUSTOMER_PASSWORD"), 12);
   const organizerPassword = await hash(required("DEMO_ORGANIZER_PASSWORD"), 12);
   const generalPassword = await hash("Password123!", 12);
 
-  // 1. Create Organizers
+  // 1. Create Indonesian event organizers.
   const organizer1 = await prisma.user.upsert({
     where: { email: required("DEMO_ORGANIZER_EMAIL") },
-    update: { name: "Eventure Live" },
+    update: { name: "Eventure Nusantara" },
     create: {
       email: required("DEMO_ORGANIZER_EMAIL"),
       passwordHash: organizerPassword,
-      name: "Eventure Live",
+      name: "Eventure Nusantara",
       role: UserRole.ORGANIZER,
       referralCode: "EV-LIVE2026",
     },
@@ -33,11 +33,11 @@ async function main() {
 
   const organizer2 = await prisma.user.upsert({
     where: { email: "oscar@example.com" },
-    update: { name: "Purwadhika Live" },
+    update: { name: "Purwadhika Event Lab" },
     create: {
       email: "oscar@example.com",
       passwordHash: generalPassword,
-      name: "Purwadhika Live",
+      name: "Purwadhika Event Lab",
       role: UserRole.ORGANIZER,
       referralCode: "EV-PURWA2026",
     },
@@ -45,11 +45,11 @@ async function main() {
 
   const organizer3 = await prisma.user.upsert({
     where: { email: "sound@example.com" },
-    update: { name: "Soundrenaline Live" },
+    update: { name: "Soundrenaline Indonesia" },
     create: {
       email: "sound@example.com",
       passwordHash: generalPassword,
-      name: "Soundrenaline Live",
+      name: "Soundrenaline Indonesia",
       role: UserRole.ORGANIZER,
       referralCode: "EV-SOUND2026",
     },
@@ -57,7 +57,7 @@ async function main() {
 
   const organizers = [organizer1, organizer2, organizer3];
 
-  // 2. Create Customers (10 customers for rich transaction volume)
+  // 2. Create customers for referral, account, and transaction demos.
   const customer1 = await prisma.user.upsert({
     where: { email: required("DEMO_CUSTOMER_EMAIL") },
     update: { name: "Bima Santoso" },
@@ -72,22 +72,28 @@ async function main() {
   });
 
   const customer2 = await prisma.user.upsert({
-    where: { email: "alice@example.com" },
-    update: { name: "Alice Wonderland" },
+    where: { email: "customer2@example.com" },
+    update: { name: "Ayu Lestari" },
     create: {
-      email: "alice@example.com",
+      email: "customer2@example.com",
       passwordHash: generalPassword,
-      name: "Alice Wonderland",
+      name: "Ayu Lestari",
       role: UserRole.CUSTOMER,
-      referralCode: "EV-ALICE2026",
+      referralCode: "EV-AYU2026",
       referredById: organizer1.id,
     },
   });
 
   const extraCustomers = [];
   const customerNames = [
-    "Cindy Crawford", "David Beckham", "Elena Rostova", "Fajar Nugraha",
-    "Gita Gutawa", "Hendra Setiawan", "Indah Permatasari", "Joko Anwar"
+    "Citra Maharani",
+    "Dimas Pratama",
+    "Eka Wulandari",
+    "Fajar Nugraha",
+    "Gita Puspita",
+    "Hendra Setiawan",
+    "Indah Permatasari",
+    "Joko Saputra",
   ];
 
   for (let i = 0; i < customerNames.length; i++) {
@@ -109,7 +115,7 @@ async function main() {
 
   const allCustomers = [customer1, customer2, ...extraCustomers];
 
-  // 3. Create Categories
+  // 3. Create event categories.
   const categorySeeds = [
     ["Music", "music"],
     ["Technology", "technology"],
@@ -191,7 +197,7 @@ async function main() {
       venue: "Teras Cikapundung",
       address: "Jl. Siliwangi, Cipaganti",
       city: "Bandung",
-      province: "West Java",
+      province: "Jawa Barat",
       startsAt: new Date("2026-11-07T09:30:00.000Z"),
       endsAt: new Date("2026-11-07T14:00:00.000Z"),
       capacity: 300,
@@ -232,7 +238,7 @@ async function main() {
       venue: "Tunjungan Plaza Courtyard",
       address: "Jl. Jenderal Basuki Rachmat No. 8-12",
       city: "Surabaya",
-      province: "East Java",
+      province: "Jawa Timur",
       startsAt: new Date("2026-12-05T04:00:00.000Z"),
       endsAt: new Date("2026-12-05T09:00:00.000Z"),
       capacity: 200,
@@ -280,7 +286,7 @@ async function main() {
       endsAt: new Date("2026-10-31T23:59:59.000Z"),
     },
   });
-  await prisma.coupon.upsert({
+  const welcomeCoupon = await prisma.coupon.upsert({
     where: { code: "WELCOME10" },
     update: {},
     create: {
@@ -291,19 +297,109 @@ async function main() {
     },
   });
 
-  // 5. Generate 36 Events ("Products") across different months of 2026
-  console.log("📦 Seeding 36 Events (Products)...");
+  await prisma.userCoupon.upsert({
+    where: {
+      userId_couponId: {
+        userId: customer1.id,
+        couponId: welcomeCoupon.id,
+      },
+    },
+    update: {
+      status: "ACTIVE",
+      expiresAt: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+      redeemedAt: null,
+    },
+    create: {
+      userId: customer1.id,
+      couponId: welcomeCoupon.id,
+      status: "ACTIVE",
+      expiresAt: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+    },
+  });
+
+  // 5. Generate 36 events across Indonesian cities and every month of 2026.
+  console.log("Seeding 36 events across Indonesia...");
   const eventTemplates = [
-    { title: "Jakarta Tech Summit", city: "Jakarta", venue: "Kuningan City Hall", cat: "technology", basePrice: 200000 },
-    { title: "Soundrenaline Music Festival", city: "Bali", venue: "Garuda Wisnu Kencana", cat: "music", basePrice: 500000 },
-    { title: "Nusantara Culinary Expo", city: "Bandung", venue: "Trans Studio Convention", cat: "food-and-drink", basePrice: 50000 },
-    { title: "Indonesia Marathon", city: "Jakarta", venue: "Gelora Bung Karno", cat: "sports", basePrice: 250000 },
-    { title: "AI & Future Product Conference", city: "Surabaya", venue: "Grand City Hall", cat: "technology", basePrice: 300000 },
-    { title: "Jazz Traffic Festival", city: "Surabaya", venue: "Grand City Arena", cat: "music", basePrice: 350000 },
-    { title: "Coffee & Barista Championship", city: "Yogyakarta", venue: "Jogja Expo Center", cat: "food-and-drink", basePrice: 75000 },
-    { title: "Badminton Open 2026", city: "Jakarta", venue: "Istora Senayan", cat: "sports", basePrice: 150000 },
-    { title: "Startup Pitch & Networking", city: "Jakarta", venue: "SCBD District 8", cat: "business", basePrice: 100000 },
-    { title: "Modern Contemporary Art Gala", city: "Bandung", venue: "NuArt Sculpture Park", cat: "art-and-theater", basePrice: 120000 },
+    {
+      title: "Jakarta Tech Summit",
+      city: "Jakarta",
+      province: "DKI Jakarta",
+      venue: "Kuningan City Hall",
+      cat: "technology",
+      basePrice: 200_000,
+    },
+    {
+      title: "Soundrenaline Music Festival",
+      city: "Badung",
+      province: "Bali",
+      venue: "Garuda Wisnu Kencana",
+      cat: "music",
+      basePrice: 500_000,
+    },
+    {
+      title: "Nusantara Culinary Expo",
+      city: "Bandung",
+      province: "Jawa Barat",
+      venue: "Trans Studio Convention Centre",
+      cat: "food-and-drink",
+      basePrice: 50_000,
+    },
+    {
+      title: "Indonesia Marathon",
+      city: "Jakarta",
+      province: "DKI Jakarta",
+      venue: "Gelora Bung Karno",
+      cat: "sports",
+      basePrice: 250_000,
+    },
+    {
+      title: "AI & Future Product Conference",
+      city: "Surabaya",
+      province: "Jawa Timur",
+      venue: "Grand City Convention Hall",
+      cat: "technology",
+      basePrice: 300_000,
+    },
+    {
+      title: "Jazz Traffic Festival",
+      city: "Surabaya",
+      province: "Jawa Timur",
+      venue: "Grand City Arena",
+      cat: "music",
+      basePrice: 350_000,
+    },
+    {
+      title: "Coffee & Barista Championship",
+      city: "Yogyakarta",
+      province: "Daerah Istimewa Yogyakarta",
+      venue: "Jogja Expo Center",
+      cat: "food-and-drink",
+      basePrice: 75_000,
+    },
+    {
+      title: "Badminton Open 2026",
+      city: "Jakarta",
+      province: "DKI Jakarta",
+      venue: "Istora Senayan",
+      cat: "sports",
+      basePrice: 150_000,
+    },
+    {
+      title: "Startup Pitch & Networking",
+      city: "Jakarta",
+      province: "DKI Jakarta",
+      venue: "District 8 SCBD",
+      cat: "business",
+      basePrice: 100_000,
+    },
+    {
+      title: "Modern Contemporary Art Gala",
+      city: "Bandung",
+      province: "Jawa Barat",
+      venue: "NuArt Sculpture Park",
+      cat: "art-and-theater",
+      basePrice: 120_000,
+    },
   ];
 
   const createdEvents = [];
@@ -336,7 +432,7 @@ async function main() {
         venue: tmpl.venue,
         address: `Jl. Utama No. ${i}, ${tmpl.city}`,
         city: tmpl.city,
-        province: tmpl.city === "Jakarta" ? "DKI Jakarta" : tmpl.city === "Bali" ? "Bali" : "Jawa Barat",
+        province: tmpl.province,
         startsAt,
         endsAt,
         capacity: 200,
@@ -368,8 +464,8 @@ async function main() {
     createdEvents.push(event);
   }
 
-  // 6. Generate 40 Transactions & 40+ Attendee Items ("Transactions")
-  console.log("💳 Seeding 40 Transactions & Order Verifications...");
+  // 6. Generate a useful mix of transaction states for both customer and organizer demos.
+  console.log("Seeding 40 transactions and payment proofs...");
 
   const receiptImages = [
     "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&q=80",
@@ -378,46 +474,67 @@ async function main() {
     "https://images.unsplash.com/photo-1583521214690-73421a1829a9?w=600&q=80",
   ];
 
+  const seededAt = new Date();
+  const pastEvents = createdEvents.filter((event) => event.endsAt < seededAt);
+  const futureEvents = createdEvents.filter((event) => event.startsAt > seededAt);
+
+  if (pastEvents.length === 0 || futureEvents.length === 0) {
+    throw new Error("Transaction seed requires both past and future events");
+  }
+
   for (let j = 1; j <= 40; j++) {
     const invoiceNumber = `INV-2026-${String(j).padStart(3, "0")}`;
-    const customer = allCustomers[j % allCustomers.length]!;
-    const event = createdEvents[j % createdEvents.length]!;
-    const ticketType = event.ticketTypes[j % event.ticketTypes.length]!;
-
-    if (!ticketType || !customer || !event) continue;
-
-    const qty = (j % 4) + 1; // 1 to 4 tickets per transaction
-    const subtotal = ticketType.price * qty;
-    const total = subtotal;
-
-    // Determine realistic transaction status
-    // 1-15: DONE (Accepted & Paid) -> Rich gross revenue & attendee data
-    // 16-30: WAITING_FOR_CONFIRMATION -> Pending proof review for Organizer
-    // 31-35: REJECTED -> Historical rejected orders
-    // 36-40: WAITING_FOR_PAYMENT -> New orders awaiting upload
+    const customer = allCustomers[(j - 1) % allCustomers.length]!;
     let status: TransactionStatus = TransactionStatus.WAITING_FOR_PAYMENT;
-    let paymentUploadedAt: Date | null = null;
-    let completedAt: Date | null = null;
-    let organizerDeadline: Date | null = null;
-    let isAttended = false;
-
-    const createdAt = new Date(Date.UTC(2026, (j - 1) % 12, (j % 20) + 1, 14, 30, 0));
-    const paymentDeadline = new Date(createdAt.getTime() + 2 * 60 * 60 * 1000);
 
     if (j <= 15) {
       status = TransactionStatus.DONE;
+    } else if (j <= 25) {
+      status = TransactionStatus.WAITING_FOR_CONFIRMATION;
+    } else if (j <= 30) {
+      status = TransactionStatus.REJECTED;
+    } else if (j > 35) {
+      status = TransactionStatus.CANCELED;
+    }
+
+    const eventPool = status === TransactionStatus.DONE ? pastEvents : futureEvents;
+    const event = eventPool[(j - 1) % eventPool.length]!;
+    const ticketType = event.ticketTypes[(j - 1) % event.ticketTypes.length]!;
+    const qty = ((j - 1) % 4) + 1;
+    const subtotal = ticketType.price * qty;
+    const total = subtotal;
+    let paymentUploadedAt: Date | null = null;
+    let completedAt: Date | null = null;
+    let organizerDeadline: Date | null = null;
+    let canceledAt: Date | null = null;
+    let cancellationReason: string | null = null;
+    let isAttended = false;
+    const isPending =
+      status === TransactionStatus.WAITING_FOR_PAYMENT ||
+      status === TransactionStatus.WAITING_FOR_CONFIRMATION;
+    const createdAt = isPending
+      ? new Date(seededAt.getTime() - (j % 30) * 60 * 1000)
+      : new Date(event.startsAt.getTime() - (14 + (j % 10)) * 24 * 60 * 60 * 1000);
+    const paymentDeadline = isPending
+      ? new Date(seededAt.getTime() + 2 * 60 * 60 * 1000)
+      : new Date(createdAt.getTime() + 2 * 60 * 60 * 1000);
+
+    if (status === TransactionStatus.DONE) {
       paymentUploadedAt = new Date(createdAt.getTime() + 30 * 60 * 1000);
       completedAt = new Date(paymentUploadedAt.getTime() + 60 * 60 * 1000);
       organizerDeadline = new Date(paymentUploadedAt.getTime() + 3 * 24 * 60 * 60 * 1000);
       isAttended = true;
-    } else if (j <= 30) {
-      status = TransactionStatus.WAITING_FOR_CONFIRMATION;
-      paymentUploadedAt = new Date(createdAt.getTime() + 45 * 60 * 1000);
-      organizerDeadline = new Date(paymentUploadedAt.getTime() + 3 * 24 * 60 * 60 * 1000);
-    } else if (j <= 35) {
-      status = TransactionStatus.REJECTED;
+    } else if (status === TransactionStatus.WAITING_FOR_CONFIRMATION) {
+      paymentUploadedAt = new Date(seededAt.getTime() - (j % 20) * 60 * 1000);
+      organizerDeadline = new Date(seededAt.getTime() + 3 * 24 * 60 * 60 * 1000);
+    } else if (status === TransactionStatus.REJECTED) {
       paymentUploadedAt = new Date(createdAt.getTime() + 20 * 60 * 1000);
       organizerDeadline = new Date(paymentUploadedAt.getTime() + 3 * 24 * 60 * 60 * 1000);
+      canceledAt = new Date(paymentUploadedAt.getTime() + 60 * 60 * 1000);
+      cancellationReason = "Payment proof could not be verified";
+    } else if (status === TransactionStatus.CANCELED) {
+      canceledAt = new Date(createdAt.getTime() + 60 * 60 * 1000);
+      cancellationReason = "Canceled by customer";
     }
 
     const tx = await prisma.transaction.upsert({
@@ -427,6 +544,8 @@ async function main() {
         paymentUploadedAt,
         completedAt,
         organizerDeadline,
+        canceledAt,
+        cancellationReason,
         isAttended,
       },
       create: {
@@ -440,6 +559,8 @@ async function main() {
         organizerDeadline,
         paymentUploadedAt,
         completedAt,
+        canceledAt,
+        cancellationReason,
         isAttended,
         createdAt,
         items: {
@@ -455,14 +576,19 @@ async function main() {
       },
     });
 
-    // Attach PaymentProof if status is WAITING_FOR_CONFIRMATION or DONE or REJECTED
-    if (status !== TransactionStatus.WAITING_FOR_PAYMENT) {
+    if (
+      status === TransactionStatus.WAITING_FOR_CONFIRMATION ||
+      status === TransactionStatus.DONE ||
+      status === TransactionStatus.REJECTED
+    ) {
       await prisma.paymentProof.upsert({
         where: { transactionId: tx.id },
         update: {},
         create: {
           transactionId: tx.id,
-          fileUrl: receiptImages[j % receiptImages.length] || "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&q=80",
+          fileUrl:
+            receiptImages[j % receiptImages.length] ??
+            "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&q=80",
           publicId: `proofs/${invoiceNumber}`,
           mimeType: "image/jpeg",
           fileSize: 125000,
@@ -471,7 +597,7 @@ async function main() {
       });
     }
 
-    // 7. Generate Event Reviews ("Logs") for DONE transactions
+    // 7. Generate post-event reviews for attended transactions.
     if (status === TransactionStatus.DONE) {
       await prisma.review.upsert({
         where: { transactionId: tx.id },
@@ -480,16 +606,16 @@ async function main() {
           transactionId: tx.id,
           eventId: event.id,
           customerId: customer.id,
-          rating: (j % 2 === 0) ? 5 : 4,
-          comment: `Great experience at ${event.name}! Smooth check-in and fantastic atmosphere.`,
-          createdAt: completedAt || new Date(),
+          rating: j % 2 === 0 ? 5 : 4,
+          comment: `Pengalaman yang menyenangkan di ${event.name}. Proses check-in lancar dan acaranya seru.`,
+          createdAt: new Date(event.endsAt.getTime() + 24 * 60 * 60 * 1000),
         },
       });
     }
   }
 
-  // 8. Generate Point Ledger entries ("Logs") for referral rewards
-  console.log("📜 Seeding Point Ledger Entries & Referral Logs...");
+  // 8. Generate point ledger entries for referral reward demos.
+  console.log("Seeding referral point ledger entries...");
   for (let k = 0; k < extraCustomers.length; k++) {
     const cust = extraCustomers[k];
     if (!cust) continue;
@@ -510,7 +636,7 @@ async function main() {
     }
   }
 
-  console.log("✅ Seed completed successfully! Over 36 products, 40 transactions, and 30 logs generated.");
+  console.log("Seed completed: 39 Indonesian events, 40 transactions, and referral rewards.");
 }
 
 main()
