@@ -26,7 +26,7 @@ This matrix translates the supplied brief into implementation ownership and merg
 | Unit and integration tests for material flows                     | Both          | API, shared, and web Vitest suites plus PostgreSQL CI             | Implemented |
 | `.env.example`, CORS, secrets excluded                            | Shared        | Env parser, CORS allowlist, `.gitignore`                          | Implemented |
 | Frontend and backend deployed                                     | Both          | URLs in README                                                    | Pending     |
-| 20+ meaningful conventional commits                               | Both          | 85 commits before final documentation                             | Satisfied   |
+| 20+ meaningful conventional commits                               | Both          | More than 85 atomic and merge commits                             | Satisfied   |
 | `main`/`develop` branching and no direct main pushes              | Both          | Feature merges into `develop`; protected release PR to `main`     | Configured  |
 | README with features, stack, ERD, setup, URLs, demo users         | Shared        | Updated repository README                                         | Implemented |
 

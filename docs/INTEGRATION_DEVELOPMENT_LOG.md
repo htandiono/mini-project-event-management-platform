@@ -111,6 +111,14 @@ This log records how Feature 2 was developed and how both feature branches were 
 - Limited attendee lists to confirmed `DONE` orders.
 - Added shared date-range contract tests.
 
+### 11. Parse Express 5 query filters safely
+
+**Commit:** `cac0091 fix(api): parse Express query filters safely`
+
+- Fixed the PostgreSQL CI failure caused by assigning to Express 5's read-only `request.query` accessor.
+- Parsed dashboard and organizer transaction queries in their async controllers instead.
+- Preserved the same shared Zod validation and standard validation-error response.
+
 ## Verification record
 
 - Prisma schema validation and client generation: passed.
