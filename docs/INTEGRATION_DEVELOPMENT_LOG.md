@@ -137,6 +137,15 @@ This log records how Feature 2 was developed and how both feature branches were 
 - Found and corrected the same dead route in the dashboard quick action so it opens the existing event manager.
 - Added navigation regression tests for both the sidebar and dashboard destinations.
 
+### 14. Make API imports portable for Vercel
+
+**Commit:** `02ac37e fix(api): use portable module imports for Vercel`
+
+- Reproduced Vercel's stricter module-interop type check locally.
+- Switched Helmet to an explicit namespace/default call compatible with both NodeNext and Vercel.
+- Switched the Node crypto import to the portable `node:` namespace form.
+- Verified linting, normal and strict-interoperability type checks, the API production build, and all 24 database-independent API tests.
+
 ## Verification record
 
 - Prisma schema validation and client generation: passed.
