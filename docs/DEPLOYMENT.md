@@ -46,6 +46,7 @@ Set application variables for both Production and Preview unless a narrower scop
 
 - `NODE_ENV` and `API_PORT`
 - `FRONTEND_URL` set to the production web origin
+- `FRONTEND_PREVIEW_URL` set to the stable `develop` branch alias of the web Vercel project
 - `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, and their expiry variables
 - `DEMO_CUSTOMER_EMAIL`, `DEMO_CUSTOMER_PASSWORD`, `DEMO_ORGANIZER_EMAIL`, and `DEMO_ORGANIZER_PASSWORD` for the seed
 - Optional Cloudinary credentials provide the local upload fallback when Supabase is absent

@@ -193,12 +193,21 @@ This log records how Feature 2 was developed and how both feature branches were 
 - Validated paired Supabase credentials and kept upload cleanup outside database transactions.
 - Passed API linting, normal and Vercel-like type checks, the production build, and all 33 database-independent API tests.
 
+### 20. Allow the stable Vercel web preview origin
+
+**Commit:** `44e1561 feat(api): allow Vercel web previews`
+
+- Kept the production web origin as the primary CORS allowlist entry.
+- Added one optional, exact preview origin instead of accepting arbitrary Vercel subdomains.
+- Wired the setting through local and serverless API startup.
+- Added a regression test proving the configured Preview receives the CORS response header.
+
 ## Verification record
 
 - Prisma schema validation and client generation: passed.
 - Formatting: passed.
 - ESLint across shared, database, API, and web workspaces: passed.
 - TypeScript checks across all workspaces: passed.
-- Database-independent tests: 60 passed (shared 8, API 33, web 19).
+- Database-independent tests: 61 passed (shared 8, API 34, web 19).
 - Production builds: shared, database, Express API, and all 22 Next.js routes passed.
 - PostgreSQL migrations, seed, and integration suites are enforced by the CI job before release to `main`.
