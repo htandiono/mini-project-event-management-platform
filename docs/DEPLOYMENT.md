@@ -50,7 +50,26 @@ Set application variables for both Production and Preview unless a narrower scop
 - `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, and their expiry variables
 - `DEMO_CUSTOMER_EMAIL`, `DEMO_CUSTOMER_PASSWORD`, `DEMO_ORGANIZER_EMAIL`, and `DEMO_ORGANIZER_PASSWORD` for the seed
 - Optional Cloudinary credentials provide the local upload fallback when Supabase is absent
-- Real SMTP credentials and `MAIL_FROM` for account and transaction email
+- `MAIL_FROM` for account and transaction email
+
+### Transactional email with Resend
+
+Resend is the preferred hosted provider because its Vercel Marketplace integration provisions a scoped `RESEND_API_KEY` directly into the selected project. The API converts that key to Nodemailer's documented Resend SMTP settings: `smtp.resend.com`, port `465`, implicit TLS, and user `resend`.
+
+1. Install [Resend from the Vercel Marketplace](https://vercel.com/marketplace/resend) into the API project for Production and Preview.
+2. Confirm Vercel injected `RESEND_API_KEY`; never copy its value into source control or shared documentation.
+3. Keep `MAIL_FROM` as an application-managed value. Before domain verification, `Eventure <onboarding@resend.dev>` is only suitable for Resend's restricted account-owner testing.
+4. For real recipients, verify a project-owned sending domain with SPF and DKIM, preferably a dedicated subdomain, then change `MAIL_FROM` to an address on that domain.
+5. Redeploy the API and trigger a welcome or password-reset email. Confirm the message in the Resend dashboard and check that the API logs contain no `[email]` delivery warning.
+
+The explicit `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, and `SMTP_PASS` variables remain supported as a local or alternate-provider fallback. All four are required when `RESEND_API_KEY` is absent; Resend takes precedence when both methods are present.
+
+Provider references:
+
+- [Resend pricing](https://resend.com/docs/knowledge-base/what-is-resend-pricing) currently lists 3,000 transactional emails per month and 100 per day on the free plan.
+- [Resend security](https://resend.com/docs/security) documents TLS in transit, encryption at rest, SOC 2 Type II, GDPR controls, and penetration testing.
+- [Resend domain setup](https://resend.com/docs/dashboard/domains/introduction) explains SPF/DKIM verification and recommends a sending subdomain.
+- [Resend testing-domain restriction](https://resend.com/docs/knowledge-base/403-error-resend-dev-domain) explains why arbitrary recipients require a verified custom domain.
 
 ### Variables injected by the Supabase integration
 
