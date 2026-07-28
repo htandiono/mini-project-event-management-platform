@@ -137,12 +137,87 @@ This log records how Feature 2 was developed and how both feature branches were 
 - Found and corrected the same dead route in the dashboard quick action so it opens the existing event manager.
 - Added navigation regression tests for both the sidebar and dashboard destinations.
 
+### 14. Make API imports portable for Vercel
+
+**Commit:** `02ac37e fix(api): use portable module imports for Vercel`
+
+- Reproduced Vercel's stricter module-interop type check locally.
+- Switched Helmet to an explicit namespace/default call compatible with both NodeNext and Vercel.
+- Switched the Node crypto import to the portable `node:` namespace form.
+- Verified linting, normal and strict-interoperability type checks, the API production build, and all 24 database-independent API tests.
+
+### 15. Normalize Helmet across Vercel module modes
+
+**Commit:** `071d8b1 fix(api): unwrap Helmet across Vercel module modes`
+
+- Confirmed the Vercel preview compiler wrapped Helmet differently from both the normal and strict local TypeScript modes.
+- Added a small runtime-safe factory that accepts either a callable default or a wrapped default export.
+- Kept the security middleware behavior unchanged.
+- Re-ran formatting, linting, both TypeScript modes, the API production build, and all 24 database-independent API tests.
+
+### 16. Support native Vercel Supabase variables
+
+**Commit:** `cb625ec feat(database): support Vercel Supabase URLs`
+
+- Accepted Vercel's pooled `POSTGRES_PRISMA_URL` as the production runtime connection.
+- Preferred `POSTGRES_URL_NON_POOLING` for Prisma CLI migration commands when available.
+- Preserved `DATABASE_URL` for local development and existing deployments.
+- Added environment parsing tests and verified Prisma generation and validation with only the Supabase-style variable.
+
+### 17. Export the API as a Vercel serverless handler
+
+**Commit:** `a9a2645 fix(api): export Vercel serverless handler`
+
+- Reproduced the live `FUNCTION_INVOCATION_FAILED` response after the preview build completed successfully.
+- Traced the Vercel runtime log to a missing default handler export in `src/app.ts`.
+- Added a lazily initialized default handler while retaining the reusable `createApp` factory for local startup and tests.
+- Added a regression assertion for the serverless export and passed linting, type checking, the API build, and all 28 database-independent API tests.
+
+### 18. Configure Vercel and seed Supabase
+
+**Commit:** `671bd7d docs: document Vercel Supabase deployment`
+
+- Created separate Git-connected Vercel projects for the Express API and Next.js web workspaces.
+- Connected the native Supabase resource to API Production and Preview environments without exposing provider values.
+- Applied committed Prisma migrations and seeded 39 Indonesian events, 40 transactions, referral rewards, and reviewer accounts.
+- Restored the ordinary API build command after the one-time seed and verified the final Preview health and public event responses.
+- Added a secret-free deployment runbook covering project roots, build commands, environment-variable names, production URLs, and promotion checks.
+
+### 19. Route hosted uploads to Supabase Storage
+
+**Commit:** `7235537 feat(api): store uploads in Supabase`
+
+- Added the official Supabase client and selected its storage adapter when Vercel injects the URL and service-role key.
+- Created a constrained public image bucket lazily and generated unique paths for profile photos and payment proofs.
+- Preserved Cloudinary as the local fallback, including its existing avatar crop behavior.
+- Validated paired Supabase credentials and kept upload cleanup outside database transactions.
+- Passed API linting, normal and Vercel-like type checks, the production build, and all 33 database-independent API tests.
+
+### 20. Allow the stable Vercel web preview origin
+
+**Commit:** `44e1561 feat(api): allow Vercel web previews`
+
+- Kept the production web origin as the primary CORS allowlist entry.
+- Added one optional, exact preview origin instead of accepting arbitrary Vercel subdomains.
+- Wired the setting through local and serverless API startup.
+- Added a regression test proving the configured Preview receives the CORS response header.
+
+### 21. Handle live Supabase missing-bucket responses
+
+**Commit:** `3248bda fix(api): handle Supabase missing buckets`
+
+- Reproduced a hosted avatar upload failure against the connected Supabase resource.
+- Confirmed in Supabase logs that a missing bucket uses HTTP `400` with a storage-level `404` code.
+- Accepted only the documented missing-bucket codes while preserving failures for unrelated `400` responses.
+- Provisioned the constrained public bucket and verified a live authenticated avatar upload returned its Supabase public URL.
+- Added a production-shaped regression test; all 35 database-independent API tests pass.
+
 ## Verification record
 
 - Prisma schema validation and client generation: passed.
 - Formatting: passed.
 - ESLint across shared, database, API, and web workspaces: passed.
 - TypeScript checks across all workspaces: passed.
-- Database-independent tests: 51 passed (shared 8, API 24, web 19).
+- Database-independent tests: 62 passed (shared 8, API 35, web 19).
 - Production builds: shared, database, Express API, and all 22 Next.js routes passed.
 - PostgreSQL migrations, seed, and integration suites are enforced by the CI job before release to `main`.

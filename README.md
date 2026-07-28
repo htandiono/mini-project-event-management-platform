@@ -19,16 +19,16 @@ Feature 1 and Feature 2 are integrated on `develop`. The complete customer flow 
 
 ## Tech stack
 
-| Layer                | Technology                                                        |
-| -------------------- | ----------------------------------------------------------------- |
-| Web                  | Next.js 16, React 19, TypeScript                                  |
-| API                  | Node.js, Express 5, TypeScript                                    |
-| Data                 | PostgreSQL 16, Prisma ORM 6                                       |
-| Quality              | ESLint, Prettier, Vitest, Testing Library, Supertest              |
-| Local infrastructure | Docker Compose, pnpm workspaces                                   |
-| Deployment target    | Vercel (web), Railway/Vercel (API), Railway/Supabase (PostgreSQL) |
+| Layer                | Technology                                           |
+| -------------------- | ---------------------------------------------------- |
+| Web                  | Next.js 16, React 19, TypeScript                     |
+| API                  | Node.js, Express 5, TypeScript                       |
+| Data                 | PostgreSQL 16, Prisma ORM 6                          |
+| Quality              | ESLint, Prettier, Vitest, Testing Library, Supertest |
+| Local infrastructure | Docker Compose, pnpm workspaces                      |
+| Deployment target    | Vercel (web and API), Supabase PostgreSQL            |
 
-Recharts supplies organizer analytics, Multer and Cloudinary handle image uploads, and Nodemailer sends non-blocking account and transaction emails.
+Recharts supplies organizer analytics, Multer and Supabase Storage handle hosted image uploads, Cloudinary remains the local fallback, and Nodemailer sends non-blocking account and transaction emails.
 
 ## API surface
 
@@ -39,6 +39,7 @@ Recharts supplies organizer analytics, Multer and Cloudinary handle image upload
 - Customer: checkout/history under `/api/v1/transactions`, proof upload under `/:id/payment-proof`, cancellation under `/:id/cancel`, and reviews under `/:id/review`
 
 See the [Feature 1 Development Log](docs/FEATURE_1_DEVELOPMENT_LOG.md) and [Integration Development Log](docs/INTEGRATION_DEVELOPMENT_LOG.md) for the commit-by-commit record.
+See the [Vercel and Supabase Deployment Guide](docs/DEPLOYMENT.md) for the hosted architecture, environment-variable contract, migration procedure, and production checklist.
 
 ## Repository layout
 
@@ -164,7 +165,7 @@ Local seed values come from `.env`; the example defaults are:
 | Customer  | `customer2@example.com`    | `Password123!`  |
 | Organizer | `oscar@example.com`        | `Password123!`  |
 
-Replace these for every hosted environment and update this table with dedicated reviewer accounts before submission.
+Hosted reviewer values are managed through Vercel's `DEMO_*` variables and should be shared privately; the values above are local seed examples.
 
 ## Git workflow
 
@@ -180,9 +181,9 @@ See [Collaboration Guide](docs/COLLABORATION.md) for ownership and merge rules, 
 
 ## Deployment URLs
 
-| Service     | URL              |
-| ----------- | ---------------- |
-| Frontend    | Not deployed yet |
-| Backend API | Not deployed yet |
+| Service     | Production URL                                                  |
+| ----------- | --------------------------------------------------------------- |
+| Frontend    | `https://mini-project-event-management-platf-eta.vercel.app`    |
+| Backend API | `https://mini-project-event-management-platf.vercel.app/api/v1` |
 
-Replace these placeholders before the demo. The production database must be migrated and seeded, and every demonstration flow must be retested against the deployed URLs.
+Both projects deploy from `main`; pull requests receive Vercel previews. The Supabase production database is migrated and seeded with Indonesian events and demo accounts before production promotion.

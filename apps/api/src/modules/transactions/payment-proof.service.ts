@@ -2,7 +2,7 @@ import { TransactionStatus, type PrismaClient } from "@eventure/database";
 import { ORGANIZER_REVIEW_WINDOW_DAYS, type PaymentProofSubmission } from "@eventure/shared";
 
 import { AppError } from "../../lib/app-error.js";
-import { deleteFromCloudinary, uploadToCloudinary } from "../../services/cloudinary.service.js";
+import { deleteAsset, uploadAsset } from "../../services/asset-storage.service.js";
 import { restoreTransactionById } from "./transaction-lifecycle.service.js";
 
 interface PaymentProofFile {
@@ -16,9 +16,9 @@ interface PaymentProofStorage {
   remove(publicId: string): Promise<void>;
 }
 
-const cloudinaryPaymentProofStorage: PaymentProofStorage = {
-  upload: (file) => uploadToCloudinary(file.buffer, "eventure/payment-proofs", false),
-  remove: deleteFromCloudinary,
+const paymentProofStorage: PaymentProofStorage = {
+  upload: (file) => uploadAsset(file.buffer, file.mimetype, "eventure/payment-proofs"),
+  remove: deleteAsset,
 };
 
 export async function submitPaymentProof(
@@ -27,7 +27,7 @@ export async function submitPaymentProof(
   transactionId: string,
   file: PaymentProofFile,
   now = new Date(),
-  storage: PaymentProofStorage = cloudinaryPaymentProofStorage,
+  storage: PaymentProofStorage = paymentProofStorage,
 ): Promise<PaymentProofSubmission> {
   const transaction = await database.transaction.findFirst({
     where: { id: transactionId, customerId },
