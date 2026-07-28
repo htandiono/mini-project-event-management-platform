@@ -92,7 +92,9 @@ export default function UserOrdersPage() {
               <tbody>
                 {orders.map((order: UserOrder) => (
                   <tr key={order.id}>
-                    <td style={{ fontFamily: "monospace", fontWeight: "700" }}>{order.code}</td>
+                    <td style={{ fontFamily: "monospace", fontWeight: "700" }}>
+                      {order.invoiceNumber}
+                    </td>
                     <td style={{ fontWeight: "650", color: "var(--color-ink)" }}>
                       {order.event?.name || "Event Details"}
                     </td>
@@ -103,9 +105,7 @@ export default function UserOrdersPage() {
                         </div>
                       )) || "—"}
                     </td>
-                    <td style={{ fontWeight: "700" }}>
-                      Rp {order.finalAmount.toLocaleString("id-ID")}
-                    </td>
+                    <td style={{ fontWeight: "700" }}>Rp {order.total.toLocaleString("id-ID")}</td>
                     <td>{getStatusBadge(order.status)}</td>
                     <td>
                       {new Date(order.createdAt).toLocaleDateString("en-US", {

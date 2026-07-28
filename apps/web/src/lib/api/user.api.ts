@@ -45,14 +45,14 @@ export interface UserOrderItem {
 
 export interface UserOrder {
   id: string;
-  code: string;
+  invoiceNumber: string;
   customerId: string;
   eventId: string;
-  originalAmount: number;
+  subtotal: number;
   pointsUsed: number;
   couponDiscount: number;
   voucherDiscount: number;
-  finalAmount: number;
+  total: number;
   status:
     | "WAITING_FOR_PAYMENT"
     | "WAITING_FOR_CONFIRMATION"
@@ -60,7 +60,7 @@ export interface UserOrder {
     | "REJECTED"
     | "EXPIRED"
     | "CANCELED";
-  expiresAt: string;
+  paymentDeadline: string;
   createdAt: string;
   updatedAt: string;
   event?: {
