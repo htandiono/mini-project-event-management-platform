@@ -1,8 +1,9 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import express, { type RequestHandler } from "express";
+import express, { type Request, type RequestHandler, type Response } from "express";
 import helmetModule from "helmet";
 
+import { getEnv } from "./config/env.js";
 import { errorHandler } from "./middleware/error-handler.js";
 import { notFound } from "./middleware/not-found.js";
 import { apiRouter } from "./routes/index.js";
@@ -39,4 +40,13 @@ export function createApp({ frontendUrl }: CreateAppOptions) {
   app.use(errorHandler);
 
   return app;
+}
+
+let runtimeApp: ReturnType<typeof createApp> | undefined;
+
+export default function handler(request: Request, response: Response) {
+  const env = getEnv();
+  runtimeApp ??= createApp({ frontendUrl: env.FRONTEND_URL });
+
+  runtimeApp(request, response);
 }
