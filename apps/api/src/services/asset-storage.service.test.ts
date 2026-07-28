@@ -12,13 +12,14 @@ function createStorageMock(bucketExists: boolean) {
       },
     }),
   };
-  const getBucket = vi
-    .fn()
-    .mockResolvedValue(
-      bucketExists
-        ? { data: { id: "eventure-public" }, error: null }
-        : { data: null, error: { message: "not found", status: 404 } },
-    );
+  const getBucket = vi.fn().mockResolvedValue(
+    bucketExists
+      ? { data: { id: "eventure-public" }, error: null }
+      : {
+          data: null,
+          error: { message: "Bucket not found", status: 400, statusCode: "404" },
+        },
+  );
   const createBucket = vi.fn().mockResolvedValue({
     data: { name: "eventure-public" },
     error: null,
@@ -72,5 +73,19 @@ describe("createSupabaseAssetStorage", () => {
     await expect(
       storage.upload(Buffer.from("not-an-image"), "application/pdf", "eventure/avatars"),
     ).rejects.toThrow("Unsupported Supabase Storage MIME type: application/pdf");
+  });
+
+  it("does not create a bucket after unrelated lookup failures", async () => {
+    const { api, createBucket } = createStorageMock(true);
+    api.getBucket = vi.fn().mockResolvedValue({
+      data: null,
+      error: { message: "Invalid API key", status: 400, statusCode: "400" },
+    });
+    const storage = createSupabaseAssetStorage(api);
+
+    await expect(
+      storage.upload(Buffer.from("image"), "image/png", "eventure/avatars"),
+    ).rejects.toThrow("Supabase Storage bucket lookup failed: Invalid API key");
+    expect(createBucket).not.toHaveBeenCalled();
   });
 });

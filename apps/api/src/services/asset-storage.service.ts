@@ -25,6 +25,7 @@ export interface AssetStorage {
 interface StorageErrorLike {
   message: string;
   status?: number;
+  statusCode?: string;
 }
 
 interface SupabaseFileBucket {
@@ -50,6 +51,10 @@ function storageError(action: string, error: StorageErrorLike): Error {
   return new Error(`Supabase Storage ${action} failed: ${error.message}`);
 }
 
+function isMissingBucket(error: StorageErrorLike): boolean {
+  return error.status === 404 || error.statusCode === "404" || error.statusCode === "NoSuchBucket";
+}
+
 export function createSupabaseAssetStorage(storage: SupabaseStorageApi): AssetStorage {
   let bucketReady: Promise<void> | undefined;
 
@@ -58,7 +63,7 @@ export function createSupabaseAssetStorage(storage: SupabaseStorageApi): AssetSt
     if (!existing.error) {
       return;
     }
-    if (existing.error.status !== 404) {
+    if (!isMissingBucket(existing.error)) {
       throw storageError("bucket lookup", existing.error);
     }
 
