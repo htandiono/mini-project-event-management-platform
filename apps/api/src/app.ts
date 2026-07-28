@@ -1,7 +1,7 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
-import helmet from "helmet";
+import * as helmet from "helmet";
 
 import { errorHandler } from "./middleware/error-handler.js";
 import { notFound } from "./middleware/not-found.js";
@@ -15,7 +15,7 @@ export function createApp({ frontendUrl }: CreateAppOptions) {
   const app = express();
 
   app.disable("x-powered-by");
-  app.use(helmet());
+  app.use(helmet.default());
   app.use(
     cors({
       credentials: true,

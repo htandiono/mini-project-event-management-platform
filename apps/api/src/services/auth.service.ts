@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import * as crypto from "node:crypto";
 import { prisma, type User } from "@eventure/database";
 import type {
   ForgotPasswordDTO,
