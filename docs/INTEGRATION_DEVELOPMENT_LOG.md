@@ -119,12 +119,30 @@ This log records how Feature 2 was developed and how both feature branches were 
 - Parsed dashboard and organizer transaction queries in their async controllers instead.
 - Preserved the same shared Zod validation and standard validation-error response.
 
+### 12. Align customer orders with the API response
+
+**Commit:** `05c452a fix(web): align customer orders with API fields`
+
+- Confirmed the review report by tracing `/api/v1/users/me/orders` to its Prisma transaction response.
+- Replaced the stale `code`, `originalAmount`, and `finalAmount` frontend fields with `invoiceNumber`, `subtotal`, and `total`.
+- Renamed the stale `expiresAt` contract field to the actual `paymentDeadline` field.
+- Added a page regression test that renders an Indonesian invoice number and formatted transaction total.
+
+### 13. Remove the dead organizer create route
+
+**Commit:** `29699b5 fix(web): remove dead organizer create route`
+
+- Confirmed that `/organizer/events/new` is absent from the Next.js route tree.
+- Removed the redundant broken sidebar link while retaining the working `My Events` destination.
+- Found and corrected the same dead route in the dashboard quick action so it opens the existing event manager.
+- Added navigation regression tests for both the sidebar and dashboard destinations.
+
 ## Verification record
 
 - Prisma schema validation and client generation: passed.
 - Formatting: passed.
 - ESLint across shared, database, API, and web workspaces: passed.
 - TypeScript checks across all workspaces: passed.
-- Database-independent tests: 48 passed (shared 8, API 24, web 16).
+- Database-independent tests: 51 passed (shared 8, API 24, web 19).
 - Production builds: shared, database, Express API, and all 22 Next.js routes passed.
 - PostgreSQL migrations, seed, and integration suites are enforced by the CI job before release to `main`.
