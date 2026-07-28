@@ -13,9 +13,15 @@
   },
   "dependencies": {
     "@eventure/shared": "workspace:*",
+    "@tanstack/react-query": "^5.101.4",
+    "axios": "^1.18.1",
+    "lucide-react": "^1.27.0",
     "next": "16.2.12",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "react-hook-form": "^7.83.0",
+    "recharts": "^3.10.1",
+    "zod": "4.1.12"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "6.9.1",
@@ -23,6 +29,7 @@
     "@types/node": "24.10.1",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
+    "@types/recharts": "^2.0.1",
     "@vitest/coverage-v8": "4.1.10",
     "eslint": "9.39.5",
     "eslint-config-next": "16.2.12",

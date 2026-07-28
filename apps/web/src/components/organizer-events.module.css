@@ -1,0 +1,150 @@
+.page {
+  padding-block: clamp(2.5rem, 6vw, 5rem) 6rem;
+}
+
+.heading,
+.cardHeader,
+.actions {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.heading {
+  align-items: end;
+  margin-bottom: 2rem;
+}
+
+.heading h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.7rem, 6vw, 4.8rem);
+  letter-spacing: -0.045em;
+  line-height: 1;
+  margin: 0;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.card,
+.formPanel,
+.message {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+}
+
+.card {
+  padding: 1.25rem;
+}
+
+.card h2,
+.card p {
+  margin: 0;
+}
+
+.card p {
+  color: var(--color-muted);
+  margin-top: 0.4rem;
+}
+
+.status {
+  background: color-mix(in srgb, var(--color-teal) 12%, white);
+  border-radius: 999px;
+  color: var(--color-teal);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.4rem 0.65rem;
+}
+
+.actions {
+  border-top: 1px solid var(--color-line);
+  justify-content: flex-start;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+.formPanel {
+  margin-bottom: 2rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.formPanel h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  margin: 0 0 1.25rem;
+}
+
+.form {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.field,
+.fullField {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.fullField {
+  grid-column: 1 / -1;
+}
+
+.field span,
+.fullField span {
+  color: var(--color-muted);
+  font-size: 0.76rem;
+  font-weight: 750;
+}
+
+.field input,
+.field select,
+.fullField input,
+.fullField textarea {
+  background: var(--color-canvas);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  min-height: 2.7rem;
+  padding: 0.6rem 0.7rem;
+}
+
+.fullField textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.checkbox {
+  align-items: center;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.message {
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.error {
+  color: var(--color-primary-dark);
+}
+
+@media (max-width: 760px) {
+  .grid,
+  .form {
+    grid-template-columns: 1fr;
+  }
+
+  .fullField {
+    grid-column: auto;
+  }
+
+  .heading,
+  .cardHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

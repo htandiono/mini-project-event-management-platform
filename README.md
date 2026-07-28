@@ -4,7 +4,7 @@ Eventure is a responsive event management platform for discovering, publishing, 
 
 ## Current status
 
-The shared foundation is ready: monorepo tooling, frontend theme, Express API shell, Prisma data model, seed data, tests, CI, local PostgreSQL, and contributor contracts. Product feature endpoints and screens are intentionally left to the two feature branches.
+Feature 1 and Feature 2 are integrated on `develop`. The complete customer flow now covers discovery, checkout, payment-proof upload, automatic deadlines, order tracking, and attended-event reviews. The organizer flow covers authentication, event/ticket/voucher management, proof decisions, attendee lists, analytics, profile management, and email notifications.
 
 ## Main features
 
@@ -28,7 +28,17 @@ The shared foundation is ready: monorepo tooling, frontend theme, Express API sh
 | Local infrastructure | Docker Compose, pnpm workspaces                                   |
 | Deployment target    | Vercel (web), Railway/Vercel (API), Railway/Supabase (PostgreSQL) |
 
-Planned feature integrations required by the brief are Recharts, Multer with Cloudinary, and Nodemailer. They should be added only in the feature that uses them.
+Recharts supplies organizer analytics, Multer and Cloudinary handle image uploads, and Nodemailer sends non-blocking account and transaction emails.
+
+## API surface
+
+- Public: `GET /api/v1/events`, `/events/categories`, `/events/:slug`, and `/events/:slug/reviews`
+- Authentication and accounts: `/api/v1/auth` and authenticated profile/reward routes under `/api/v1/users/me`
+- Organizer: event CRUD under `/api/v1/organizer/events`, with nested `/tickets` and `/vouchers`
+- Organizer operations: proof decisions under `/api/v1/organizer/transactions` and reporting under `/api/v1/dashboard`
+- Customer: checkout/history under `/api/v1/transactions`, proof upload under `/:id/payment-proof`, cancellation under `/:id/cancel`, and reviews under `/:id/review`
+
+See the [Feature 1 Development Log](docs/FEATURE_1_DEVELOPMENT_LOG.md) and [Integration Development Log](docs/INTEGRATION_DEVELOPMENT_LOG.md) for the commit-by-commit record.
 
 ## Repository layout
 
@@ -51,12 +61,12 @@ docs/                   Architecture and collaboration guides
 
 ## Local setup
 
-1. Clone the repository and switch to your assigned branch.
+1. Clone the repository and switch to the integration branch.
 
    ```bash
-   git clone <repository-url>
-   cd "Mini Project Event Management Platform"
-   git switch feature/feature-2-accounts-dashboard
+   git clone https://github.com/htandiono/mini-project-event-management-platform.git
+   cd mini-project-event-management-platform
+   git switch develop
    ```
 
 2. Create the local environment file.
@@ -82,11 +92,11 @@ docs/                   Architecture and collaboration guides
    docker compose up -d
    ```
 
-5. Generate the Prisma client, create the first local migration, and seed demo data.
+5. Generate the Prisma client, apply the committed migrations, and seed demo data.
 
    ```bash
    pnpm db:generate
-   pnpm db:migrate -- --name init
+   pnpm db:migrate:deploy
    pnpm db:seed
    ```
 
@@ -101,16 +111,18 @@ docs/                   Architecture and collaboration guides
 
 ## Development commands
 
-| Command            | Purpose                                                 |
-| ------------------ | ------------------------------------------------------- |
-| `pnpm dev`         | Run web and API development servers                     |
-| `pnpm build`       | Build all packages and applications in dependency order |
-| `pnpm lint`        | Lint every workspace                                    |
-| `pnpm typecheck`   | Run strict TypeScript checks                            |
-| `pnpm test`        | Run unit and integration tests                          |
-| `pnpm verify`      | Run all checks required before a pull request           |
-| `pnpm db:studio`   | Open Prisma Studio                                      |
-| `pnpm db:validate` | Validate the shared Prisma schema                       |
+| Command                  | Purpose                                                 |
+| ------------------------ | ------------------------------------------------------- |
+| `pnpm dev`               | Run web and API development servers                     |
+| `pnpm build`             | Build all packages and applications in dependency order |
+| `pnpm lint`              | Lint every workspace                                    |
+| `pnpm typecheck`         | Run strict TypeScript checks                            |
+| `pnpm test`              | Run unit and integration tests                          |
+| `pnpm verify`            | Run all checks required before a pull request           |
+| `pnpm db:migrate:deploy` | Apply committed migrations without creating a new one   |
+| `pnpm db:seed`           | Upsert Indonesian demo events, accounts, and orders     |
+| `pnpm db:studio`         | Open Prisma Studio                                      |
+| `pnpm db:validate`       | Validate the shared Prisma schema                       |
 
 ## Database ERD
 
@@ -133,7 +145,7 @@ erDiagram
   TRANSACTION ||--|{ TRANSACTION_ITEM : contains
   TICKET_TYPE ||--o{ TRANSACTION_ITEM : selected_as
   VOUCHER o|--o{ TRANSACTION : discounts
-  USER_COUPON o|--o| TRANSACTION : discounts
+  USER_COUPON o|--o{ TRANSACTION : discounts
   TRANSACTION ||--o| PAYMENT_PROOF : has
   TRANSACTION ||--o{ POINT_LEDGER : records
   TRANSACTION ||--o| REVIEW : enables
@@ -149,6 +161,8 @@ Local seed values come from `.env`; the example defaults are:
 | --------- | -------------------------- | --------------- |
 | Customer  | `customer@eventure.local`  | `Customer123!`  |
 | Organizer | `organizer@eventure.local` | `Organizer123!` |
+| Customer  | `customer2@example.com`    | `Password123!`  |
+| Organizer | `oscar@example.com`        | `Password123!`  |
 
 Replace these for every hosted environment and update this table with dedicated reviewer accounts before submission.
 
@@ -158,7 +172,7 @@ Replace these for every hosted environment and update this table with dedicated 
 - `develop` is the integration branch.
 - `feature/feature-1-events-transactions` belongs to Feature 1.
 - `feature/feature-2-accounts-dashboard` belongs to Feature 2.
-- Open pull requests into `develop`; never push feature work directly to `main`.
+- Feature work is merged into `develop`; production promotion uses a reviewed pull request from `develop` to `main`.
 - Use conventional, single-purpose commits such as `feat(api): add paginated event query`.
 - Run `pnpm verify` before every pull request.
 

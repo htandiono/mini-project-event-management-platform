@@ -1,10 +1,22 @@
 import type { ApiFailure } from "@eventure/shared";
 import type { ErrorRequestHandler } from "express";
+import multer from "multer";
 import { ZodError } from "zod";
 
 import { AppError } from "../lib/app-error.js";
 
 export const errorHandler: ErrorRequestHandler = (error, _request, response, _next) => {
+  if (error instanceof multer.MulterError) {
+    const body: ApiFailure = {
+      success: false,
+      message: error.code === "LIMIT_FILE_SIZE" ? "Uploaded image is too large" : error.message,
+      errors: [],
+    };
+
+    response.status(400).json(body);
+    return;
+  }
+
   if (error instanceof SyntaxError) {
     const body: ApiFailure = {
       success: false,

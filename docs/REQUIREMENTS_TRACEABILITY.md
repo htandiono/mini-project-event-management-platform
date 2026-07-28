@@ -1,34 +1,34 @@
 # Assignment Requirements Traceability
 
-This matrix translates the supplied brief into implementation ownership and evidence. Update the Evidence column with route names, test files, and deployed URLs as features land.
+This matrix translates the supplied brief into implementation ownership and merged evidence.
 
-| Requirement                                                       | Owner         | Planned evidence                                           | Status               |
-| ----------------------------------------------------------------- | ------------- | ---------------------------------------------------------- | -------------------- |
-| Registration, login, logout, hashing, JWT, protected routes, RBAC | Feature 2     | Auth API, auth middleware, protected layouts, tests        | Planned              |
-| Minimum 7 entities and relational design                          | Shared        | Prisma schema with 13 entities and ERD                     | Foundation ready     |
-| Full CRUD for 3 main entities                                     | Feature 1     | Event, ticket type, voucher/category endpoints and UI      | Planned              |
-| One-to-many and many-to-many relations                            | Shared        | Event-ticket types and User-UserCoupon-Coupon              | Foundation ready     |
-| Soft delete on main entities                                      | Both          | `deletedAt` fields and service query tests                 | Schema ready         |
-| Backend validation and uniform errors                             | Both          | Zod schemas and `{ success, message, errors }` middleware  | Foundation ready     |
-| Relevant, repeatable seed data                                    | Shared        | Idempotent Prisma seed                                     | Foundation ready     |
-| Debounced search of at least 300 ms                               | Feature 1     | Search hook/component test                                 | Planned              |
-| Backend filters, sorting, pagination                              | Feature 1     | Event list endpoint query and integration tests            | Planned              |
-| Informative empty search/filter state                             | Feature 1     | Event list UI                                              | Primitive ready      |
-| Six-state ticket transaction flow                                 | Feature 1     | Checkout/status services and state tests                   | Contract ready       |
-| Two-hour proof and three-day organizer deadlines                  | Feature 1     | Expiry worker/service tests                                | Constants ready      |
-| SQL rollback and seat/benefit restoration                         | Feature 1 + 2 | Prisma transaction tests                                   | Planned              |
-| Three dashboard summary cards                                     | Feature 2     | Organizer dashboard                                        | Planned              |
-| Two charts and date filter                                        | Feature 2     | Recharts UI and aggregation endpoints                      | Planned              |
-| Cloud upload through Multer                                       | Feature 2     | Profile/proof upload with MIME/size validation and cleanup | Planned              |
-| Async HTML email through Nodemailer                               | Feature 2     | Accept/reject notification service                         | Planned              |
-| Confirmation dialogs on data modification                         | Both          | Shared dialog and flow tests                               | Planned              |
-| Responsive UI                                                     | Both          | Four target viewport checks                                | Theme ready          |
-| Unit tests for each flow                                          | Both          | Vitest suites in each workspace                            | Harness ready        |
-| `.env.example`, CORS, secrets excluded                            | Shared        | Env parser, CORS allowlist, `.gitignore`                   | Foundation ready     |
-| Frontend and backend deployed                                     | Both          | URLs in README                                             | Not started          |
-| 20+ meaningful conventional commits                               | Both          | Git log                                                    | In progress          |
-| `main`/`develop` branching and no direct main pushes              | Both          | Branches and GitHub protection settings                    | Local branches ready |
-| README with features, stack, ERD, setup, URLs, demo users         | Shared        | Repository README                                          | Foundation ready     |
+| Requirement                                                       | Owner         | Merged evidence                                                   | Status      |
+| ----------------------------------------------------------------- | ------------- | ----------------------------------------------------------------- | ----------- |
+| Registration, login, logout, hashing, JWT, protected routes, RBAC | Feature 2     | Auth API, middleware, protected layouts, integration tests        | Implemented |
+| Minimum 7 entities and relational design                          | Shared        | Prisma schema with 13 entities and README ERD                     | Implemented |
+| Full CRUD for 3 main entities                                     | Feature 1     | Event, ticket type, and voucher API/UI with focused tests         | Implemented |
+| One-to-many and many-to-many relations                            | Shared        | Event-ticket types and User-UserCoupon-Coupon                     | Implemented |
+| Soft delete on main entities                                      | Both          | Event/ticket/voucher/review services filter `deletedAt`           | Implemented |
+| Backend validation and uniform errors                             | Both          | Zod schemas, validation middleware, and shared error handler      | Implemented |
+| Relevant, repeatable seed data                                    | Shared        | 39 Indonesian events, 40 orders, rewards, proofs, and reviews     | Implemented |
+| Debounced search of at least 300 ms                               | Feature 1     | `use-debounced-value.test.tsx` verifies 350 ms                    | Implemented |
+| Backend filters, sorting, pagination                              | Feature 1     | Public event query service and focused tests                      | Implemented |
+| Informative empty search/filter state                             | Feature 1     | `event-browser.tsx`                                               | Implemented |
+| Six-state ticket transaction flow                                 | Feature 1     | Checkout, proof upload, decision, expiry, cancel, review          | Implemented |
+| Two-hour proof and three-day organizer deadlines                  | Both          | Checkout/lifecycle services and proof submission service          | Implemented |
+| SQL rollback and seat/benefit restoration                         | Feature 1 + 2 | Shared atomic restoration service and compensation tests          | Implemented |
+| Three dashboard summary cards                                     | Feature 2     | Organizer dashboard summary                                       | Implemented |
+| Two charts and date filter                                        | Feature 2     | Recharts analytics with validated Jakarta date range              | Implemented |
+| Cloud upload through Multer                                       | Feature 2     | Profile and payment-proof upload with type/size checks            | Implemented |
+| Async HTML email through Nodemailer                               | Feature 2     | Welcome/reset and post-commit transaction decision emails         | Implemented |
+| Confirmation dialogs on data modification                         | Both          | Event, ticket, voucher, checkout, cancel, review, proof decisions | Implemented |
+| Responsive UI                                                     | Both          | Shared tokens, CSS modules, and responsive account/dashboard UI   | Implemented |
+| Unit and integration tests for material flows                     | Both          | API, shared, and web Vitest suites plus PostgreSQL CI             | Implemented |
+| `.env.example`, CORS, secrets excluded                            | Shared        | Env parser, CORS allowlist, `.gitignore`                          | Implemented |
+| Frontend and backend deployed                                     | Both          | URLs in README                                                    | Pending     |
+| 20+ meaningful conventional commits                               | Both          | More than 85 atomic and merge commits                             | Satisfied   |
+| `main`/`develop` branching and no direct main pushes              | Both          | Feature merges into `develop`; protected release PR to `main`     | Configured  |
+| README with features, stack, ERD, setup, URLs, demo users         | Shared        | Updated repository README                                         | Implemented |
 
 ## Feature 1 acceptance summary
 
