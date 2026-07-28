@@ -15,6 +15,18 @@ describe("API application", () => {
     expect(vercelHandler).toBeTypeOf("function");
   });
 
+  it("allows the configured Vercel preview origin", async () => {
+    const previewOrigin = "https://eventure-preview.vercel.app";
+    const previewApp = createApp({
+      frontendUrl: "https://eventure.example",
+      frontendPreviewUrl: previewOrigin,
+    });
+
+    const response = await request(previewApp).get("/api/v1/health").set("Origin", previewOrigin);
+
+    expect(response.headers["access-control-allow-origin"]).toBe(previewOrigin);
+  });
+
   it("returns the health contract", async () => {
     const response = await request(app).get("/api/v1/health");
 

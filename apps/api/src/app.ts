@@ -17,9 +17,10 @@ const createHelmet =
 
 export interface CreateAppOptions {
   frontendUrl: string;
+  frontendPreviewUrl?: string;
 }
 
-export function createApp({ frontendUrl }: CreateAppOptions) {
+export function createApp({ frontendUrl, frontendPreviewUrl }: CreateAppOptions) {
   const app = express();
 
   app.disable("x-powered-by");
@@ -27,7 +28,7 @@ export function createApp({ frontendUrl }: CreateAppOptions) {
   app.use(
     cors({
       credentials: true,
-      origin: frontendUrl,
+      origin: frontendPreviewUrl ? [frontendUrl, frontendPreviewUrl] : frontendUrl,
     }),
   );
   app.use(cookieParser());
@@ -46,7 +47,10 @@ let runtimeApp: ReturnType<typeof createApp> | undefined;
 
 export default function handler(request: Request, response: Response) {
   const env = getEnv();
-  runtimeApp ??= createApp({ frontendUrl: env.FRONTEND_URL });
+  runtimeApp ??= createApp({
+    frontendUrl: env.FRONTEND_URL,
+    frontendPreviewUrl: env.FRONTEND_PREVIEW_URL,
+  });
 
   runtimeApp(request, response);
 }

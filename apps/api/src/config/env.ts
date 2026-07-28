@@ -8,6 +8,7 @@ const envSchema = z
     POSTGRES_PRISMA_URL: z.string().min(1).optional(),
     POSTGRES_URL_NON_POOLING: z.string().min(1).optional(),
     FRONTEND_URL: z.url(),
+    FRONTEND_PREVIEW_URL: z.url().optional(),
     JWT_ACCESS_SECRET: z.string().min(32),
     JWT_ACCESS_EXPIRES_IN: z.string().default("15m"),
     JWT_REFRESH_SECRET: z.string().min(32),
