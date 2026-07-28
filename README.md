@@ -28,7 +28,7 @@ Feature 1 and Feature 2 are integrated on `develop`. The complete customer flow 
 | Local infrastructure | Docker Compose, pnpm workspaces                      |
 | Deployment target    | Vercel (web and API), Supabase PostgreSQL            |
 
-Recharts supplies organizer analytics, Multer and Cloudinary handle image uploads, and Nodemailer sends non-blocking account and transaction emails.
+Recharts supplies organizer analytics, Multer and Supabase Storage handle hosted image uploads, Cloudinary remains the local fallback, and Nodemailer sends non-blocking account and transaction emails.
 
 ## API surface
 

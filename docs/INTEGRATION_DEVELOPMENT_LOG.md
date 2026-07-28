@@ -183,12 +183,22 @@ This log records how Feature 2 was developed and how both feature branches were 
 - Restored the ordinary API build command after the one-time seed and verified the final Preview health and public event responses.
 - Added a secret-free deployment runbook covering project roots, build commands, environment-variable names, production URLs, and promotion checks.
 
+### 19. Route hosted uploads to Supabase Storage
+
+**Commit:** `7235537 feat(api): store uploads in Supabase`
+
+- Added the official Supabase client and selected its storage adapter when Vercel injects the URL and service-role key.
+- Created a constrained public image bucket lazily and generated unique paths for profile photos and payment proofs.
+- Preserved Cloudinary as the local fallback, including its existing avatar crop behavior.
+- Validated paired Supabase credentials and kept upload cleanup outside database transactions.
+- Passed API linting, normal and Vercel-like type checks, the production build, and all 33 database-independent API tests.
+
 ## Verification record
 
 - Prisma schema validation and client generation: passed.
 - Formatting: passed.
 - ESLint across shared, database, API, and web workspaces: passed.
 - TypeScript checks across all workspaces: passed.
-- Database-independent tests: 55 passed (shared 8, API 28, web 19).
+- Database-independent tests: 60 passed (shared 8, API 33, web 19).
 - Production builds: shared, database, Express API, and all 22 Next.js routes passed.
 - PostgreSQL migrations, seed, and integration suites are enforced by the CI job before release to `main`.

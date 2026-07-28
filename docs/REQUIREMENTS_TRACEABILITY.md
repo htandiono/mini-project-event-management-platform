@@ -19,7 +19,7 @@ This matrix translates the supplied brief into implementation ownership and merg
 | SQL rollback and seat/benefit restoration                         | Feature 1 + 2 | Shared atomic restoration service and compensation tests          | Implemented |
 | Three dashboard summary cards                                     | Feature 2     | Organizer dashboard summary                                       | Implemented |
 | Two charts and date filter                                        | Feature 2     | Recharts analytics with validated Jakarta date range              | Implemented |
-| Cloud upload through Multer                                       | Feature 2     | Profile and payment-proof upload with type/size checks            | Implemented |
+| Cloud upload through Multer                                       | Feature 2     | Supabase-hosted profile/proof uploads with Cloudinary fallback    | Implemented |
 | Async HTML email through Nodemailer                               | Feature 2     | Welcome/reset and post-commit transaction decision emails         | Implemented |
 | Confirmation dialogs on data modification                         | Both          | Event, ticket, voucher, checkout, cancel, review, proof decisions | Implemented |
 | Responsive UI                                                     | Both          | Shared tokens, CSS modules, and responsive account/dashboard UI   | Implemented |

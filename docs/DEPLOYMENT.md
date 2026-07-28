@@ -48,14 +48,15 @@ Set application variables for both Production and Preview unless a narrower scop
 - `FRONTEND_URL` set to the production web origin
 - `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, and their expiry variables
 - `DEMO_CUSTOMER_EMAIL`, `DEMO_CUSTOMER_PASSWORD`, `DEMO_ORGANIZER_EMAIL`, and `DEMO_ORGANIZER_PASSWORD` for the seed
-- Real Cloudinary credentials for profile and payment-proof uploads
+- Optional Cloudinary credentials provide the local upload fallback when Supabase is absent
 - Real SMTP credentials and `MAIL_FROM` for account and transaction email
 
 ### Variables injected by the Supabase integration
 
 - `POSTGRES_PRISMA_URL` is the pooled serverless runtime connection.
 - `POSTGRES_URL_NON_POOLING` is the direct migration connection.
-- `SUPABASE_URL`, server keys, public keys, host, user, password, and database metadata are managed by the integration.
+- `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, public keys, host, user, password, and database metadata are managed by the integration.
+- On its first hosted upload, the API creates the public `eventure-public` bucket with a 5 MB image-only limit; profile photos and payment proofs use random object paths.
 - Do not add a placeholder `DATABASE_URL`; the application and Prisma config select the Supabase variables directly.
 
 ### Web variable
