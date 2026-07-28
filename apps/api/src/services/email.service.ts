@@ -3,18 +3,40 @@ import { getEnv } from "../config/env.js";
 
 let transporter: nodemailer.Transporter | null = null;
 
+interface MailTransportEnv {
+  RESEND_API_KEY?: string;
+  SMTP_HOST?: string;
+  SMTP_PORT?: number;
+  SMTP_USER?: string;
+  SMTP_PASS?: string;
+}
+
+export function resolveMailTransport(env: MailTransportEnv) {
+  if (env.RESEND_API_KEY) {
+    return {
+      host: "smtp.resend.com",
+      port: 465,
+      secure: true,
+      auth: { user: "resend", pass: env.RESEND_API_KEY },
+    };
+  }
+
+  if (!env.SMTP_HOST || !env.SMTP_PORT || !env.SMTP_USER || !env.SMTP_PASS) {
+    throw new Error("Complete SMTP credentials are required when Resend is not configured");
+  }
+
+  return {
+    host: env.SMTP_HOST,
+    port: env.SMTP_PORT,
+    secure: env.SMTP_PORT === 465,
+    auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
+  };
+}
+
 function getTransporter(): nodemailer.Transporter {
   if (!transporter) {
     const env = getEnv();
-    transporter = nodemailer.createTransport({
-      host: env.SMTP_HOST,
-      port: env.SMTP_PORT,
-      secure: env.SMTP_PORT === 465,
-      auth: {
-        user: env.SMTP_USER,
-        pass: env.SMTP_PASS,
-      },
-    });
+    transporter = nodemailer.createTransport(resolveMailTransport(env));
   }
   return transporter;
 }

@@ -17,6 +17,23 @@ const baseEnv = {
 };
 
 describe("getEnv", () => {
+  it("accepts the Vercel Resend API key without duplicate SMTP credentials", () => {
+    const env = getEnv({
+      FRONTEND_URL: baseEnv.FRONTEND_URL,
+      JWT_ACCESS_SECRET: baseEnv.JWT_ACCESS_SECRET,
+      JWT_REFRESH_SECRET: baseEnv.JWT_REFRESH_SECRET,
+      CLOUDINARY_CLOUD_NAME: baseEnv.CLOUDINARY_CLOUD_NAME,
+      CLOUDINARY_API_KEY: baseEnv.CLOUDINARY_API_KEY,
+      CLOUDINARY_API_SECRET: baseEnv.CLOUDINARY_API_SECRET,
+      MAIL_FROM: "Eventure <onboarding@resend.dev>",
+      POSTGRES_PRISMA_URL: "postgresql://supabase.example/eventure",
+      RESEND_API_KEY: "re_test",
+    });
+
+    expect(env.RESEND_API_KEY).toBe("re_test");
+    expect(env.SMTP_HOST).toBeUndefined();
+  });
+
   it("accepts the Vercel Supabase pooled URL", () => {
     const env = getEnv({
       ...baseEnv,
