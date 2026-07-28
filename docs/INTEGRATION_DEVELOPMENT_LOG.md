@@ -173,6 +173,16 @@ This log records how Feature 2 was developed and how both feature branches were 
 - Added a lazily initialized default handler while retaining the reusable `createApp` factory for local startup and tests.
 - Added a regression assertion for the serverless export and passed linting, type checking, the API build, and all 28 database-independent API tests.
 
+### 18. Configure Vercel and seed Supabase
+
+**Commit:** `671bd7d docs: document Vercel Supabase deployment`
+
+- Created separate Git-connected Vercel projects for the Express API and Next.js web workspaces.
+- Connected the native Supabase resource to API Production and Preview environments without exposing provider values.
+- Applied committed Prisma migrations and seeded 39 Indonesian events, 40 transactions, referral rewards, and reviewer accounts.
+- Restored the ordinary API build command after the one-time seed and verified the final Preview health and public event responses.
+- Added a secret-free deployment runbook covering project roots, build commands, environment-variable names, production URLs, and promotion checks.
+
 ## Verification record
 
 - Prisma schema validation and client generation: passed.
