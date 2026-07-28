@@ -146,6 +146,15 @@ This log records how Feature 2 was developed and how both feature branches were 
 - Switched the Node crypto import to the portable `node:` namespace form.
 - Verified linting, normal and strict-interoperability type checks, the API production build, and all 24 database-independent API tests.
 
+### 15. Normalize Helmet across Vercel module modes
+
+**Commit:** `071d8b1 fix(api): unwrap Helmet across Vercel module modes`
+
+- Confirmed the Vercel preview compiler wrapped Helmet differently from both the normal and strict local TypeScript modes.
+- Added a small runtime-safe factory that accepts either a callable default or a wrapped default export.
+- Kept the security middleware behavior unchanged.
+- Re-ran formatting, linting, both TypeScript modes, the API production build, and all 24 database-independent API tests.
+
 ## Verification record
 
 - Prisma schema validation and client generation: passed.
