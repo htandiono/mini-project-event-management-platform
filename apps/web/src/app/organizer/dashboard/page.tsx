@@ -139,7 +139,7 @@ export default function OrganizerDashboardPage() {
           }}
         >
           <Link
-            href="/organizer/events/new"
+            href="/organizer/events"
             style={{
               display: "flex",
               alignItems: "flex-start",

@@ -7,7 +7,6 @@ import { useAuth } from "@/lib/auth-context";
 import {
   LayoutDashboard,
   CalendarDays,
-  PlusCircle,
   ClipboardCheck,
   BarChart3,
   User,
@@ -84,7 +83,6 @@ export default function OrganizerLayout({ children }: { children: React.ReactNod
   const navItems = [
     { label: "Dashboard", href: "/organizer/dashboard", icon: LayoutDashboard, exact: true },
     { label: "My Events", href: "/organizer/events", icon: CalendarDays, exact: true },
-    { label: "Create Event", href: "/organizer/events/new", icon: PlusCircle },
     { label: "Order Verifications", href: "/organizer/orders", icon: ClipboardCheck },
     { label: "Analytics & Reports", href: "/organizer/analytics", icon: BarChart3 },
     { label: "Profile Settings", href: "/organizer/profile", icon: User },
