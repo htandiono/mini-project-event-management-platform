@@ -155,6 +155,15 @@ This log records how Feature 2 was developed and how both feature branches were 
 - Kept the security middleware behavior unchanged.
 - Re-ran formatting, linting, both TypeScript modes, the API production build, and all 24 database-independent API tests.
 
+### 16. Support native Vercel Supabase variables
+
+**Commit:** `cb625ec feat(database): support Vercel Supabase URLs`
+
+- Accepted Vercel's pooled `POSTGRES_PRISMA_URL` as the production runtime connection.
+- Preferred `POSTGRES_URL_NON_POOLING` for Prisma CLI migration commands when available.
+- Preserved `DATABASE_URL` for local development and existing deployments.
+- Added environment parsing tests and verified Prisma generation and validation with only the Supabase-style variable.
+
 ## Verification record
 
 - Prisma schema validation and client generation: passed.
