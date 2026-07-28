@@ -164,12 +164,21 @@ This log records how Feature 2 was developed and how both feature branches were 
 - Preserved `DATABASE_URL` for local development and existing deployments.
 - Added environment parsing tests and verified Prisma generation and validation with only the Supabase-style variable.
 
+### 17. Export the API as a Vercel serverless handler
+
+**Commit:** `a9a2645 fix(api): export Vercel serverless handler`
+
+- Reproduced the live `FUNCTION_INVOCATION_FAILED` response after the preview build completed successfully.
+- Traced the Vercel runtime log to a missing default handler export in `src/app.ts`.
+- Added a lazily initialized default handler while retaining the reusable `createApp` factory for local startup and tests.
+- Added a regression assertion for the serverless export and passed linting, type checking, the API build, and all 28 database-independent API tests.
+
 ## Verification record
 
 - Prisma schema validation and client generation: passed.
 - Formatting: passed.
 - ESLint across shared, database, API, and web workspaces: passed.
 - TypeScript checks across all workspaces: passed.
-- Database-independent tests: 51 passed (shared 8, API 24, web 19).
+- Database-independent tests: 55 passed (shared 8, API 28, web 19).
 - Production builds: shared, database, Express API, and all 22 Next.js routes passed.
 - PostgreSQL migrations, seed, and integration suites are enforced by the CI job before release to `main`.
