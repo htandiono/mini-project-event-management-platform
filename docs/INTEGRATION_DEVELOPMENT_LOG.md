@@ -202,12 +202,22 @@ This log records how Feature 2 was developed and how both feature branches were 
 - Wired the setting through local and serverless API startup.
 - Added a regression test proving the configured Preview receives the CORS response header.
 
+### 21. Handle live Supabase missing-bucket responses
+
+**Commit:** `3248bda fix(api): handle Supabase missing buckets`
+
+- Reproduced a hosted avatar upload failure against the connected Supabase resource.
+- Confirmed in Supabase logs that a missing bucket uses HTTP `400` with a storage-level `404` code.
+- Accepted only the documented missing-bucket codes while preserving failures for unrelated `400` responses.
+- Provisioned the constrained public bucket and verified a live authenticated avatar upload returned its Supabase public URL.
+- Added a production-shaped regression test; all 35 database-independent API tests pass.
+
 ## Verification record
 
 - Prisma schema validation and client generation: passed.
 - Formatting: passed.
 - ESLint across shared, database, API, and web workspaces: passed.
 - TypeScript checks across all workspaces: passed.
-- Database-independent tests: 61 passed (shared 8, API 34, web 19).
+- Database-independent tests: 62 passed (shared 8, API 35, web 19).
 - Production builds: shared, database, Express API, and all 22 Next.js routes passed.
 - PostgreSQL migrations, seed, and integration suites are enforced by the CI job before release to `main`.

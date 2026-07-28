@@ -57,7 +57,7 @@ Set application variables for both Production and Preview unless a narrower scop
 - `POSTGRES_PRISMA_URL` is the pooled serverless runtime connection.
 - `POSTGRES_URL_NON_POOLING` is the direct migration connection.
 - `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, public keys, host, user, password, and database metadata are managed by the integration.
-- On its first hosted upload, the API creates the public `eventure-public` bucket with a 5 MB image-only limit; profile photos and payment proofs use random object paths.
+- On its first hosted upload, the API creates the public `eventure-public` bucket with a 5 MB image-only limit. The adapter handles Supabase's HTTP `400` plus storage `404` missing-bucket response; profile photos and payment proofs use random object paths.
 - Do not add a placeholder `DATABASE_URL`; the application and Prisma config select the Supabase variables directly.
 
 ### Web variable
@@ -65,6 +65,11 @@ Set application variables for both Production and Preview unless a narrower scop
 - `NEXT_PUBLIC_API_URL` points to the production API base URL ending in `/api/v1`.
 
 Because this value is embedded during the Next.js build, redeploy the web project whenever it changes.
+
+### Cross-project Preview access
+
+- Turn off Vercel Authentication for API Preview deployments so the separate web Preview can call them anonymously. A protected API Preview redirects cross-origin requests to Vercel SSO and appears as `Failed to fetch` in the web app.
+- Keep Express CORS restricted to `FRONTEND_URL` and the exact `FRONTEND_PREVIEW_URL`; do not replace the allowlist with a wildcard.
 
 ## Production migration and seed
 
