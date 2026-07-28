@@ -3,7 +3,7 @@ import type { ChangePasswordDTO, UpdateProfileDTO, UserResponse } from "@eventur
 import bcrypt from "bcryptjs";
 import { AppError } from "../lib/app-error.js";
 import { formatUserResponse } from "./auth.service.js";
-import { deleteFromCloudinary, uploadToCloudinary } from "./cloudinary.service.js";
+import { deleteAsset, uploadAsset } from "./asset-storage.service.js";
 
 export async function getUserPointBalance(userId: string): Promise<number> {
   const now = new Date();
@@ -70,9 +70,9 @@ export async function updateProfile(
   }
 
   if (file) {
-    const uploadResult = await uploadToCloudinary(file.buffer);
+    const uploadResult = await uploadAsset(file.buffer, file.mimetype);
     if (user.avatarPublicId) {
-      void deleteFromCloudinary(user.avatarPublicId);
+      void deleteAsset(user.avatarPublicId);
     }
     updateData.avatarUrl = uploadResult.url;
     updateData.avatarPublicId = uploadResult.publicId;

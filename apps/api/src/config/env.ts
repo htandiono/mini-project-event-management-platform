@@ -15,6 +15,8 @@ const envSchema = z
     CLOUDINARY_CLOUD_NAME: z.string().min(1),
     CLOUDINARY_API_KEY: z.string().min(1),
     CLOUDINARY_API_SECRET: z.string().min(1),
+    SUPABASE_URL: z.url().optional(),
+    SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
     SMTP_HOST: z.string().min(1),
     SMTP_PORT: z.coerce.number().int().positive(),
     SMTP_USER: z.string().min(1),
@@ -26,10 +28,18 @@ const envSchema = z
     path: ["DATABASE_URL"],
   });
 
-export type AppEnv = z.infer<typeof envSchema>;
+const storageEnvSchema = envSchema.refine(
+  (env) => Boolean(env.SUPABASE_URL) === Boolean(env.SUPABASE_SERVICE_ROLE_KEY),
+  {
+    message: "Supabase Storage URL and service role key must be configured together",
+    path: ["SUPABASE_URL"],
+  },
+);
+
+export type AppEnv = z.infer<typeof storageEnvSchema>;
 
 export function getEnv(source: NodeJS.ProcessEnv = process.env): AppEnv {
-  const result = envSchema.safeParse(source);
+  const result = storageEnvSchema.safeParse(source);
 
   if (!result.success) {
     const missing = result.error.issues.map((issue) => issue.path.join(".")).join(", ");

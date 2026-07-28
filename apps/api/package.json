@@ -16,6 +16,7 @@
   "dependencies": {
     "@eventure/database": "workspace:*",
     "@eventure/shared": "workspace:*",
+    "@supabase/supabase-js": "^2.110.8",
     "bcryptjs": "3.0.2",
     "cloudinary": "^2.10.0",
     "cookie-parser": "^1.4.7",

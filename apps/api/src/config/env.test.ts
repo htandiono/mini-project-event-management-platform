@@ -26,6 +26,27 @@ describe("getEnv", () => {
     expect(env.POSTGRES_PRISMA_URL).toBe("postgresql://supabase.example/eventure");
   });
 
+  it("accepts paired Supabase Storage credentials", () => {
+    const env = getEnv({
+      ...baseEnv,
+      POSTGRES_PRISMA_URL: "postgresql://supabase.example/eventure",
+      SUPABASE_URL: "https://project.supabase.co",
+      SUPABASE_SERVICE_ROLE_KEY: "service-role-key",
+    });
+
+    expect(env.SUPABASE_URL).toBe("https://project.supabase.co");
+  });
+
+  it("rejects incomplete Supabase Storage credentials", () => {
+    expect(() =>
+      getEnv({
+        ...baseEnv,
+        POSTGRES_PRISMA_URL: "postgresql://supabase.example/eventure",
+        SUPABASE_URL: "https://project.supabase.co",
+      }),
+    ).toThrow("Invalid environment configuration: SUPABASE_URL");
+  });
+
   it("keeps supporting the local DATABASE_URL", () => {
     const env = getEnv({
       ...baseEnv,
