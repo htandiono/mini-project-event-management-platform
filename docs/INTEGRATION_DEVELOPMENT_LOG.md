@@ -233,12 +233,16 @@ This log records how Feature 2 was developed and how both feature branches were 
 - Deployed the commit with a domain-restricted Resend key and the verified `eventure.cloud` sender.
 - Confirmed the Preview API health contract, customer registration, and a live `delivered` welcome-email event in Resend.
 
+## Presentation delivery
+
+The interactive presentation is a shared delivery artifact. It preserves the assignment ownership boundary—Feature 1 remains `htandiono`, Feature 2 remains `awanstywn`—while presenting shared architecture, contracts, integration tests, and production evidence. Its atomic steps and verification record are maintained in `PRESENTATION_DEVELOPMENT_LOG.md`.
+
 ## Verification record
 
 - Prisma schema validation and client generation: passed.
 - Formatting: passed.
 - ESLint across shared, database, API, and web workspaces: passed.
 - TypeScript checks across all workspaces: passed.
-- Database-independent tests: 66 passed (shared 8, API 39, web 19).
-- Production builds: shared, database, Express API, and all 22 Next.js routes passed.
+- Database-independent tests: 68 passed (shared 8, API 39, web 21).
+- Production builds: shared, database, Express API, and all 23 Next.js routes passed.
 - PostgreSQL migrations, seed, and integration suites are enforced by the CI job before release to `main`.

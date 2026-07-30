@@ -4,11 +4,12 @@ This runbook records the shared production setup for Eventure. It contains no se
 
 ## Live services
 
-| Service  | Vercel project                               | URL                                                             |
-| -------- | -------------------------------------------- | --------------------------------------------------------------- |
-| Web      | `mini-project-event-management-platform-web` | `https://mini-project-event-management-platf-eta.vercel.app`    |
-| API      | `mini-project-event-management-platform-api` | `https://mini-project-event-management-platf.vercel.app/api/v1` |
-| Database | Supabase resource `eventure-production-db`   | Connected privately through Vercel                              |
+| Service      | Vercel project                               | URL                                   |
+| ------------ | -------------------------------------------- | ------------------------------------- |
+| Web          | `mini-project-event-management-platform-web` | `https://eventure.cloud`              |
+| Presentation | `mini-project-event-management-platform-web` | `https://presentation.eventure.cloud` |
+| API          | `mini-project-event-management-platform-api` | `https://api.eventure.cloud/api/v1`   |
+| Database     | Supabase resource `eventure-production-db`   | Connected privately through Vercel    |
 
 Both Vercel projects are connected to the GitHub repository. `main` is production and pull-request branches receive Preview deployments.
 
@@ -47,6 +48,7 @@ Set application variables for both Production and Preview unless a narrower scop
 - `NODE_ENV` and `API_PORT`
 - `FRONTEND_URL` set to the production web origin
 - `FRONTEND_PREVIEW_URL` set to the stable `develop` branch alias of the web Vercel project
+- `PRESENTATION_URL` set to the exact production presentation origin
 - `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, and their expiry variables
 - `DEMO_CUSTOMER_EMAIL`, `DEMO_CUSTOMER_PASSWORD`, `DEMO_ORGANIZER_EMAIL`, and `DEMO_ORGANIZER_PASSWORD` for the seed
 - Optional Cloudinary credentials provide the local upload fallback when Supabase is absent
@@ -86,12 +88,20 @@ Provider references:
 
 - `NEXT_PUBLIC_API_URL` points to the production API base URL ending in `/api/v1`.
 
-Because this value is embedded during the Next.js build, redeploy the web project whenever it changes.
+Because this value is embedded during the Next.js build, redeploy the web project whenever it changes. The presentation reuses the same exact API base and does not introduce browser-side secrets.
+
+### Presentation custom domain
+
+1. Add `presentation.eventure.cloud` to the existing web Vercel project as a Production domain.
+2. Add the exact CNAME record requested by Vercel in Hostinger DNS; preserve the apex, `www`, API, and Resend records.
+3. Set `PRESENTATION_URL=https://presentation.eventure.cloud` on the API project and redeploy the API so its exact-origin CORS allowlist includes the deck.
+4. Redeploy the web project. The host-specific rewrite serves `/presentation` at the subdomain root while `eventure.cloud` continues to serve the product.
+5. Verify HTTPS, keyboard navigation, speaker notes, the live API checks, and the embedded production application.
 
 ### Cross-project Preview access
 
 - Turn off Vercel Authentication for API Preview deployments so the separate web Preview can call them anonymously. A protected API Preview redirects cross-origin requests to Vercel SSO and appears as `Failed to fetch` in the web app.
-- Keep Express CORS restricted to `FRONTEND_URL` and the exact `FRONTEND_PREVIEW_URL`; do not replace the allowlist with a wildcard.
+- Keep Express CORS restricted to `FRONTEND_URL`, the exact `FRONTEND_PREVIEW_URL`, and the exact `PRESENTATION_URL`; do not replace the allowlist with a wildcard.
 
 ## Production migration and seed
 
@@ -113,6 +123,7 @@ Redeploy the latest Preview without build cache, confirm the seed reports 39 Ind
 6. Merge `develop` into `main`; do not push directly to `main`.
 7. Wait for both Production deployments to report Ready.
 8. Repeat health, catalog, login, checkout, payment-proof, organizer decision, dashboard, and review checks on the production URLs.
+9. Verify the presentation subdomain, live API console, social preview metadata, and embedded product.
 
 ## Reviewer access
 
