@@ -51,6 +51,14 @@ Every ownership label and speaker note follows this boundary. Shared evaluation 
 - Added the presentation domain, environment contract, DNS steps, and verification checklist.
 - Updated assignment traceability and the merged verification totals.
 
+### 5. Normalize blank optional origins
+
+**Commit:** `2581f44 fix(api): ignore blank optional origins`
+
+- Traced the first protected PR run's authentication failures to blank optional URLs copied from `.env.example`.
+- Normalized blank preview and presentation origins to an absent value while keeping malformed non-empty URLs invalid.
+- Added focused regression coverage and passed 14 environment/CORS tests, API lint, and API type checking before rerunning CI.
+
 ## Evaluation flow
 
 The deck covers frontend, backend, core features, feature testing, industry readiness, code understanding, and presentation quality. The supplied PDF has a percentage inconsistency between its overview and detailed scoring pages; the deck calls this out transparently and presents evidence for every listed category instead of assuming one interpretation.

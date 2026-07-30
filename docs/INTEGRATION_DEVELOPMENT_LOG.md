@@ -243,6 +243,6 @@ The interactive presentation is a shared delivery artifact. It preserves the ass
 - Formatting: passed.
 - ESLint across shared, database, API, and web workspaces: passed.
 - TypeScript checks across all workspaces: passed.
-- Database-independent tests: 68 passed (shared 8, API 39, web 21).
+- Database-independent tests: 69 passed (shared 8, API 40, web 21).
 - Production builds: shared, database, Express API, and all 23 Next.js routes passed.
 - PostgreSQL migrations, seed, and integration suites are enforced by the CI job before release to `main`.
