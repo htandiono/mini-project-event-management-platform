@@ -212,12 +212,33 @@ This log records how Feature 2 was developed and how both feature branches were 
 - Provisioned the constrained public bucket and verified a live authenticated avatar upload returned its Supabase public URL.
 - Added a production-shaped regression test; all 35 database-independent API tests pass.
 
+### 22. Support native Resend SMTP
+
+**Commit:** `e497ef2 feat(api): support native Resend SMTP`
+
+- Selected Resend for hosted transactional email because it integrates directly with Vercel while preserving Nodemailer and the explicit SMTP fallback.
+- Accepted the Vercel-injected `RESEND_API_KEY` as an alternative to a complete SMTP credential set.
+- Mapped the key to Resend's implicit-TLS SMTP endpoint without exposing it to source control, logs, or documentation.
+- Added regression tests for native Resend, explicit SMTP, incomplete credentials, and environment parsing.
+- Passed all 39 database-independent API tests, repository linting, TypeScript checks, and production builds.
+- The full local integration suite still requires its PostgreSQL service at `localhost:5432`; CI remains the release gate for those database-backed tests.
+
+### 23. Make serverless email delivery deterministic
+
+**Commit:** `fef6dc7 fix(api): await transactional email delivery`
+
+- Awaited welcome and password-reset delivery so Vercel does not finish the serverless invocation while SMTP is still active.
+- Kept email failures non-blocking at the transport boundary so account workflows remain available if the provider is temporarily unavailable.
+- Passed the focused email transport test, API linting, API type checking, and the production API build.
+- Deployed the commit with a domain-restricted Resend key and the verified `eventure.cloud` sender.
+- Confirmed the Preview API health contract, customer registration, and a live `delivered` welcome-email event in Resend.
+
 ## Verification record
 
 - Prisma schema validation and client generation: passed.
 - Formatting: passed.
 - ESLint across shared, database, API, and web workspaces: passed.
 - TypeScript checks across all workspaces: passed.
-- Database-independent tests: 62 passed (shared 8, API 35, web 19).
+- Database-independent tests: 66 passed (shared 8, API 39, web 19).
 - Production builds: shared, database, Express API, and all 22 Next.js routes passed.
 - PostgreSQL migrations, seed, and integration suites are enforced by the CI job before release to `main`.

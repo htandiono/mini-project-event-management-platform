@@ -28,7 +28,7 @@ Feature 1 and Feature 2 are integrated on `develop`. The complete customer flow 
 | Local infrastructure | Docker Compose, pnpm workspaces                      |
 | Deployment target    | Vercel (web and API), Supabase PostgreSQL            |
 
-Recharts supplies organizer analytics, Multer and Supabase Storage handle hosted image uploads, Cloudinary remains the local fallback, and Nodemailer sends non-blocking account and transaction emails.
+Recharts supplies organizer analytics, Multer and Supabase Storage handle hosted image uploads, Cloudinary remains the local fallback, and Nodemailer sends non-blocking account and transaction emails through Resend in hosted environments or explicit SMTP locally.
 
 ## API surface
 
@@ -84,7 +84,7 @@ docs/                   Architecture and collaboration guides
    cp .env.example .env
    ```
 
-3. Replace the placeholder JWT, Cloudinary, and SMTP values in `.env`. Never commit `.env`.
+3. Replace the placeholder JWT and Cloudinary values, then configure either `RESEND_API_KEY` or all four SMTP values in `.env`. Never commit `.env`.
 
 4. Install dependencies and start PostgreSQL.
 

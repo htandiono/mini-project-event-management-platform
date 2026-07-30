@@ -18,10 +18,11 @@ const envSchema = z
     CLOUDINARY_API_SECRET: z.string().min(1),
     SUPABASE_URL: z.url().optional(),
     SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
-    SMTP_HOST: z.string().min(1),
-    SMTP_PORT: z.coerce.number().int().positive(),
-    SMTP_USER: z.string().min(1),
-    SMTP_PASS: z.string().min(1),
+    RESEND_API_KEY: z.string().min(1).optional(),
+    SMTP_HOST: z.string().min(1).optional(),
+    SMTP_PORT: z.coerce.number().int().positive().optional(),
+    SMTP_USER: z.string().min(1).optional(),
+    SMTP_PASS: z.string().min(1).optional(),
     MAIL_FROM: z.string().min(1),
   })
   .refine((env) => env.DATABASE_URL || env.POSTGRES_PRISMA_URL, {
@@ -29,7 +30,17 @@ const envSchema = z
     path: ["DATABASE_URL"],
   });
 
-const storageEnvSchema = envSchema.refine(
+const mailEnvSchema = envSchema.refine(
+  (env) =>
+    Boolean(env.RESEND_API_KEY) ||
+    Boolean(env.SMTP_HOST && env.SMTP_PORT && env.SMTP_USER && env.SMTP_PASS),
+  {
+    message: "RESEND_API_KEY or complete SMTP credentials are required",
+    path: ["SMTP_HOST"],
+  },
+);
+
+const storageEnvSchema = mailEnvSchema.refine(
   (env) => Boolean(env.SUPABASE_URL) === Boolean(env.SUPABASE_SERVICE_ROLE_KEY),
   {
     message: "Supabase Storage URL and service role key must be configured together",
