@@ -223,6 +223,16 @@ This log records how Feature 2 was developed and how both feature branches were 
 - Passed all 39 database-independent API tests, repository linting, TypeScript checks, and production builds.
 - The full local integration suite still requires its PostgreSQL service at `localhost:5432`; CI remains the release gate for those database-backed tests.
 
+### 23. Make serverless email delivery deterministic
+
+**Commit:** `fef6dc7 fix(api): await transactional email delivery`
+
+- Awaited welcome and password-reset delivery so Vercel does not finish the serverless invocation while SMTP is still active.
+- Kept email failures non-blocking at the transport boundary so account workflows remain available if the provider is temporarily unavailable.
+- Passed the focused email transport test, API linting, API type checking, and the production API build.
+- Deployed the commit with a domain-restricted Resend key and the verified `eventure.cloud` sender.
+- Confirmed the Preview API health contract, customer registration, and a live `delivered` welcome-email event in Resend.
+
 ## Verification record
 
 - Prisma schema validation and client generation: passed.
