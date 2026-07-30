@@ -181,7 +181,7 @@ export async function register(dto: RegisterDTO, res: Response): Promise<UserRes
 
   setAuthCookies(res, { id: newUser.id, role: newUser.role });
 
-  void sendWelcomeEmail(newUser.email, newUser.name);
+  await sendWelcomeEmail(newUser.email, newUser.name);
 
   return formatUserResponse(newUser);
 }
@@ -236,7 +236,7 @@ export async function forgotPassword(dto: ForgotPasswordDTO): Promise<void> {
 
   const env = getEnv();
   const resetLink = `${env.FRONTEND_URL}/reset-password?token=${token}`;
-  void sendPasswordResetEmail(user.email, user.name, resetLink);
+  await sendPasswordResetEmail(user.email, user.name, resetLink);
 }
 
 export async function resetPassword(dto: ResetPasswordDTO, res: Response): Promise<UserResponse> {
