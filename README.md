@@ -4,7 +4,7 @@ Eventure is a responsive event management platform for discovering, publishing, 
 
 ## Current status
 
-Feature 1 and Feature 2 are integrated on `develop`. The complete customer flow now covers discovery, checkout, payment-proof upload, automatic deadlines, order tracking, and attended-event reviews. The organizer flow covers authentication, event/ticket/voucher management, proof decisions, attendee lists, analytics, profile management, and email notifications.
+Feature 1 and Feature 2 are integrated and deployed from `main`. The complete customer flow now covers discovery, checkout, payment-proof upload, automatic deadlines, order tracking, and attended-event reviews. The organizer flow covers authentication, event/ticket/voucher management, proof decisions, attendee lists, analytics, profile management, and email notifications. A separate interactive presentation maps that work to the assignment rubric without changing the original feature ownership.
 
 ## Main features
 
@@ -28,7 +28,7 @@ Feature 1 and Feature 2 are integrated on `develop`. The complete customer flow 
 | Local infrastructure | Docker Compose, pnpm workspaces                      |
 | Deployment target    | Vercel (web and API), Supabase PostgreSQL            |
 
-Recharts supplies organizer analytics, Multer and Supabase Storage handle hosted image uploads, Cloudinary remains the local fallback, and Nodemailer sends non-blocking account and transaction emails.
+Recharts supplies organizer analytics, Multer and Supabase Storage handle hosted image uploads, Cloudinary remains the local fallback, and Nodemailer sends non-blocking account and transaction emails through Resend in hosted environments or explicit SMTP locally.
 
 ## API surface
 
@@ -38,7 +38,7 @@ Recharts supplies organizer analytics, Multer and Supabase Storage handle hosted
 - Organizer operations: proof decisions under `/api/v1/organizer/transactions` and reporting under `/api/v1/dashboard`
 - Customer: checkout/history under `/api/v1/transactions`, proof upload under `/:id/payment-proof`, cancellation under `/:id/cancel`, and reviews under `/:id/review`
 
-See the [Feature 1 Development Log](docs/FEATURE_1_DEVELOPMENT_LOG.md) and [Integration Development Log](docs/INTEGRATION_DEVELOPMENT_LOG.md) for the commit-by-commit record.
+See the [Feature 1 Development Log](docs/FEATURE_1_DEVELOPMENT_LOG.md), [Integration Development Log](docs/INTEGRATION_DEVELOPMENT_LOG.md), and [Presentation Development Log](docs/PRESENTATION_DEVELOPMENT_LOG.md) for the commit-by-commit record.
 See the [Vercel and Supabase Deployment Guide](docs/DEPLOYMENT.md) for the hosted architecture, environment-variable contract, migration procedure, and production checklist.
 
 ## Repository layout
@@ -84,7 +84,7 @@ docs/                   Architecture and collaboration guides
    cp .env.example .env
    ```
 
-3. Replace the placeholder JWT, Cloudinary, and SMTP values in `.env`. Never commit `.env`.
+3. Replace the placeholder JWT and Cloudinary values, then configure either `RESEND_API_KEY` or all four SMTP values in `.env`. Never commit `.env`.
 
 4. Install dependencies and start PostgreSQL.
 
@@ -181,9 +181,10 @@ See [Collaboration Guide](docs/COLLABORATION.md) for ownership and merge rules, 
 
 ## Deployment URLs
 
-| Service     | Production URL                                                  |
-| ----------- | --------------------------------------------------------------- |
-| Frontend    | `https://mini-project-event-management-platf-eta.vercel.app`    |
-| Backend API | `https://mini-project-event-management-platf.vercel.app/api/v1` |
+| Service                  | Production URL                        |
+| ------------------------ | ------------------------------------- |
+| Frontend                 | `https://eventure.cloud`              |
+| Interactive presentation | `https://presentation.eventure.cloud` |
+| Backend API              | `https://api.eventure.cloud/api/v1`   |
 
 Both projects deploy from `main`; pull requests receive Vercel previews. The Supabase production database is migrated and seeded with Indonesian events and demo accounts before production promotion.

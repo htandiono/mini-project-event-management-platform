@@ -17,6 +17,23 @@ const baseEnv = {
 };
 
 describe("getEnv", () => {
+  it("accepts the Vercel Resend API key without duplicate SMTP credentials", () => {
+    const env = getEnv({
+      FRONTEND_URL: baseEnv.FRONTEND_URL,
+      JWT_ACCESS_SECRET: baseEnv.JWT_ACCESS_SECRET,
+      JWT_REFRESH_SECRET: baseEnv.JWT_REFRESH_SECRET,
+      CLOUDINARY_CLOUD_NAME: baseEnv.CLOUDINARY_CLOUD_NAME,
+      CLOUDINARY_API_KEY: baseEnv.CLOUDINARY_API_KEY,
+      CLOUDINARY_API_SECRET: baseEnv.CLOUDINARY_API_SECRET,
+      MAIL_FROM: "Eventure <onboarding@resend.dev>",
+      POSTGRES_PRISMA_URL: "postgresql://supabase.example/eventure",
+      RESEND_API_KEY: "re_test",
+    });
+
+    expect(env.RESEND_API_KEY).toBe("re_test");
+    expect(env.SMTP_HOST).toBeUndefined();
+  });
+
   it("accepts the Vercel Supabase pooled URL", () => {
     const env = getEnv({
       ...baseEnv,
@@ -24,6 +41,28 @@ describe("getEnv", () => {
     });
 
     expect(env.POSTGRES_PRISMA_URL).toBe("postgresql://supabase.example/eventure");
+  });
+
+  it("accepts an optional presentation origin", () => {
+    const env = getEnv({
+      ...baseEnv,
+      DATABASE_URL: "postgresql://localhost/eventure",
+      PRESENTATION_URL: "https://presentation.eventure.cloud",
+    });
+
+    expect(env.PRESENTATION_URL).toBe("https://presentation.eventure.cloud");
+  });
+
+  it("treats blank optional origins as absent", () => {
+    const env = getEnv({
+      ...baseEnv,
+      DATABASE_URL: "postgresql://localhost/eventure",
+      FRONTEND_PREVIEW_URL: "",
+      PRESENTATION_URL: "",
+    });
+
+    expect(env.FRONTEND_PREVIEW_URL).toBeUndefined();
+    expect(env.PRESENTATION_URL).toBeUndefined();
   });
 
   it("accepts paired Supabase Storage credentials", () => {
