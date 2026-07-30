@@ -27,6 +27,20 @@ describe("API application", () => {
     expect(response.headers["access-control-allow-origin"]).toBe(previewOrigin);
   });
 
+  it("allows the configured presentation origin", async () => {
+    const presentationOrigin = "https://presentation.eventure.cloud";
+    const presentationApp = createApp({
+      frontendUrl: "https://eventure.cloud",
+      presentationUrl: presentationOrigin,
+    });
+
+    const response = await request(presentationApp)
+      .get("/api/v1/health")
+      .set("Origin", presentationOrigin);
+
+    expect(response.headers["access-control-allow-origin"]).toBe(presentationOrigin);
+  });
+
   it("returns the health contract", async () => {
     const response = await request(app).get("/api/v1/health");
 
