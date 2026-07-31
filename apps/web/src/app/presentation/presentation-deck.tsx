@@ -272,25 +272,6 @@ const apiFamilies: ApiFamily[] = [
   },
 ];
 
-interface HealthBody {
-  success: boolean;
-  message: string;
-  data: { status: string; timestamp: string };
-}
-
-interface EventItem {
-  city: string;
-  name: string;
-}
-
-interface EventsBody {
-  success: boolean;
-  data: {
-    data: EventItem[];
-    total: number;
-  };
-}
-
 interface ApiResult {
   cities: string[];
   eventCount: number;
@@ -298,6 +279,12 @@ interface ApiResult {
   health: string;
   latency: number;
   timestamp: string;
+}
+
+interface ApiCheckBody {
+  success: boolean;
+  message: string;
+  data?: ApiResult;
 }
 
 export function PresentationDeck() {
@@ -353,30 +340,16 @@ export function PresentationDeck() {
   async function runApiCheck() {
     setApiState("running");
     setApiError("");
-    const startedAt = performance.now();
 
     try {
-      const [healthResponse, eventsResponse] = await Promise.all([
-        fetch(`${API_URL}/health`, { cache: "no-store" }),
-        fetch(`${API_URL}/events?limit=24`, { cache: "no-store" }),
-      ]);
+      const response = await fetch("/api/presentation-check", { cache: "no-store" });
+      const body = (await response.json()) as ApiCheckBody;
 
-      if (!healthResponse.ok || !eventsResponse.ok) {
-        throw new Error(`API returned ${healthResponse.status}/${eventsResponse.status}`);
+      if (!response.ok || !body.success || !body.data) {
+        throw new Error(body.message || `API check returned ${response.status}`);
       }
 
-      const health = (await healthResponse.json()) as HealthBody;
-      const events = (await eventsResponse.json()) as EventsBody;
-      const cities = [...new Set(events.data.data.map((event) => event.city))].sort();
-
-      setApiResult({
-        cities,
-        eventCount: events.data.total,
-        firstEvent: events.data.data[0]?.name ?? "No upcoming events",
-        health: health.data.status,
-        latency: Math.round(performance.now() - startedAt),
-        timestamp: health.data.timestamp,
-      });
+      setApiResult(body.data);
       setApiState("success");
     } catch (error) {
       setApiError(error instanceof Error ? error.message : "The API check could not be completed.");

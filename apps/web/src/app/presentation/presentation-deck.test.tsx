@@ -77,33 +77,23 @@ describe("PresentationDeck", () => {
   });
 
   it("summarizes successful production API checks", async () => {
-    const fetchMock = vi
-      .spyOn(globalThis, "fetch")
-      .mockResolvedValueOnce(
-        new Response(
-          JSON.stringify({
-            success: true,
-            message: "API is healthy",
-            data: { status: "ok", timestamp: "2026-07-30T04:00:00.000Z" },
-          }),
-          { status: 200, headers: { "Content-Type": "application/json" } },
-        ),
-      )
-      .mockResolvedValueOnce(
-        new Response(
-          JSON.stringify({
-            success: true,
-            data: {
-              data: [
-                { city: "Jakarta", name: "Jakarta Creative Conference" },
-                { city: "Bandung", name: "Bandung Design Week" },
-              ],
-              total: 39,
-            },
-          }),
-          { status: 200, headers: { "Content-Type": "application/json" } },
-        ),
-      );
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          success: true,
+          message: "Production API is healthy",
+          data: {
+            cities: ["Bandung", "Jakarta"],
+            eventCount: 39,
+            firstEvent: "Jakarta Creative Conference",
+            health: "ok",
+            latency: 42,
+            timestamp: "2026-07-30T04:00:00.000Z",
+          },
+        }),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      ),
+    );
 
     render(<PresentationDeck />);
     fireEvent.click(screen.getByRole("button", { name: "Go to slide 11: API example" }));
@@ -113,8 +103,7 @@ describe("PresentationDeck", () => {
     expect(screen.getByText("39")).toBeInTheDocument();
     expect(screen.getByText(/Bandung · Jakarta/)).toBeInTheDocument();
     expect(screen.getByText(/Jakarta Creative Conference/)).toBeInTheDocument();
-    expect(fetchMock).toHaveBeenCalledTimes(2);
-    expect(fetchMock.mock.calls[0]?.[0]).toContain("/health");
-    expect(fetchMock.mock.calls[1]?.[0]).toContain("/events?limit=24");
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledWith("/api/presentation-check", { cache: "no-store" });
   });
 });
