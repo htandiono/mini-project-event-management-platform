@@ -70,13 +70,13 @@ const slides = [
     section: "Feature 1",
     rubric: "htandiono",
     tone: "paper",
-    note: "htandiono explains discovery and search, event resource CRUD, checkout calculations, payment deadlines, rollback, and reviews. Mention backend pagination and the 350 millisecond debounce as measurable requirements.",
+    note: "Read each row from user behavior to implementation and code evidence. htandiono should explain the 350 millisecond search debounce, organizer ownership checks, atomic checkout calculation, compensating rollback, and the current review guard.",
   },
   {
     section: "Feature 2",
     rubric: "awanstywn",
     tone: "paper",
-    note: "awanstywn explains authentication and RBAC, referrals and expiring rewards, profile uploads and password recovery, organizer decisions, analytics, attendee lists, and email notifications.",
+    note: "Read each row from user behavior to implementation and code evidence. awanstywn should explain JWT/RBAC, the exact referral recipients and 90-day expiry, Supabase Storage with Cloudinary fallback, and organizer operations from proof decisions through analytics and email.",
   },
   {
     section: "Transaction safety",
@@ -107,12 +107,6 @@ const slides = [
     rubric: "Production readiness",
     tone: "paper",
     note: "Explain the production topology, then use the five-step demo path. Keep the live demo focused: discovery, checkout state, organizer decision, dashboard evidence, and one API check.",
-  },
-  {
-    section: "Defense",
-    rubric: "Code understanding",
-    tone: "teal",
-    note: "Close with ownership and code understanding. Each contributor should explain one design choice, one failure path, and one possible improvement in their own feature. Invite the examiner to choose a route, flow, or code module.",
   },
 ] as const;
 
@@ -724,43 +718,47 @@ export function PresentationDeck() {
           <section className={styles.slide} aria-labelledby="slide-6-title">
             <SlideHeading
               eyebrow="06 · Feature 1 / htandiono"
-              title="From event discovery to a completed review"
+              title="Feature 1 is implemented across four connected sections"
               id="slide-6-title"
             />
-            <div className={styles.featureLayout}>
-              <div className={styles.featureSequence}>
-                <NumberedStep
-                  number="1"
-                  title="Discover"
-                  detail="350 ms search debounce, category and city filters, sorting, backend pagination, empty state."
-                />
-                <NumberedStep
-                  number="2"
-                  title="Publish"
-                  detail="Organizer CRUD for events, ticket types and limited vouchers with soft deletion."
-                />
-                <NumberedStep
-                  number="3"
-                  title="Purchase"
-                  detail="Capacity checks, IDR totals, points, coupons and vouchers inside a Prisma transaction."
-                />
-                <NumberedStep
-                  number="4"
-                  title="Complete"
-                  detail="Proof deadline, status tracking, cancellation/expiry restoration, attendance-gated review."
-                />
-              </div>
-              <EvidencePanel
-                label="Implementation evidence"
-                items={[
-                  "Public event query service",
-                  "Organizer resource services",
-                  "Checkout and lifecycle services",
-                  "Focused web and API tests",
-                ]}
-                footer="Primary presenter: htandiono"
+            <div className={styles.featureBreakdown} role="list">
+              <FeatureBreakdownRow
+                number="01"
+                phase="Discover"
+                userFlow="Visitors search, filter, sort and page through events before opening ticket, voucher and review details."
+                implementation="A 350 ms debounced query drives server pagination; category, city and ordering remain explicit inputs with loading, error and empty states."
+                evidence={["GET /events", "event-browser.tsx"]}
+                tone="coral"
+              />
+              <FeatureBreakdownRow
+                number="02"
+                phase="Publish"
+                userFlow="Organizers create and maintain events, ticket types and limited-use vouchers."
+                implementation="Role and ownership checks guard writes; schemas validate dates and discounts; deletion uses deletedAt for the event and related resources."
+                evidence={["/organizer/events/*", "event services"]}
+                tone="coral"
+              />
+              <FeatureBreakdownRow
+                number="03"
+                phase="Purchase"
+                userFlow="Customers choose ticket quantities and optionally apply a voucher, coupon and reward points."
+                implementation="One Prisma transaction checks capacity, calculates whole-rupiah discounts in voucher → coupon → points order, and reserves event and ticket seats."
+                evidence={["POST /transactions", "checkout.service.ts"]}
+                tone="coral"
+              />
+              <FeatureBreakdownRow
+                number="04"
+                phase="Complete"
+                userFlow="Customers upload proof, track the order, cancel when allowed and review after the event."
+                implementation="Deadlines control status; expiry, rejection and cancellation restore seats and benefits. Review creation checks DONE status and event end; attendance is recorded separately."
+                evidence={["/transactions/:id/*", "lifecycle + reviews"]}
+                tone="coral"
               />
             </div>
+            <FeatureOwner
+              owner="htandiono"
+              boundary="Events · tickets · vouchers · checkout · lifecycle · reviews"
+            />
           </section>
         );
       case 7:
@@ -768,44 +766,47 @@ export function PresentationDeck() {
           <section className={styles.slide} aria-labelledby="slide-7-title">
             <SlideHeading
               eyebrow="07 · Feature 2 / awanstywn"
-              title="Secure accounts drive organizer operations"
+              title="Feature 2 separates account and organizer responsibilities"
               id="slide-7-title"
             />
-            <div className={styles.featureLayout}>
-              <div className={styles.featureSequence}>
-                <NumberedStep
-                  number="1"
-                  title="Authenticate"
-                  detail="Registration, bcrypt hashing, JWT cookies/Bearer token, RBAC and protected layouts."
-                />
-                <NumberedStep
-                  number="2"
-                  title="Reward"
-                  detail="Immutable referral codes, expiring 10,000-point credits and expiring referral coupons."
-                />
-                <NumberedStep
-                  number="3"
-                  title="Manage profile"
-                  detail="Profile edits, password change/reset and validated cloud avatar replacement."
-                />
-                <NumberedStep
-                  number="4"
-                  title="Operate"
-                  detail="Payment decision, attendance, three metrics, two Recharts charts, filters and HTML email."
-                />
-              </div>
-              <EvidencePanel
-                label="Implementation evidence"
-                items={[
-                  "Auth middleware and services",
-                  "Profile/reward routes",
-                  "Dashboard aggregation service",
-                  "Upload and email adapters",
-                ]}
-                footer="Primary presenter: awanstywn"
+            <div className={styles.featureBreakdown} role="list">
+              <FeatureBreakdownRow
+                number="01"
+                phase="Authenticate"
+                userFlow="Users register, sign in or out, recover access and enter pages allowed for their role."
+                implementation="bcrypt hashes passwords with cost 10; access and refresh JWTs use httpOnly cookies, while middleware also accepts a Bearer access token and enforces RBAC."
+                evidence={["/auth/*", "authenticate.ts"]}
+                tone="teal"
+              />
+              <FeatureBreakdownRow
+                number="02"
+                phase="Reward"
+                userFlow="A valid referral gives the inviter 10,000 points and the new user a 10% coupon."
+                implementation="Registration creates the user, point ledger and UserCoupon atomically. Both rewards expire after 90 days; referral codes are unique and normalized."
+                evidence={["auth.service.ts", "PointLedger + UserCoupon"]}
+                tone="teal"
+              />
+              <FeatureBreakdownRow
+                number="03"
+                phase="Profile"
+                userFlow="Users edit their profile or avatar, change a known password, and request a one-hour reset link."
+                implementation="Multer accepts image files with size limits. Hosted uploads use Supabase Storage, with Cloudinary as fallback; bcrypt verifies and replaces password hashes."
+                evidence={["PATCH /users/me", "asset-storage.service.ts"]}
+                tone="teal"
+              />
+              <FeatureBreakdownRow
+                number="04"
+                phase="Operate"
+                userFlow="Organizers decide payment proofs, mark attendance, inspect attendees and filter performance data."
+                implementation="Decision services send HTML email after database work; the dashboard aggregates three summary cards and three Recharts series from DONE transactions."
+                evidence={["/dashboard/*", "decision + email services"]}
                 tone="teal"
               />
             </div>
+            <FeatureOwner
+              owner="awanstywn"
+              boundary="Auth · referrals · profile · decisions · attendance · analytics · email"
+            />
           </section>
         );
       case 8:
@@ -1113,48 +1114,7 @@ export function PresentationDeck() {
           </section>
         );
       default:
-        return (
-          <section
-            className={`${styles.slide} ${styles.closeSlide}`}
-            aria-labelledby="slide-13-title"
-          >
-            <p className={styles.kicker}>13 · Code understanding</p>
-            <h2 id="slide-13-title">We can explain the code we own—and the seams we share.</h2>
-            <div className={styles.defenseGrid}>
-              <div>
-                <span>htandiono</span>
-                <strong>Feature 1</strong>
-                <p>Discovery · resources · checkout · lifecycle · reviews</p>
-              </div>
-              <div>
-                <span>awanstywn</span>
-                <strong>Feature 2</strong>
-                <p>Auth · rewards · profile · operations · analytics</p>
-              </div>
-              <div>
-                <span>Both</span>
-                <strong>Integration</strong>
-                <p>Contracts · data boundary · testing · release</p>
-              </div>
-            </div>
-            <div className={styles.questionPrompt}>
-              <span>Project reference</span>
-              <p>Find the full source of truth on our Github Repository linked below.</p>
-            </div>
-            <div className={styles.closeLinks}>
-              <a href="https://eventure.cloud" target="_blank" rel="noreferrer">
-                eventure.cloud <ExternalLink />
-              </a>
-              <a
-                href="https://github.com/htandiono/mini-project-event-management-platform"
-                target="_blank"
-                rel="noreferrer"
-              >
-                GitHub repository <GitBranch />
-              </a>
-            </div>
-          </section>
-        );
+        return null;
     }
   }
 
@@ -1403,50 +1363,53 @@ function ErdRelation({
   );
 }
 
-function NumberedStep({
+function FeatureBreakdownRow({
   number,
-  title,
-  detail,
+  phase,
+  userFlow,
+  implementation,
+  evidence,
+  tone,
 }: {
   number: string;
-  title: string;
-  detail: string;
+  phase: string;
+  userFlow: string;
+  implementation: string;
+  evidence: string[];
+  tone: "coral" | "teal";
 }) {
   return (
-    <div className={styles.numberedStep}>
-      <span>{number}</span>
-      <div>
-        <strong>{title}</strong>
-        <p>{detail}</p>
+    <article className={`${styles.featureBreakdownRow} ${styles[tone]}`} role="listitem">
+      <div className={styles.featurePhase}>
+        <span>{number}</span>
+        <strong>{phase}</strong>
       </div>
-    </div>
+      <div>
+        <small>User flow</small>
+        <p>{userFlow}</p>
+      </div>
+      <div>
+        <small>Implementation</small>
+        <p>{implementation}</p>
+      </div>
+      <div className={styles.featureEvidence}>
+        <small>Code evidence</small>
+        {evidence.map((item) => (
+          <code key={item}>{item}</code>
+        ))}
+      </div>
+    </article>
   );
 }
 
-function EvidencePanel({
-  label,
-  items,
-  footer,
-  tone = "coral",
-}: {
-  label: string;
-  items: string[];
-  footer: string;
-  tone?: "coral" | "teal";
-}) {
+function FeatureOwner({ owner, boundary }: { owner: string; boundary: string }) {
   return (
-    <aside className={`${styles.evidencePanel} ${styles[tone]}`}>
-      <span>{label}</span>
-      <ul>
-        {items.map((item) => (
-          <li key={item}>
-            <Check />
-            {item}
-          </li>
-        ))}
-      </ul>
-      <strong>{footer}</strong>
-    </aside>
+    <div className={styles.featureOwner}>
+      <span>Primary presenter</span>
+      <strong>{owner}</strong>
+      <span>Feature boundary</span>
+      <p>{boundary}</p>
+    </div>
   );
 }
 
