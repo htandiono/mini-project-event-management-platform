@@ -23,6 +23,18 @@ describe("PresentationDeck", () => {
 
     expect(screen.getByText("Feature 1 / htandiono")).toBeInTheDocument();
     expect(screen.getByText("Feature 2 / awanstywn")).toBeInTheDocument();
+    expect(screen.getByText("reviewed PRs")).toBeInTheDocument();
+    expect(screen.getByText("Integration + CI")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Go to slide 6: Database" }));
+
+    expect(
+      screen.getByRole("img", {
+        name: /simplified eventure entity relationship diagram/i,
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("TransactionItem")).toBeInTheDocument();
+    expect(screen.getByText("PaymentProof")).toBeInTheDocument();
   });
 
   it("lists all API families and switches to organizer routes", () => {
