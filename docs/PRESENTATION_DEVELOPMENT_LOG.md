@@ -97,6 +97,15 @@ Every ownership label and speaker note follows this boundary. Shared evaluation 
 - Raised the minimum size of body copy, evidence labels, API route details, code samples, ownership details, and production links for clearer Zoom viewing.
 - Added regression coverage for the exact closing message and GitHub repository destination; all 26 web tests passed.
 
+### 10. Replace the closing claim with deeper feature evidence
+
+**Commits:** `5dd028b feat(web): deepen feature presentation breakdowns`, `5dfd252 test(web): cover detailed feature presentation`
+
+- Removed the final defense/closing slide so the 13-slide deck ends on the assignment-required deployment and live-demo evidence.
+- Rebuilt Feature 1 and Feature 2 as four full-width sections each, pairing user behavior with implementation detail and concrete route/service references.
+- Verified details directly from source and corrected the referral recipients and 90-day expiry, the three-card/three-series analytics output, and the current review guard wording.
+- Added regression coverage for both owners' detailed sections and the absence of the former slide 14; all 26 web tests passed.
+
 ## Evaluation flow
 
 The deck is an academic implementation walkthrough rather than a product pitch. It covers frontend, backend, core features, feature testing, industry readiness, code understanding, and presentation quality. The supplied PDF has a percentage inconsistency between its overview and detailed scoring pages; the deck calls this out transparently and presents evidence for every listed category instead of assuming one interpretation.
