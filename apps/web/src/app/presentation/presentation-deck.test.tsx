@@ -8,7 +8,7 @@ afterEach(() => {
 });
 
 describe("PresentationDeck", () => {
-  it("navigates with the keyboard and identifies each feature owner", () => {
+  it("navigates through the examiner flow and preserves individual ownership", () => {
     render(<PresentationDeck />);
 
     expect(screen.getByRole("heading", { name: "Eventure" })).toBeInTheDocument();
@@ -16,13 +16,26 @@ describe("PresentationDeck", () => {
     fireEvent.keyDown(window, { key: "ArrowRight" });
 
     expect(
-      screen.getByRole("heading", { name: /one platform, two complete journeys/i }),
+      screen.getByRole("heading", { name: /one connected event system/i }),
     ).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Go to slide 3: Ownership" }));
+    fireEvent.click(screen.getByRole("button", { name: "Go to slide 3: Responsibility" }));
 
-    expect(screen.getByText("Feature 1 · htandiono")).toBeInTheDocument();
-    expect(screen.getByText("Feature 2 · awanstywn")).toBeInTheDocument();
+    expect(screen.getByText("Feature 1 / htandiono")).toBeInTheDocument();
+    expect(screen.getByText("Feature 2 / awanstywn")).toBeInTheDocument();
+  });
+
+  it("lists all API families and switches to organizer routes", () => {
+    render(<PresentationDeck />);
+    fireEvent.click(screen.getByRole("button", { name: "Go to slide 10: API reference" }));
+
+    expect(screen.getByRole("heading", { name: /45 routes are grouped/i })).toBeInTheDocument();
+    expect(screen.getByText("/events/:slug/reviews")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("tab", { name: /Organizer flow/ }));
+
+    expect(screen.getByText("/organizer/transactions/:id/accept")).toBeInTheDocument();
+    expect(screen.getByText("/dashboard/events/:id/attendees")).toBeInTheDocument();
   });
 
   it("summarizes successful production API checks", async () => {
@@ -55,7 +68,7 @@ describe("PresentationDeck", () => {
       );
 
     render(<PresentationDeck />);
-    fireEvent.click(screen.getByRole("button", { name: "Go to slide 12: Live proof" }));
+    fireEvent.click(screen.getByRole("button", { name: "Go to slide 11: API example" }));
     fireEvent.click(screen.getByRole("button", { name: "Run live checks" }));
 
     expect(await screen.findByText("Healthy")).toBeInTheDocument();
