@@ -30,6 +30,14 @@ DNS and HTTPS became available, but the first production smoke test found that t
 - TypeScript: passed with `--noEmit`.
 - Next.js production build: passed; 23 routes generated and Proxy detected.
 
+## CI follow-up
+
+### `d6e067c style(web): format proxy regression test`
+
+The first protected PR run stopped at `pnpm format:check` because Prettier required one
+line in `proxy.test.ts` to be compacted. The correction changed formatting only, and the
+repository-wide Prettier check passed before the branch was pushed again.
+
 ## Responsibility boundary
 
 - Feature 1 remains owned by `htandiono`.
