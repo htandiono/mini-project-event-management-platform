@@ -89,6 +89,14 @@ Every ownership label and speaker note follows this boundary. Shared evaluation 
 - Replaced static example totals with a typed response shape, avoiding the appearance that sample counts are fixed production values.
 - Added responsive single-column diagram fallbacks and regression assertions for the branch map, integration target, ERD, and supporting entities.
 
+### 9. Clarify the closing reference and enlarge detail text
+
+**Commits:** `b8c2eff feat(web): enlarge presentation details and revise closing`, `51c552c test(web): cover presentation closing reference`
+
+- Replaced the final slide's open-ended prompt with the requested repository source-of-truth message directly above the project links.
+- Raised the minimum size of body copy, evidence labels, API route details, code samples, ownership details, and production links for clearer Zoom viewing.
+- Added regression coverage for the exact closing message and GitHub repository destination; all 26 web tests passed.
+
 ## Evaluation flow
 
 The deck is an academic implementation walkthrough rather than a product pitch. It covers frontend, backend, core features, feature testing, industry readiness, code understanding, and presentation quality. The supplied PDF has a percentage inconsistency between its overview and detailed scoring pages; the deck calls this out transparently and presents evidence for every listed category instead of assuming one interpretation.
