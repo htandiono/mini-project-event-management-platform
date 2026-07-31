@@ -20,9 +20,7 @@ describe("presentation hostname routing", () => {
   });
 
   it("leaves non-root presentation paths unchanged", () => {
-    const response = proxy(
-      new NextRequest("https://presentation.eventure.cloud/presentation"),
-    );
+    const response = proxy(new NextRequest("https://presentation.eventure.cloud/presentation"));
 
     expect(response.headers.get("x-middleware-next")).toBe("1");
     expect(response.headers.get("x-middleware-rewrite")).toBeNull();
