@@ -25,10 +25,12 @@ This matrix translates the supplied brief into implementation ownership and merg
 | Responsive UI                                                     | Both          | Shared tokens, CSS modules, and responsive account/dashboard UI   | Implemented |
 | Unit and integration tests for material flows                     | Both          | API, shared, and web Vitest suites plus PostgreSQL CI             | Implemented |
 | `.env.example`, CORS, secrets excluded                            | Shared        | Env parser, CORS allowlist, `.gitignore`                          | Implemented |
-| Frontend and backend deployed                                     | Both          | URLs in README                                                    | Pending     |
-| 20+ meaningful conventional commits                               | Both          | More than 85 atomic and merge commits                             | Satisfied   |
+| Frontend and backend deployed                                     | Both          | Vercel custom domains and Supabase production database            | Implemented |
+| 20+ meaningful conventional commits                               | Both          | More than 115 atomic and merge commits                            | Satisfied   |
 | `main`/`develop` branching and no direct main pushes              | Both          | Feature merges into `develop`; protected release PR to `main`     | Configured  |
 | README with features, stack, ERD, setup, URLs, demo users         | Shared        | Updated repository README                                         | Implemented |
+| Presentation covers the evaluation matrix                         | Shared        | Interactive rubric, architecture, evidence, and defense slides    | Implemented |
+| Live production evidence without leaving the presentation         | Shared        | API health/catalog console and embedded production application    | Implemented |
 
 ## Feature 1 acceptance summary
 

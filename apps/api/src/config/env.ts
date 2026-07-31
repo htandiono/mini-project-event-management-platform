@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const optionalUrl = z.preprocess((value) => (value === "" ? undefined : value), z.url().optional());
+
 const envSchema = z
   .object({
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
@@ -8,7 +10,8 @@ const envSchema = z
     POSTGRES_PRISMA_URL: z.string().min(1).optional(),
     POSTGRES_URL_NON_POOLING: z.string().min(1).optional(),
     FRONTEND_URL: z.url(),
-    FRONTEND_PREVIEW_URL: z.url().optional(),
+    FRONTEND_PREVIEW_URL: optionalUrl,
+    PRESENTATION_URL: optionalUrl,
     JWT_ACCESS_SECRET: z.string().min(32),
     JWT_ACCESS_EXPIRES_IN: z.string().default("15m"),
     JWT_REFRESH_SECRET: z.string().min(32),

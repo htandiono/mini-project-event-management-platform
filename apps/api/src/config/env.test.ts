@@ -43,6 +43,28 @@ describe("getEnv", () => {
     expect(env.POSTGRES_PRISMA_URL).toBe("postgresql://supabase.example/eventure");
   });
 
+  it("accepts an optional presentation origin", () => {
+    const env = getEnv({
+      ...baseEnv,
+      DATABASE_URL: "postgresql://localhost/eventure",
+      PRESENTATION_URL: "https://presentation.eventure.cloud",
+    });
+
+    expect(env.PRESENTATION_URL).toBe("https://presentation.eventure.cloud");
+  });
+
+  it("treats blank optional origins as absent", () => {
+    const env = getEnv({
+      ...baseEnv,
+      DATABASE_URL: "postgresql://localhost/eventure",
+      FRONTEND_PREVIEW_URL: "",
+      PRESENTATION_URL: "",
+    });
+
+    expect(env.FRONTEND_PREVIEW_URL).toBeUndefined();
+    expect(env.PRESENTATION_URL).toBeUndefined();
+  });
+
   it("accepts paired Supabase Storage credentials", () => {
     const env = getEnv({
       ...baseEnv,
