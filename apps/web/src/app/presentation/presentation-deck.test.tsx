@@ -50,6 +50,19 @@ describe("PresentationDeck", () => {
     expect(screen.getByText("/dashboard/events/:id/attendees")).toBeInTheDocument();
   });
 
+  it("links the closing slide to the project source of truth", () => {
+    render(<PresentationDeck />);
+    fireEvent.click(screen.getByRole("button", { name: "Go to slide 14: Defense" }));
+
+    expect(
+      screen.getByText("Find the full source of truth on our Github Repository linked below."),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /GitHub repository/i })).toHaveAttribute(
+      "href",
+      "https://github.com/htandiono/mini-project-event-management-platform",
+    );
+  });
+
   it("summarizes successful production API checks", async () => {
     const fetchMock = vi
       .spyOn(globalThis, "fetch")
