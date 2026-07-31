@@ -59,9 +59,58 @@ Every ownership label and speaker note follows this boundary. Shared evaluation 
 - Normalized blank preview and presentation origins to an absent value while keeping malformed non-empty URLs invalid.
 - Added focused regression coverage and passed 14 environment/CORS tests, API lint, and API type checking before rerunning CI.
 
+### 6. Refocus the deck for examiner review
+
+**Commit:** `d50472b feat(web): refocus presentation for examiner review`
+
+- Replaced the investor-style narrative with a 14-slide technical flow for teachers and examiners: brief, ownership, system flow, architecture, database, both features, transaction safety, API reference, evidence, production demo, and defense.
+- Used a restrained academic visual direction inspired by the supplied reference: off-white paper, oversized black headings, minimal teal/coral accents, and simple geometric structure.
+- Preserved the exact Feature 1 / Feature 2 responsibility boundary and added presenter-specific speaker notes.
+- Verified the source before making numeric claims: 12 Prisma models and 45 Express router endpoints.
+- Added a complete role-grouped API quick reference, a public `curl` example, an authenticated checkout contract, and the existing live health/catalog check.
+
+### 7. Cover the examiner presentation flow
+
+**Commit:** `5154eb1 test(web): cover examiner presentation flow`
+
+- Updated keyboard-navigation and ownership assertions for the new academic flow.
+- Added route-reference coverage for public and organizer endpoint families.
+- Kept the production API check test for health, catalog totals, cities, and the first event.
+- Passed all 25 web tests, zero-warning lint, strict TypeScript checking, and the production Next.js build for all 23 routes.
+
+### 8. Improve Zoom readability with implementation diagrams
+
+**Commits:** `04ff879 feat(web): add collaboration and ERD presentation visuals`, `beb0eab test(web): cover presentation workflow diagrams`
+
+- Replaced the responsibility-card wall with the collaboration workflow from `docs/COLLABORATION.md`: `develop` branches into the two owned feature streams, reviewed pull requests return to integration, and a release pull request promotes `develop` to `main`.
+- Replaced the text-only model groups with a simplified ERD centered on the shared `User -> Transaction -> Event` path, while retaining all 12 Prisma models in the supporting relationship groups.
+- Enlarged detail text, route rows, diagram labels, code samples, and speaker notes for laptop-scale Zoom viewing.
+- Preserved the complete interactive API reference but reduced it to two columns so route names and purposes are easier to read.
+- Replaced static example totals with a typed response shape, avoiding the appearance that sample counts are fixed production values.
+- Added responsive single-column diagram fallbacks and regression assertions for the branch map, integration target, ERD, and supporting entities.
+
+### 9. Clarify the closing reference and enlarge detail text
+
+**Commits:** `b8c2eff feat(web): enlarge presentation details and revise closing`, `51c552c test(web): cover presentation closing reference`
+
+- Replaced the final slide's open-ended prompt with the requested repository source-of-truth message directly above the project links.
+- Raised the minimum size of body copy, evidence labels, API route details, code samples, ownership details, and production links for clearer Zoom viewing.
+- Added regression coverage for the exact closing message and GitHub repository destination; all 26 web tests passed.
+
+### 10. Replace the closing claim with deeper feature evidence
+
+**Commits:** `5dd028b feat(web): deepen feature presentation breakdowns`, `5dfd252 test(web): cover detailed feature presentation`
+
+- Removed the final defense/closing slide so the 13-slide deck ends on the assignment-required deployment and live-demo evidence.
+- Rebuilt Feature 1 and Feature 2 as four full-width sections each, pairing user behavior with implementation detail and concrete route/service references.
+- Verified details directly from source and corrected the referral recipients and 90-day expiry, the three-card/three-series analytics output, and the current review guard wording.
+- Added regression coverage for both owners' detailed sections and the absence of the former slide 14; all 26 web tests passed.
+
 ## Evaluation flow
 
-The deck covers frontend, backend, core features, feature testing, industry readiness, code understanding, and presentation quality. The supplied PDF has a percentage inconsistency between its overview and detailed scoring pages; the deck calls this out transparently and presents evidence for every listed category instead of assuming one interpretation.
+The deck is an academic implementation walkthrough rather than a product pitch. It covers frontend, backend, core features, feature testing, industry readiness, code understanding, and presentation quality. The supplied PDF has a percentage inconsistency between its overview and detailed scoring pages; the deck calls this out transparently and presents evidence for every listed category instead of assuming one interpretation.
+
+The main spoken flow is concise. The API reference is intentionally interactive and can be used only when an examiner requests a route-level explanation; it does not need to be read line by line.
 
 ## Controls
 
