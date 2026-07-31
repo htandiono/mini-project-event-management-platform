@@ -1760,3 +1760,422 @@
     animation: none;
   }
 }
+
+/* Examiner-view diagrams: readable at laptop scale when shared over Zoom. */
+.branchMap {
+  align-items: center;
+  display: grid;
+  gap: clamp(0.55rem, 1vw, 1rem);
+  grid-template-columns: 1.05fr 0.42fr 1.6fr 0.48fr 1.05fr 0.42fr 0.9fr;
+  margin-top: 0.4rem;
+}
+
+.branchSource,
+.branchDevelop,
+.branchMain {
+  align-items: flex-start;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 7.5rem;
+  padding: clamp(1rem, 1.5vw, 1.35rem);
+}
+
+.branchSource small,
+.branchDevelop small,
+.branchMain small {
+  font-size: clamp(0.76rem, 0.82vw, 0.88rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.branchSource strong,
+.branchDevelop strong,
+.branchMain strong {
+  font-family: var(--font-mono);
+  font-size: clamp(1.3rem, 1.8vw, 2rem);
+  margin-top: 0.35rem;
+}
+
+.branchDevelop {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.branchMain {
+  background: var(--teal);
+}
+
+.branchAction {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  justify-content: center;
+  text-align: center;
+}
+
+.branchAction svg {
+  height: 1.8rem;
+  width: 1.8rem;
+}
+
+.branchAction span {
+  font-size: clamp(0.72rem, 0.8vw, 0.84rem);
+  font-weight: 900;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.parallelBranches {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.featureOneBranch,
+.featureTwoBranch {
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  border-left: 0.55rem solid var(--coral);
+  display: flex;
+  flex-direction: column;
+  min-height: 5.4rem;
+  padding: 0.9rem 1rem;
+}
+
+.featureTwoBranch {
+  border-left-color: var(--teal);
+}
+
+.featureOneBranch span,
+.featureTwoBranch span {
+  font-size: clamp(0.76rem, 0.82vw, 0.88rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.featureOneBranch strong,
+.featureTwoBranch strong {
+  font-size: clamp(1rem, 1.12vw, 1.24rem);
+  line-height: 1.18;
+  margin-top: 0.28rem;
+}
+
+.ownershipStrip {
+  border-bottom: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: clamp(1rem, 2vw, 1.7rem);
+}
+
+.ownershipStrip > div {
+  min-width: 0;
+  padding: 1rem clamp(0.8rem, 1.4vw, 1.35rem);
+}
+
+.ownershipStrip > div + div {
+  border-left: 1px solid var(--line);
+}
+
+.ownershipStrip span {
+  display: block;
+  font-size: clamp(0.76rem, 0.82vw, 0.88rem);
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.ownershipStrip strong {
+  display: block;
+  font-size: clamp(0.9rem, 0.98vw, 1.05rem);
+  line-height: 1.35;
+  margin-top: 0.38rem;
+}
+
+.erdDiagram {
+  display: grid;
+  gap: clamp(1rem, 1.8vw, 1.5rem);
+}
+
+.erdCore {
+  align-items: center;
+  display: grid;
+  gap: clamp(0.5rem, 0.9vw, 0.9rem);
+  grid-template-columns: 1fr 0.9fr 1.15fr 0.9fr 1fr;
+}
+
+.erdNode {
+  align-items: flex-start;
+  background: color-mix(in srgb, var(--teal) 12%, var(--paper));
+  border: 2px solid var(--ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 7.2rem;
+  padding: clamp(0.9rem, 1.3vw, 1.25rem);
+}
+
+.erdNode.gold {
+  background: color-mix(in srgb, var(--gold) 25%, var(--paper));
+}
+
+.erdNode.coral {
+  background: color-mix(in srgb, var(--coral) 14%, var(--paper));
+}
+
+.erdNode span {
+  font-size: clamp(0.72rem, 0.78vw, 0.82rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.erdNode strong {
+  font-family: var(--font-mono);
+  font-size: clamp(1.35rem, 1.8vw, 1.9rem);
+  margin-top: 0.35rem;
+}
+
+.erdNode small {
+  font-size: clamp(0.76rem, 0.84vw, 0.9rem);
+  font-weight: 700;
+  line-height: 1.3;
+  margin-top: 0.25rem;
+}
+
+.erdShared {
+  box-shadow: 0.45rem 0.45rem 0 var(--gold);
+}
+
+.erdConnector {
+  align-items: center;
+  display: grid;
+  gap: 0.35rem;
+  grid-template-columns: auto 1fr auto;
+}
+
+.erdConnector > span {
+  font-family: var(--font-mono);
+  font-size: clamp(0.72rem, 0.78vw, 0.82rem);
+  font-weight: 800;
+}
+
+.erdConnector > div {
+  align-items: center;
+  border-bottom: 2px solid var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.erdConnector b {
+  font-size: clamp(0.72rem, 0.78vw, 0.82rem);
+  line-height: 1.15;
+  text-align: center;
+}
+
+.erdConnector svg {
+  height: 1.25rem;
+  margin-bottom: -0.72rem;
+  width: 1.25rem;
+}
+
+.erdRelationGrid {
+  display: grid;
+  gap: 0.8rem 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.erdRelation {
+  border-top: 0.28rem solid var(--ink);
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.75rem 0.1rem 0;
+}
+
+.erdRelation > span {
+  font-size: clamp(0.72rem, 0.78vw, 0.82rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.erdRelation > strong {
+  font-size: clamp(0.88rem, 0.98vw, 1.04rem);
+  line-height: 1.28;
+}
+
+.erdRelation > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.erdRelation code {
+  background: var(--ink);
+  color: var(--paper);
+  font-size: clamp(0.7rem, 0.76vw, 0.8rem);
+  padding: 0.2rem 0.38rem;
+}
+
+.rubricGrid p,
+.takeaway p,
+.flowLane > div span,
+.flowLane li p,
+.flowBoundary p,
+.architectureNode p,
+.integration p,
+.numberedStep p,
+.sharedBand p,
+.atomicBand p,
+.status span,
+.transition span,
+.authExample p,
+.liveHint,
+.metric span,
+.evidenceRow > p,
+.evidenceRow > span,
+.deployNode p,
+.demoRunbook p,
+.defenseGrid p {
+  font-size: clamp(0.84rem, 1vw, 0.96rem);
+  line-height: 1.42;
+}
+
+.rubricGrid strong,
+.sharedBand strong,
+.atomicBand strong,
+.integration strong,
+.numberedStep strong,
+.evidencePanel li,
+.evidenceRow > strong,
+.demoRunbook strong {
+  font-size: clamp(0.95rem, 1.06vw, 1.08rem);
+}
+
+.architectureNode span,
+.evidencePanel > span,
+.routeGroup h3,
+.apiReferenceHeader > span {
+  font-size: clamp(0.76rem, 0.82vw, 0.86rem);
+}
+
+.architectureNode h3 {
+  font-size: clamp(1.2rem, 1.45vw, 1.5rem);
+}
+
+.routeGroups {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.routeRow {
+  grid-template-columns: 3.4rem minmax(0, 1fr);
+  padding: 0.48rem 0.52rem;
+}
+
+.routeRow > span {
+  font-size: clamp(0.66rem, 0.72vw, 0.72rem);
+}
+
+.routeRow code {
+  font-size: clamp(0.74rem, 0.82vw, 0.84rem);
+}
+
+.routeRow p {
+  font-size: clamp(0.7rem, 0.76vw, 0.78rem);
+  line-height: 1.32;
+}
+
+.apiReferenceHeader code,
+.apiTabs button,
+.codePanel > div:first-child,
+.codePanel pre {
+  font-size: clamp(0.76rem, 0.86vw, 0.9rem);
+}
+
+.notes p {
+  font-size: 0.95rem;
+  line-height: 1.48;
+}
+
+@media (max-width: 1050px) {
+  .branchMap {
+    grid-template-columns: 1fr 0.42fr 1.55fr 0.48fr 1fr;
+  }
+
+  .branchMap > :nth-child(6),
+  .branchMap > :nth-child(7) {
+    display: none;
+  }
+
+  .ownershipStrip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ownershipStrip > div:last-child {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 900px) {
+  .branchMap,
+  .erdCore {
+    grid-template-columns: 1fr;
+  }
+
+  .branchMap > :nth-child(6),
+  .branchMap > :nth-child(7) {
+    display: flex;
+  }
+
+  .branchAction svg,
+  .erdConnector svg {
+    transform: rotate(90deg);
+  }
+
+  .branchAction {
+    padding: 0.25rem;
+  }
+
+  .branchSource,
+  .branchDevelop,
+  .branchMain {
+    min-height: 5.4rem;
+  }
+
+  .erdConnector {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .erdConnector > div {
+    border-bottom: 0;
+  }
+
+  .erdNode {
+    min-height: 6rem;
+  }
+}
+
+@media (max-width: 620px) {
+  .ownershipStrip,
+  .erdRelationGrid,
+  .routeGroups {
+    grid-template-columns: 1fr;
+  }
+
+  .ownershipStrip > div + div,
+  .ownershipStrip > div:last-child {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    grid-column: auto;
+  }
+}

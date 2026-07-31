@@ -12,6 +12,7 @@ import {
   Database,
   ExternalLink,
   GitBranch,
+  GitMerge,
   Globe2,
   Layers3,
   Mail,
@@ -20,7 +21,6 @@ import {
   RefreshCw,
   ShieldCheck,
   UploadCloud,
-  Users,
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
@@ -482,41 +482,59 @@ export function PresentationDeck() {
               title="Ownership stays clear at every shared boundary"
               id="slide-2-title"
             />
-            <div className={styles.ownerGrid}>
-              <OwnerCard
-                number="01"
-                label="Feature 1 / htandiono"
-                title="Events and customer transactions"
-                items={[
-                  "Discovery, details, search, filter and pagination",
-                  "Event, ticket type and voucher CRUD",
-                  "Checkout, payment proof, deadlines and rollback",
-                  "Orders, attendance-gated reviews and ratings",
-                ]}
-                accent="coral"
-              />
-              <OwnerCard
-                number="02"
-                label="Feature 2 / awanstywn"
-                title="Accounts and organizer operations"
-                items={[
-                  "Authentication, JWT, RBAC and protected pages",
-                  "Referrals, expiring points and coupons",
-                  "Profile, avatar, password change and reset",
-                  "Proof decisions, attendee list, analytics and email",
-                ]}
-                accent="teal"
-              />
-            </div>
-            <div className={styles.sharedBand}>
-              <Users />
-              <div>
-                <strong>Shared integration</strong>
-                <p>
-                  Contracts · Prisma boundaries · rollback seam · review · CI · production release
-                </p>
+            <div
+              className={styles.branchMap}
+              role="img"
+              aria-label="Develop branches into Feature 1 and Feature 2, both return through reviewed pull requests, then develop is released to main"
+            >
+              <div className={styles.branchSource}>
+                <small>Shared baseline</small>
+                <strong>develop</strong>
               </div>
-              <span>Both</span>
+              <div className={styles.branchAction}>
+                <GitBranch />
+                <span>branch</span>
+              </div>
+              <div className={styles.parallelBranches}>
+                <div className={styles.featureOneBranch}>
+                  <span>Feature 1</span>
+                  <strong>events + transactions</strong>
+                </div>
+                <div className={styles.featureTwoBranch}>
+                  <span>Feature 2</span>
+                  <strong>accounts + dashboard</strong>
+                </div>
+              </div>
+              <div className={styles.branchAction}>
+                <GitMerge />
+                <span>reviewed PRs</span>
+              </div>
+              <div className={styles.branchDevelop}>
+                <small>Integration + CI</small>
+                <strong>develop</strong>
+              </div>
+              <div className={styles.branchAction}>
+                <ArrowRight />
+                <span>release PR</span>
+              </div>
+              <div className={styles.branchMain}>
+                <small>Production</small>
+                <strong>main</strong>
+              </div>
+            </div>
+            <div className={styles.ownershipStrip}>
+              <div>
+                <span>Feature 1 / htandiono</span>
+                <strong>Discovery · CRUD · checkout · lifecycle · reviews</strong>
+              </div>
+              <div>
+                <span>Feature 2 / awanstywn</span>
+                <strong>Auth · rewards · profile · operations · analytics</strong>
+              </div>
+              <div>
+                <span>Shared review</span>
+                <strong>Contracts · Prisma · rollback · CI · release</strong>
+              </div>
             </div>
           </section>
         );
@@ -641,53 +659,63 @@ export function PresentationDeck() {
               title="12 related models support the complete lifecycle"
               id="slide-5-title"
             />
-            <div className={styles.databaseLayout}>
-              <div className={styles.entityMap}>
-                <EntityGroup
-                  title="Accounts & rewards"
-                  entities={["User", "PointLedger", "Coupon", "UserCoupon"]}
-                  accent="teal"
+            <div
+              className={styles.erdDiagram}
+              role="img"
+              aria-label="Simplified Eventure entity relationship diagram centered on User, Transaction, and Event"
+            >
+              <div className={styles.erdCore}>
+                <ErdNode name="User" detail="customer or organizer" tone="teal" />
+                <div className={styles.erdConnector}>
+                  <span>1</span>
+                  <div>
+                    <b>purchases</b>
+                    <ArrowRight />
+                  </div>
+                  <span>many</span>
+                </div>
+                <ErdNode
+                  name="Transaction"
+                  detail="status · total · deadlines"
+                  tone="gold"
+                  shared
                 />
-                <ArrowDown />
-                <EntityGroup
-                  title="Catalog & promotion"
-                  entities={["Category", "Event", "TicketType", "Voucher"]}
-                  accent="coral"
-                />
-                <ArrowDown />
-                <EntityGroup
-                  title="Purchase & proof"
-                  entities={["Transaction", "TransactionItem", "PaymentProof"]}
-                  accent="gold"
-                />
-                <ArrowDown />
-                <EntityGroup title="After attendance" entities={["Review"]} accent="ink" />
+                <div className={styles.erdConnector}>
+                  <span>many</span>
+                  <div>
+                    <b>belongs to</b>
+                    <ArrowRight />
+                  </div>
+                  <span>1</span>
+                </div>
+                <ErdNode name="Event" detail="organizer · category · capacity" tone="coral" />
               </div>
-              <div className={styles.dataRules}>
-                <Rule
-                  number="01"
-                  title="One-to-many"
-                  detail="Organizer → Events; Event → TicketTypes and Transactions."
+              <div className={styles.erdRelationGrid}>
+                <ErdRelation
+                  label="Catalog"
+                  relation="Category 1 → many Event → many TicketType / Voucher"
+                  entities={["Category", "TicketType", "Voucher"]}
                 />
-                <Rule
-                  number="02"
-                  title="Many-to-many"
-                  detail="User ↔ Coupon through UserCoupon; Transaction ↔ TicketType through TransactionItem."
+                <ErdRelation
+                  label="Ticket selection"
+                  relation="Transaction ↔ TicketType through TransactionItem"
+                  entities={["TransactionItem", "TicketType"]}
                 />
-                <Rule
-                  number="03"
-                  title="Integrity"
-                  detail="CUID keys, unique slugs/invoices, foreign keys and indexed status/deadline queries."
+                <ErdRelation
+                  label="Rewards"
+                  relation="User ↔ Coupon through UserCoupon; points use a ledger"
+                  entities={["Coupon", "UserCoupon", "PointLedger"]}
                 />
-                <Rule
-                  number="04"
-                  title="Conventions"
-                  detail="Whole-rupiah integers, UTC timestamps and deletedAt soft deletion."
+                <ErdRelation
+                  label="Payment outcome"
+                  relation="Transaction has at most one proof and one review"
+                  entities={["PaymentProof", "Review"]}
                 />
               </div>
             </div>
             <Takeaway>
-              <b>Transaction</b> is the intentional integration seam between both features.
+              <b>Transaction</b> is the shared seam; money stays in whole rupiah and main records
+              use soft deletion.
             </Takeaway>
           </section>
         );
@@ -893,10 +921,10 @@ export function PresentationDeck() {
                 </pre>
                 <pre className={styles.responseCode}>
                   <code>{`{
-  "success": true,
-  "message": "Events retrieved",
-  "data": { "data": [...], "total": 39,
-            "page": 1, "totalPages": 7, "limit": 6 }
+  success: true,
+  message: "Events retrieved",
+  data: { data: EventSummary[], total: number,
+          page: number, totalPages: number, limit: number }
 }`}</code>
                 </pre>
                 <div className={styles.authExample}>
@@ -1268,38 +1296,6 @@ function Takeaway({ children }: { children: ReactNode }) {
   );
 }
 
-function OwnerCard({
-  number,
-  label,
-  title,
-  items,
-  accent,
-}: {
-  number: string;
-  label: string;
-  title: string;
-  items: string[];
-  accent: "coral" | "teal";
-}) {
-  return (
-    <article className={`${styles.ownerCard} ${styles[accent]}`}>
-      <div>
-        <span>{number}</span>
-        <small>{label}</small>
-      </div>
-      <h3>{title}</h3>
-      <ul>
-        {items.map((item) => (
-          <li key={item}>
-            <Check />
-            {item}
-          </li>
-        ))}
-      </ul>
-    </article>
-  );
-}
-
 function FlowLane({
   label,
   owner,
@@ -1365,36 +1361,45 @@ function Integration({ icon, title, detail }: { icon: ReactNode; title: string; 
   );
 }
 
-function EntityGroup({
-  title,
-  entities,
-  accent,
+function ErdNode({
+  name,
+  detail,
+  tone,
+  shared = false,
 }: {
-  title: string;
-  entities: string[];
-  accent: "teal" | "coral" | "gold" | "ink";
+  name: string;
+  detail: string;
+  tone: "teal" | "gold" | "coral";
+  shared?: boolean;
 }) {
   return (
-    <div className={`${styles.entityGroup} ${styles[accent]}`}>
-      <strong>{title}</strong>
-      <div>
-        {entities.map((entity) => (
-          <span key={entity}>{entity}</span>
-        ))}
-      </div>
+    <div className={`${styles.erdNode} ${styles[tone]} ${shared ? styles.erdShared : ""}`}>
+      <span>{shared ? "shared model" : "entity"}</span>
+      <strong>{name}</strong>
+      <small>{detail}</small>
     </div>
   );
 }
 
-function Rule({ number, title, detail }: { number: string; title: string; detail: string }) {
+function ErdRelation({
+  label,
+  relation,
+  entities,
+}: {
+  label: string;
+  relation: string;
+  entities: string[];
+}) {
   return (
-    <div className={styles.rule}>
-      <span>{number}</span>
+    <article className={styles.erdRelation}>
+      <span>{label}</span>
+      <strong>{relation}</strong>
       <div>
-        <strong>{title}</strong>
-        <p>{detail}</p>
+        {entities.map((entity) => (
+          <code key={entity}>{entity}</code>
+        ))}
       </div>
-    </div>
+    </article>
   );
 }
 
