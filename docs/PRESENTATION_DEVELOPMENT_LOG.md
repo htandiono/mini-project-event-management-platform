@@ -59,9 +59,30 @@ Every ownership label and speaker note follows this boundary. Shared evaluation 
 - Normalized blank preview and presentation origins to an absent value while keeping malformed non-empty URLs invalid.
 - Added focused regression coverage and passed 14 environment/CORS tests, API lint, and API type checking before rerunning CI.
 
+### 6. Refocus the deck for examiner review
+
+**Commit:** `d50472b feat(web): refocus presentation for examiner review`
+
+- Replaced the investor-style narrative with a 14-slide technical flow for teachers and examiners: brief, ownership, system flow, architecture, database, both features, transaction safety, API reference, evidence, production demo, and defense.
+- Used a restrained academic visual direction inspired by the supplied reference: off-white paper, oversized black headings, minimal teal/coral accents, and simple geometric structure.
+- Preserved the exact Feature 1 / Feature 2 responsibility boundary and added presenter-specific speaker notes.
+- Verified the source before making numeric claims: 12 Prisma models and 45 Express router endpoints.
+- Added a complete role-grouped API quick reference, a public `curl` example, an authenticated checkout contract, and the existing live health/catalog check.
+
+### 7. Cover the examiner presentation flow
+
+**Commit:** `5154eb1 test(web): cover examiner presentation flow`
+
+- Updated keyboard-navigation and ownership assertions for the new academic flow.
+- Added route-reference coverage for public and organizer endpoint families.
+- Kept the production API check test for health, catalog totals, cities, and the first event.
+- Passed all 25 web tests, zero-warning lint, strict TypeScript checking, and the production Next.js build for all 23 routes.
+
 ## Evaluation flow
 
-The deck covers frontend, backend, core features, feature testing, industry readiness, code understanding, and presentation quality. The supplied PDF has a percentage inconsistency between its overview and detailed scoring pages; the deck calls this out transparently and presents evidence for every listed category instead of assuming one interpretation.
+The deck is an academic implementation walkthrough rather than a product pitch. It covers frontend, backend, core features, feature testing, industry readiness, code understanding, and presentation quality. The supplied PDF has a percentage inconsistency between its overview and detailed scoring pages; the deck calls this out transparently and presents evidence for every listed category instead of assuming one interpretation.
+
+The main spoken flow is concise. The API reference is intentionally interactive and can be used only when an examiner requests a route-level explanation; it does not need to be read line by line.
 
 ## Controls
 

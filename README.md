@@ -32,6 +32,8 @@ Recharts supplies organizer analytics, Multer and Supabase Storage handle hosted
 
 ## API surface
 
+The Express application exposes 45 implemented router endpoints under `/api/v1`; the interactive presentation includes a complete role-grouped quick reference and example calls.
+
 - Public: `GET /api/v1/events`, `/events/categories`, `/events/:slug`, and `/events/:slug/reviews`
 - Authentication and accounts: `/api/v1/auth` and authenticated profile/reward routes under `/api/v1/users/me`
 - Organizer: event CRUD under `/api/v1/organizer/events`, with nested `/tickets` and `/vouchers`
