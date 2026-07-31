@@ -78,6 +78,17 @@ Every ownership label and speaker note follows this boundary. Shared evaluation 
 - Kept the production API check test for health, catalog totals, cities, and the first event.
 - Passed all 25 web tests, zero-warning lint, strict TypeScript checking, and the production Next.js build for all 23 routes.
 
+### 8. Improve Zoom readability with implementation diagrams
+
+**Commits:** `04ff879 feat(web): add collaboration and ERD presentation visuals`, `beb0eab test(web): cover presentation workflow diagrams`
+
+- Replaced the responsibility-card wall with the collaboration workflow from `docs/COLLABORATION.md`: `develop` branches into the two owned feature streams, reviewed pull requests return to integration, and a release pull request promotes `develop` to `main`.
+- Replaced the text-only model groups with a simplified ERD centered on the shared `User -> Transaction -> Event` path, while retaining all 12 Prisma models in the supporting relationship groups.
+- Enlarged detail text, route rows, diagram labels, code samples, and speaker notes for laptop-scale Zoom viewing.
+- Preserved the complete interactive API reference but reduced it to two columns so route names and purposes are easier to read.
+- Replaced static example totals with a typed response shape, avoiding the appearance that sample counts are fixed production values.
+- Added responsive single-column diagram fallbacks and regression assertions for the branch map, integration target, ERD, and supporting entities.
+
 ## Evaluation flow
 
 The deck is an academic implementation walkthrough rather than a product pitch. It covers frontend, backend, core features, feature testing, industry readiness, code understanding, and presentation quality. The supplied PDF has a percentage inconsistency between its overview and detailed scoring pages; the deck calls this out transparently and presents evidence for every listed category instead of assuming one interpretation.
