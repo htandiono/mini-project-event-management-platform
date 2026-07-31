@@ -50,17 +50,30 @@ describe("PresentationDeck", () => {
     expect(screen.getByText("/dashboard/events/:id/attendees")).toBeInTheDocument();
   });
 
-  it("links the closing slide to the project source of truth", () => {
+  it("breaks both feature owners' work into source-backed sections", () => {
     render(<PresentationDeck />);
-    fireEvent.click(screen.getByRole("button", { name: "Go to slide 14: Defense" }));
+    fireEvent.click(screen.getByRole("button", { name: "Go to slide 7: Feature 1" }));
+
+    expect(screen.getByRole("heading", { name: /four connected sections/i })).toBeInTheDocument();
+    expect(screen.getByText(/voucher → coupon → points order/i)).toBeInTheDocument();
+    expect(screen.getByText(/attendance is recorded separately/i)).toBeInTheDocument();
+    expect(screen.getByText("checkout.service.ts")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Go to slide 8: Feature 2" }));
+
+    expect(screen.getByRole("heading", { name: /account and organizer/i })).toBeInTheDocument();
+    expect(
+      screen.getByText(/inviter 10,000 points and the new user a 10% coupon/i),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Supabase Storage, with Cloudinary as fallback/i)).toBeInTheDocument();
+    expect(screen.getByText(/three summary cards and three Recharts series/i)).toBeInTheDocument();
 
     expect(
-      screen.getByText("Find the full source of truth on our Github Repository linked below."),
+      screen.queryByRole("button", { name: "Go to slide 14: Defense" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Go to slide 13: Deployment and demo" }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /GitHub repository/i })).toHaveAttribute(
-      "href",
-      "https://github.com/htandiono/mini-project-event-management-platform",
-    );
   });
 
   it("summarizes successful production API checks", async () => {
