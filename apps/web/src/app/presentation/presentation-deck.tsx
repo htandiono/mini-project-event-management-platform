@@ -1138,8 +1138,8 @@ export function PresentationDeck() {
               </div>
             </div>
             <div className={styles.questionPrompt}>
-              <span>Choose a starting point</span>
-              <p>user flow · database relation · API route · failure case · live demo</p>
+              <span>Project reference</span>
+              <p>Find the full source of truth on our Github Repository linked below.</p>
             </div>
             <div className={styles.closeLinks}>
               <a href="https://eventure.cloud" target="_blank" rel="noreferrer">
