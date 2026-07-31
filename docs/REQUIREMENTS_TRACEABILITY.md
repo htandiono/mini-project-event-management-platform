@@ -5,7 +5,7 @@ This matrix translates the supplied brief into implementation ownership and merg
 | Requirement                                                       | Owner         | Merged evidence                                                   | Status      |
 | ----------------------------------------------------------------- | ------------- | ----------------------------------------------------------------- | ----------- |
 | Registration, login, logout, hashing, JWT, protected routes, RBAC | Feature 2     | Auth API, middleware, protected layouts, integration tests        | Implemented |
-| Minimum 7 entities and relational design                          | Shared        | Prisma schema with 13 entities and README ERD                     | Implemented |
+| Minimum 7 entities and relational design                          | Shared        | Prisma schema with 12 models and README ERD                       | Implemented |
 | Full CRUD for 3 main entities                                     | Feature 1     | Event, ticket type, and voucher API/UI with focused tests         | Implemented |
 | One-to-many and many-to-many relations                            | Shared        | Event-ticket types and User-UserCoupon-Coupon                     | Implemented |
 | Soft delete on main entities                                      | Both          | Event/ticket/voucher/review services filter `deletedAt`           | Implemented |
