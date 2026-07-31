@@ -28,6 +28,11 @@ export interface CheckoutTotals {
   total: number;
 }
 
+export const CHECKOUT_TRANSACTION_LIMITS = {
+  maxWait: 5_000,
+  timeout: 15_000,
+} as const;
+
 export function calculatePointBalance(
   entries: Array<{ type: PointEntryType; amount: number }>,
 ): number {
@@ -306,6 +311,9 @@ export async function createCheckout(
 
       return mapTransaction(created);
     },
-    { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+    {
+      isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+      ...CHECKOUT_TRANSACTION_LIMITS,
+    },
   );
 }

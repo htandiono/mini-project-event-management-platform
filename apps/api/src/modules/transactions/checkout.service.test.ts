@@ -1,7 +1,11 @@
 import { PointEntryType } from "@eventure/database";
 import { describe, expect, it } from "vitest";
 
-import { calculateCheckoutTotals, calculatePointBalance } from "./checkout.service.js";
+import {
+  CHECKOUT_TRANSACTION_LIMITS,
+  calculateCheckoutTotals,
+  calculatePointBalance,
+} from "./checkout.service.js";
 import { checkoutInputSchema } from "./transaction.schemas.js";
 
 describe("checkout input", () => {
@@ -45,5 +49,14 @@ describe("calculatePointBalance", () => {
         { type: PointEntryType.RESTORE, amount: 1_000 },
       ]),
     ).toBe(8_000);
+  });
+});
+
+describe("checkout transaction configuration", () => {
+  it("allows hosted database round trips to finish within a bounded window", () => {
+    expect(CHECKOUT_TRANSACTION_LIMITS).toEqual({
+      maxWait: 5_000,
+      timeout: 15_000,
+    });
   });
 });
